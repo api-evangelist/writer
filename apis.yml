@@ -1,0 +1,29 @@
+aid: writer
+url: https://raw.githubusercontent.com/api-evangelist/writer/refs/heads/main/apis.yml
+name: Writer
+x-type: company
+description: >-
+  Writer is a generative AI platform purpose-built for the enterprise. The Writer Platform API exposes the proprietary Palmyra family of LLMs, knowledge-graph retrieval, and AI Studio tools for content, summarization, and process automation.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - AI
+  - LLM
+  - Enterprise
+  - Content Generation
+  - Palmyra
+created: '2026-05-08'
+modified: '2026-05-08'
+specificationVersion: '0.19'
+apis: []
+common:
+  - type: Website
+    url: https://writer.com/
+  - type: Plans
+    url: plans/writer-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/writer-rate-limits.yml
+  - type: FinOps
+    url: finops/writer-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

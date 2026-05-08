@@ -1,0 +1,67 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Writer
+providerId: writer
+created: '2026-05-08'
+modified: '2026-05-08'
+reconciled: false
+tags:
+- AI
+- LLM
+- Enterprise
+- Content Generation
+- Palmyra
+- FinOps
+- Cost Management
+- FOCUS
+description: FOCUS-aligned FinOps placeholder for Writer. Pipeline will replace with the provider's
+  real billing-model details once researched.
+notes: Initial scaffold — billing model has not yet been reconciled.
+sources:
+- https://writer.com/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Writer
+serviceCategory: AI
+billingModel:
+  pricingCategory: To Be Reconciled
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+  - Usage
+  - Purchase
+  - Adjustment
+focusColumns:
+  ServiceName: Writer
+  ServiceCategory: AI
+  ProviderName: Writer
+  PublisherName: Writer
+  InvoiceIssuerName: Writer
+  BillingCurrency: USD
+  ChargeCategory: Usage
+meters:
+- name: api_usage
+  description: Catch-all meter pending reconciliation against the provider's published metering.
+  unit: varies
+  aggregation: sum
+  dimensions:
+  - account
+  - resource
+principles:
+- name: Visibility
+  description: Pull provider invoices or usage exports until a self-serve usage feed is documented.
+- name: Allocation
+  description: Tag invoice line items to consuming business units in your FinOps store.
+- name: Optimization
+  description: Levers depend on the provider's billing model; review at renewal once reconciled.
+- name: Accountability
+  description: Assign a contract owner to review billing against negotiated terms.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
