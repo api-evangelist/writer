@@ -30,6 +30,8 @@ apis:
         type: Documentation
       - url: https://dev.writer.com/api-reference/chat-api
         type: API Reference
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Generates multi-turn conversational completions using Palmyra family models with streaming, tool calling, and structured outputs.
   - aid: writer:writer-text-generation-api
@@ -45,6 +47,8 @@ apis:
         type: Documentation
       - url: https://dev.writer.com/api-reference/completion-api
         type: API Reference
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Single-shot text completion endpoint for prompts that don't require conversational context.
   - aid: writer:writer-tool-calling-api
@@ -58,6 +62,8 @@ apis:
     properties:
       - url: https://dev.writer.com/api-guides/tool-calling
         type: Documentation
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Defines and executes custom functions and external service integrations during chat completions.
   - aid: writer:writer-knowledge-graph-api
@@ -74,6 +80,8 @@ apis:
         type: Documentation
       - url: https://dev.writer.com/api-reference/graph-api
         type: API Reference
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Builds and queries graph-based retrieval indexes that connect enterprise data sources to agents for accurate, grounded responses.
   - aid: writer:writer-files-api
@@ -90,6 +98,8 @@ apis:
         type: Documentation
       - url: https://dev.writer.com/api-reference/file-api
         type: API Reference
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Upload, download, list, and delete files; attach them to Knowledge Graphs and Agents.
   - aid: writer:writer-applications-api
@@ -106,6 +116,8 @@ apis:
         type: Documentation
       - url: https://dev.writer.com/api-reference/application-api
         type: API Reference
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Invokes no-code agents and AI Studio Applications as microservices or programmatically triggers Blueprints via HTTP.
   - aid: writer:writer-vision-api
@@ -120,6 +132,8 @@ apis:
     properties:
       - url: https://dev.writer.com/api-guides/vision
         type: Documentation
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Submits images and documents with a prompt to generate an analysis using vision-capable Palmyra models.
   - aid: writer:writer-web-search-api
@@ -133,6 +147,8 @@ apis:
     properties:
       - url: https://dev.writer.com/api-guides/web-search
         type: Documentation
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Queries the web for real-time information to include in agent responses, with citation support.
   - aid: writer:writer-translation-api
@@ -146,6 +162,8 @@ apis:
     properties:
       - url: https://dev.writer.com/api-guides/translation
         type: Documentation
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Converts text between 30+ supported languages with enterprise tone and style guidance.
   - aid: writer:writer-models-api
@@ -159,6 +177,8 @@ apis:
     properties:
       - url: https://dev.writer.com/api-reference/model-api
         type: API Reference
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Lists Palmyra models and external models (e.g., AWS Bedrock) accessible to the account, with metadata and parameters.
   - aid: writer:writer-guardrails-api
@@ -173,6 +193,8 @@ apis:
     properties:
       - url: https://dev.writer.com/api-guides/guardrails
         type: Documentation
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Enforces content safety, PII protection, and compliance policies across AI agents and chat completions.
   - aid: writer:writer-api-keys-api
@@ -186,6 +208,8 @@ apis:
     properties:
       - url: https://dev.writer.com/api-guides/quickstart
         type: Documentation
+      - url: openapi/writer-openapi.yml
+        type: OpenAPI
     description: >-
       Programmatically creates, lists, and rotates API keys for authenticating to the Writer Platform.
 common:
