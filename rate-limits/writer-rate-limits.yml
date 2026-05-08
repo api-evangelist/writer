@@ -15,22 +15,41 @@ tags:
 - Rate Limiting
 - Quotas
 - Throttling
-description: Placeholder rate-limit artifact for Writer. Replace with real limits once the pipeline
-  researches the provider's rate-limit documentation.
-notes: Initial scaffold — limits have not yet been reconciled against the provider's documentation.
+description: >-
+  Writer enforces RPM (requests per minute) and TPM (tokens per minute) on
+  the AI Studio Platform API, with limits tied to the customer's contract
+  and configured per organization and per model. The exact per-tier limits
+  are not publicly disclosed and are pending reconciliation.
+notes: >-
+  Documentation references RPM and TPM limits; specific values are
+  contract-dependent. Verify in the dev.writer.com rate-limit guide for
+  the active organization.
 sources:
-- https://writer.com/
+- https://dev.writer.com/api-guides/rate-limits
+- https://writer.com/pricing/
 responseCodes:
   throttled: 429
 limits:
-- name: Default
-  scope: account
-  metric: varies
+- name: Requests Per Minute (RPM)
+  scope: organization
+  metric: requests
   limit: see provider documentation
-  notes: Pending reconciliation.
+  notes: Per-model RPM, varies by contract and model. Pending reconciliation.
+- name: Tokens Per Minute (TPM)
+  scope: organization
+  metric: tokens
+  limit: see provider documentation
+  notes: Per-model TPM, varies by contract and model. Pending reconciliation.
+- name: Concurrent Requests
+  scope: organization
+  metric: concurrent
+  limit: see provider documentation
+  notes: Concurrency cap per model. Pending reconciliation.
 policies:
+- name: Tiered Limits
+  description: Higher limits unlocked through Enterprise contract size.
 - name: Backoff Strategy
-  description: Clients should implement exponential backoff with jitter and honor any Retry-After header.
+  description: Clients should implement exponential backoff with jitter and honor Retry-After.
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

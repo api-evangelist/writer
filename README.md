@@ -1,6 +1,6 @@
 # Writer (writer)
 
-Writer is a generative AI platform purpose-built for the enterprise. The Writer Platform API exposes the proprietary Palmyra family of LLMs, knowledge-graph retrieval, and AI Studio tools for content, summarization, and process automation.
+Writer is a generative AI platform purpose-built for the enterprise. The Writer AI Studio Platform API exposes the proprietary Palmyra family of LLMs, knowledge-graph retrieval, no-code Application invocation, tool calling, vision, translation, and content guardrails for enterprise content, summarization, and process-automation workflows.
 
 **URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/writer/refs/heads/main/apis.yml)
 
@@ -12,27 +12,45 @@ Writer is a generative AI platform purpose-built for the enterprise. The Writer 
 
 ## Tags:
 
- - AI, LLM, Enterprise, Content Generation, Palmyra
+ - AI, LLM, Enterprise, Content Generation, Palmyra, Agents
 
 ## Timestamps
 
 - **Created:** 2026-05-08
 - **Modified:** 2026-05-08
 
+## APIs
+
+| API | Description |
+|---|---|
+| Writer Chat Completion API | Multi-turn chat with Palmyra models, tool calling, structured outputs. |
+| Writer Text Generation API | Single-shot text completion. |
+| Writer Tool Calling API | Custom function execution and external service integration. |
+| Writer Knowledge Graph API | Graph-based retrieval/RAG over enterprise data. |
+| Writer Files API | File upload/download/list/delete attached to Graphs and Agents. |
+| Writer Applications API | Invoke no-code agents and Blueprints via HTTP. |
+| Writer Vision API | Image and document analysis with vision-capable Palmyra models. |
+| Writer Web Search API | Real-time web search with citations. |
+| Writer Translation API | 30+ language translation with enterprise tone guidance. |
+| Writer Models API | Lists Palmyra and external models (e.g., AWS Bedrock). |
+| Writer Guardrails API | Safety, PII, and compliance enforcement. |
+| Writer API Keys API | Programmatic key creation/rotation. |
+
 ## Common Properties
 
 - [Website](https://writer.com/)
-- [Plans](plans/writer-plans-pricing.yml) — API Commons Plans 0.1 (placeholder; pipeline will replace with real pricing)
-- [RateLimits](rate-limits/writer-rate-limits.yml) — API Commons Rate Limits 0.1 (placeholder)
-- [FinOps](finops/writer-finops.yml) — FOCUS-aligned FinOps Framework 1.0 (placeholder)
+- [Documentation](https://dev.writer.com/)
+- [Plans](plans/writer-plans-pricing.yml) — API Commons Plans 0.1
+- [RateLimits](rate-limits/writer-rate-limits.yml) — API Commons Rate Limits 0.1
+- [FinOps](finops/writer-finops.yml) — FOCUS-aligned FinOps Framework 1.0
 
 ## Artifacts
 
 | Artifact | Path | Notes |
 |---|---|---|
-| Plans | `plans/writer-plans-pricing.yml` | Placeholder — pipeline will fetch real pricing |
-| Rate Limits | `rate-limits/writer-rate-limits.yml` | Placeholder — pipeline will fetch real limits |
-| FinOps | `finops/writer-finops.yml` | FOCUS-aligned placeholder |
+| Plans | `plans/writer-plans-pricing.yml` | Starter (14-day trial) / Enterprise (contact sales) / AI Studio API. Per-seat & per-token rates not public. |
+| Rate Limits | `rate-limits/writer-rate-limits.yml` | RPM/TPM enforced per organization; specific values contract-dependent. |
+| FinOps | `finops/writer-finops.yml` | FOCUS-aligned, subscription + usage hybrid (seats, tokens, KG queries, vision calls, storage). |
 
 ## Maintainers
 

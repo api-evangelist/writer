@@ -12,31 +12,128 @@ tags:
 - Enterprise
 - Content Generation
 - Palmyra
+- Agents
 - Plans
-description: Placeholder plans/pricing artifact for Writer. Replace with real published pricing once
-  the pipeline researches the provider's plans page.
-notes: Initial scaffold — plans/pricing have not yet been reconciled against the provider's documentation.
+description: >-
+  Writer offers a Starter trial and an Enterprise plan for the AI HQ /
+  WRITER Agent product, plus AI Studio Platform API access (per-token
+  pricing for Palmyra models, Knowledge Graph, vision, etc.) typically
+  bundled into Enterprise contracts. Public per-seat and per-token rates
+  are not disclosed and require sales contact.
+notes: >-
+  Per-seat and per-token rates for AI Studio are not publicly disclosed.
+  Mark reconciled=false for the developer pricing surface; AI HQ Starter
+  vs Enterprise tiering is reconciled.
 sources:
-- https://writer.com/
+- https://writer.com/pricing/
+- https://dev.writer.com/
 plans:
-- id: writer-default
-  name: To Be Reconciled
-  type: enterprise
-  description: Initial scaffold; replace with provider plan tiers (Free / Pro / Enterprise / pay-as-you-go,
-    etc.) once pricing is reconciled.
+- id: writer-starter
+  name: Starter (Trial)
+  type: free
+  description: >-
+    14-day free trial of WRITER Agent / AI HQ for up to 5 users with
+    capped Playbooks, 1 Personality profile, basic connectors, and
+    limited Knowledge Graph access. No credit card required.
   entries:
-  - label: API Access
-    name: api_access
+  - label: Trial Length
+    name: trial_length
     type: flat
-    metric: varies
-    limit: -1
-    timeFrame: usage
+    metric: days
+    limit: 14
+    timeFrame: trial
     geo: global
     unit: 1
-    price: see https://writer.com/
+    price: $0
+    userMultiplied: false
+  - label: Users
+    name: users
+    type: flat
+    metric: seats
+    limit: 5
+    timeFrame: trial
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Playbooks
+    name: playbooks
+    type: flat
+    metric: count
+    limit: 5
+    timeFrame: trial
+    geo: global
+    unit: 1
+    price: included
+    userMultiplied: false
+  - label: Personality Profiles
+    name: personality_profiles
+    type: flat
+    metric: count
+    limit: 1
+    timeFrame: trial
+    geo: global
+    unit: 1
+    price: included
     userMultiplied: false
   elements:
-  - name: Pending Reconciliation
+  - name: WRITER Agent
+  - name: Basic Connectors
+  - name: Limited Knowledge Graph
+- id: writer-enterprise
+  name: Enterprise
+  type: enterprise
+  description: >-
+    Custom-priced enterprise plan with unlimited users, teams, and free
+    collaborators; unlimited Playbooks; advanced orchestration; full
+    Knowledge Graph; departmental brand profiles; granular governance;
+    optional solution packs; and priority support.
+  entries:
+  - label: Annual Subscription
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: true
+  elements:
+  - name: Unlimited Users
+  - name: Unlimited Playbooks
+  - name: Full Knowledge Graph
+  - name: Departmental Brand Profiles
+  - name: Governance
+  - name: Priority Support
+  - name: Solution Packs
+- id: writer-ai-studio
+  name: AI Studio Platform API
+  type: usage
+  description: >-
+    Programmatic API access to Palmyra models, Knowledge Graph, Vision,
+    Tools, Translation, Web Search, Applications, and Guardrails - typically
+    contracted as part of Enterprise. Per-token / per-call rates are not
+    publicly disclosed.
+  entries:
+  - label: API Access (per-token)
+    name: api_tokens
+    type: usage
+    metric: tokens
+    limit: -1
+    timeFrame: month
+    geo: global
+    unit: 1000000
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Palmyra Models
+  - name: Knowledge Graph
+  - name: Vision
+  - name: Web Search
+  - name: Translation
+  - name: Applications
+  - name: Guardrails
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
