@@ -223,6 +223,25 @@ common:
     url: rate-limits/writer-rate-limits.yml
   - type: FinOps
     url: finops/writer-finops.yml
+  - type: Integrations
+    url: https://writer.com/partners/
+integrations:
+  - name: WRITER - Enterprise AI platform
+  - name: Financial services
+  - name: Healthcare & life sciences
+  - name: Retail & consumer goods
+  - name: Technology
+  - name: Marketing
+  - name: Sales
+  - name: Writer’s Room blog
+  - name: Engineering blog
+  - name: 'Podcast: Humans of AI'
+  - name: Events & webinars
+  - name: Marketing AI ROI calculator
+  - name: Arrow right
+  - name: WRITER
+  - name: LinkedIn
+  - name: G2
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
