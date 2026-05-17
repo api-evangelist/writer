@@ -1,7 +1,7 @@
 aid: writer
 url: https://raw.githubusercontent.com/api-evangelist/writer/refs/heads/main/apis.yml
 name: Writer
-x-type: company
+kind: company
 description: >-
   Writer is a generative AI platform purpose-built for the enterprise. The Writer AI Studio Platform API exposes the proprietary Palmyra family of LLMs, knowledge-graph retrieval, no-code Application invocation, tool calling, vision, translation, and content guardrails for enterprise content, summarization, and process-automation workflows.
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
@@ -29,7 +29,7 @@ apis:
       - url: https://dev.writer.com/api-guides/chat-completion
         type: Documentation
       - url: https://dev.writer.com/api-reference/chat-api
-        type: API Reference
+        type: APIReference
       - url: openapi/writer-openapi.yml
         type: OpenAPI
     description: >-
@@ -46,7 +46,7 @@ apis:
       - url: https://dev.writer.com/api-guides/text-generation
         type: Documentation
       - url: https://dev.writer.com/api-reference/completion-api
-        type: API Reference
+        type: APIReference
       - url: openapi/writer-openapi.yml
         type: OpenAPI
     description: >-
@@ -79,7 +79,7 @@ apis:
       - url: https://dev.writer.com/api-guides/knowledge-graph
         type: Documentation
       - url: https://dev.writer.com/api-reference/graph-api
-        type: API Reference
+        type: APIReference
       - url: openapi/writer-openapi.yml
         type: OpenAPI
     description: >-
@@ -97,7 +97,7 @@ apis:
       - url: https://dev.writer.com/api-guides/file-management
         type: Documentation
       - url: https://dev.writer.com/api-reference/file-api
-        type: API Reference
+        type: APIReference
       - url: openapi/writer-openapi.yml
         type: OpenAPI
     description: >-
@@ -115,7 +115,7 @@ apis:
       - url: https://dev.writer.com/api-guides/applications
         type: Documentation
       - url: https://dev.writer.com/api-reference/application-api
-        type: API Reference
+        type: APIReference
       - url: openapi/writer-openapi.yml
         type: OpenAPI
     description: >-
@@ -176,7 +176,7 @@ apis:
     baseURL: https://api.writer.com/v1
     properties:
       - url: https://dev.writer.com/api-reference/model-api
-        type: API Reference
+        type: APIReference
       - url: openapi/writer-openapi.yml
         type: OpenAPI
     description: >-
