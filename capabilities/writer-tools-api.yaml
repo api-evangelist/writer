@@ -1,0 +1,128 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: API — Tools API
+  description: 'API — Tools API. 2 operations. Lead operation: Parse PDF. Self-contained Naftiko capability covering one Writer
+    business surface.'
+  tags:
+  - Writer
+  - Tools API
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WRITER_API_KEY: WRITER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: writer-tools-api
+    baseUri: https://api.writer.com
+    description: API — Tools API business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-tools-pdf-parser-file_id
+      path: /v1/tools/pdf-parser/{file_id}
+      operations:
+      - name: post
+        method: POST
+        description: Parse PDF
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: file_id
+          in: path
+          type: string
+          description: The unique identifier of the file.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-tools-web-search
+      path: /v1/tools/web-search
+      operations:
+      - name: post
+        method: POST
+        description: Web search
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.WRITER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: writer-tools-api-rest
+    port: 8080
+    description: REST adapter for API — Tools API. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/tools/pdf-parser/{file-id}
+      name: v1-tools-pdf-parser-file-id
+      description: REST surface for v1-tools-pdf-parser-file_id.
+      operations:
+      - method: POST
+        name: post
+        description: Parse PDF
+        call: writer-tools-api.post
+        with:
+          file_id: rest.file_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/tools/web-search
+      name: v1-tools-web-search
+      description: REST surface for v1-tools-web-search.
+      operations:
+      - method: POST
+        name: post
+        description: Web search
+        call: writer-tools-api.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: writer-tools-api-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for API — Tools API. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: parse-pdf
+      description: Parse PDF
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: writer-tools-api.post
+      with:
+        file_id: tools.file_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: web-search
+      description: Web search
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: writer-tools-api.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

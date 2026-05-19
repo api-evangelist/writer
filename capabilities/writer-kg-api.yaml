@@ -1,0 +1,393 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: API — KG API
+  description: 'API — KG API. 8 operations. Lead operation: List graphs. Self-contained Naftiko capability covering one Writer
+    business surface.'
+  tags:
+  - Writer
+  - KG API
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WRITER_API_KEY: WRITER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: writer-kg-api
+    baseUri: https://api.writer.com
+    description: API — KG API business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-graphs
+      path: /v1/graphs
+      operations:
+      - name: findgraphswithfilestatus
+        method: GET
+        description: List graphs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: order
+          in: query
+          type: string
+          description: Specifies the order of the results. Valid values are asc for ascending and desc for descending.
+        - name: before
+          in: query
+          type: string
+          description: The ID of the first object in the previous page. This parameter instructs the API to return the previous
+            page of results.
+        - name: after
+          in: query
+          type: string
+          description: The ID of the last object in the previous page. This parameter instructs the API to return the next
+            page of results.
+        - name: limit
+          in: query
+          type: integer
+          description: Specifies the maximum number of objects returned in a page. The default value is 50. The minimum value
+            is 1, and the maximum value is 100.
+      - name: creategraph
+        method: POST
+        description: Create graph
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-graphs-question
+      path: /v1/graphs/question
+      operations:
+      - name: question
+        method: POST
+        description: Question
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-graphs-graph_id
+      path: /v1/graphs/{graph_id}
+      operations:
+      - name: findgraphwithfilestatus
+        method: GET
+        description: Retrieve graph
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: graph_id
+          in: path
+          type: string
+          description: The unique identifier of the Knowledge Graph.
+          required: true
+      - name: updategraph
+        method: PUT
+        description: Update graph
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: graph_id
+          in: path
+          type: string
+          description: The unique identifier of the Knowledge Graph.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletegraph
+        method: DELETE
+        description: Delete graph
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: graph_id
+          in: path
+          type: string
+          description: The unique identifier of the Knowledge Graph.
+          required: true
+    - name: v1-graphs-graph_id-file
+      path: /v1/graphs/{graph_id}/file
+      operations:
+      - name: addfiletograph
+        method: POST
+        description: Add file to graph
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: graph_id
+          in: path
+          type: string
+          description: The unique identifier of the Knowledge Graph.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-graphs-graph_id-file-file_id
+      path: /v1/graphs/{graph_id}/file/{file_id}
+      operations:
+      - name: removefilefromgraph
+        method: DELETE
+        description: Remove file from graph
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: graph_id
+          in: path
+          type: string
+          description: The unique identifier of the Knowledge Graph to which the files belong.
+          required: true
+        - name: file_id
+          in: path
+          type: string
+          description: The unique identifier of the file.
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.WRITER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: writer-kg-api-rest
+    port: 8080
+    description: REST adapter for API — KG API. One Spectral-compliant resource per consumed operation, prefixed with /v1.
+    resources:
+    - path: /v1/v1/graphs
+      name: v1-graphs
+      description: REST surface for v1-graphs.
+      operations:
+      - method: GET
+        name: findgraphswithfilestatus
+        description: List graphs
+        call: writer-kg-api.findgraphswithfilestatus
+        with:
+          order: rest.order
+          before: rest.before
+          after: rest.after
+          limit: rest.limit
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: creategraph
+        description: Create graph
+        call: writer-kg-api.creategraph
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/graphs/question
+      name: v1-graphs-question
+      description: REST surface for v1-graphs-question.
+      operations:
+      - method: POST
+        name: question
+        description: Question
+        call: writer-kg-api.question
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/graphs/{graph-id}
+      name: v1-graphs-graph-id
+      description: REST surface for v1-graphs-graph_id.
+      operations:
+      - method: GET
+        name: findgraphwithfilestatus
+        description: Retrieve graph
+        call: writer-kg-api.findgraphwithfilestatus
+        with:
+          graph_id: rest.graph_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PUT
+        name: updategraph
+        description: Update graph
+        call: writer-kg-api.updategraph
+        with:
+          graph_id: rest.graph_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletegraph
+        description: Delete graph
+        call: writer-kg-api.deletegraph
+        with:
+          graph_id: rest.graph_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/graphs/{graph-id}/file
+      name: v1-graphs-graph-id-file
+      description: REST surface for v1-graphs-graph_id-file.
+      operations:
+      - method: POST
+        name: addfiletograph
+        description: Add file to graph
+        call: writer-kg-api.addfiletograph
+        with:
+          graph_id: rest.graph_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/graphs/{graph-id}/file/{file-id}
+      name: v1-graphs-graph-id-file-file-id
+      description: REST surface for v1-graphs-graph_id-file-file_id.
+      operations:
+      - method: DELETE
+        name: removefilefromgraph
+        description: Remove file from graph
+        call: writer-kg-api.removefilefromgraph
+        with:
+          graph_id: rest.graph_id
+          file_id: rest.file_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: writer-kg-api-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for API — KG API. One tool per consumed operation, routed inline through this capability's consumes
+      block.
+    tools:
+    - name: list-graphs
+      description: List graphs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: writer-kg-api.findgraphswithfilestatus
+      with:
+        order: tools.order
+        before: tools.before
+        after: tools.after
+        limit: tools.limit
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-graph
+      description: Create graph
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: writer-kg-api.creategraph
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: question
+      description: Question
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: writer-kg-api.question
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: retrieve-graph
+      description: Retrieve graph
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: writer-kg-api.findgraphwithfilestatus
+      with:
+        graph_id: tools.graph_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-graph
+      description: Update graph
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: writer-kg-api.updategraph
+      with:
+        graph_id: tools.graph_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-graph
+      description: Delete graph
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: writer-kg-api.deletegraph
+      with:
+        graph_id: tools.graph_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: add-file-graph
+      description: Add file to graph
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: writer-kg-api.addfiletograph
+      with:
+        graph_id: tools.graph_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: remove-file-graph
+      description: Remove file from graph
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: writer-kg-api.removefilefromgraph
+      with:
+        graph_id: tools.graph_id
+        file_id: tools.file_id
+      outputParameters:
+      - type: object
+        mapping: $.

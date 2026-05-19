@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: API — Translation
+  description: 'API — Translation. 1 operations. Lead operation: Translate text. Self-contained Naftiko capability covering
+    one Writer business surface.'
+  tags:
+  - Writer
+  - Translation
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WRITER_API_KEY: WRITER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: writer-translation
+    baseUri: https://api.writer.com
+    description: API — Translation business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-translation
+      path: /v1/translation
+      operations:
+      - name: post
+        method: POST
+        description: Translate text
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    authentication:
+      type: bearer
+      token: '{{env.WRITER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: writer-translation-rest
+    port: 8080
+    description: REST adapter for API — Translation. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/v1/translation
+      name: v1-translation
+      description: REST surface for v1-translation.
+      operations:
+      - method: POST
+        name: post
+        description: Translate text
+        call: writer-translation.post
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: writer-translation-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for API — Translation. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: translate-text
+      description: Translate text
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: writer-translation.post
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

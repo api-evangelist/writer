@@ -1,0 +1,303 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: API — Generation API
+  description: 'API — Generation API. 6 operations. Lead operation: List applications. Self-contained Naftiko capability covering
+    one Writer business surface.'
+  tags:
+  - Writer
+  - Generation API
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    WRITER_API_KEY: WRITER_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: writer-generation-api
+    baseUri: https://api.writer.com
+    description: API — Generation API business capability. Self-contained, no shared references.
+    resources:
+    - name: v1-applications
+      path: /v1/applications
+      operations:
+      - name: get
+        method: GET
+        description: List applications
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: order
+          in: query
+          type: string
+          description: Sort order for the results based on creation time.
+        - name: before
+          in: query
+          type: string
+          description: Return results before this application ID for pagination.
+        - name: after
+          in: query
+          type: string
+          description: Return results after this application ID for pagination.
+        - name: limit
+          in: query
+          type: integer
+          description: Maximum number of applications to return in the response.
+        - name: type
+          in: query
+          type: string
+          description: Filter applications by their type.
+    - name: v1-applications-application_id
+      path: /v1/applications/{application_id}
+      operations:
+      - name: get
+        method: GET
+        description: Application details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: application_id
+          in: path
+          type: string
+          description: Unique identifier of the application to retrieve.
+          required: true
+      - name: generatecontent
+        method: POST
+        description: Generate from application
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: application_id
+          in: path
+          type: string
+          description: The unique identifier of a [no-code agent](/no-code/introduction) in AI Studio.
+          required: true
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-chat
+      path: /v1/chat
+      operations:
+      - name: chat
+        method: POST
+        description: Chat completion
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-completions
+      path: /v1/completions
+      operations:
+      - name: completions
+        method: POST
+        description: Text generation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v1-models
+      path: /v1/models
+      operations:
+      - name: models
+        method: GET
+        description: List models
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.WRITER_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: writer-generation-api-rest
+    port: 8080
+    description: REST adapter for API — Generation API. One Spectral-compliant resource per consumed operation, prefixed with
+      /v1.
+    resources:
+    - path: /v1/v1/applications
+      name: v1-applications
+      description: REST surface for v1-applications.
+      operations:
+      - method: GET
+        name: get
+        description: List applications
+        call: writer-generation-api.get
+        with:
+          order: rest.order
+          before: rest.before
+          after: rest.after
+          limit: rest.limit
+          type: rest.type
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/applications/{application-id}
+      name: v1-applications-application-id
+      description: REST surface for v1-applications-application_id.
+      operations:
+      - method: GET
+        name: get
+        description: Application details
+        call: writer-generation-api.get
+        with:
+          application_id: rest.application_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: generatecontent
+        description: Generate from application
+        call: writer-generation-api.generatecontent
+        with:
+          application_id: rest.application_id
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/chat
+      name: v1-chat
+      description: REST surface for v1-chat.
+      operations:
+      - method: POST
+        name: chat
+        description: Chat completion
+        call: writer-generation-api.chat
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/completions
+      name: v1-completions
+      description: REST surface for v1-completions.
+      operations:
+      - method: POST
+        name: completions
+        description: Text generation
+        call: writer-generation-api.completions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v1/models
+      name: v1-models
+      description: REST surface for v1-models.
+      operations:
+      - method: GET
+        name: models
+        description: List models
+        call: writer-generation-api.models
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: writer-generation-api-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for API — Generation API. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-applications
+      description: List applications
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: writer-generation-api.get
+      with:
+        order: tools.order
+        before: tools.before
+        after: tools.after
+        limit: tools.limit
+        type: tools.type
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: application-details
+      description: Application details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: writer-generation-api.get
+      with:
+        application_id: tools.application_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: generate-application
+      description: Generate from application
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: writer-generation-api.generatecontent
+      with:
+        application_id: tools.application_id
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: chat-completion
+      description: Chat completion
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: writer-generation-api.chat
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: text-generation
+      description: Text generation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: writer-generation-api.completions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-models
+      description: List models
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: writer-generation-api.models
+      outputParameters:
+      - type: object
+        mapping: $.
