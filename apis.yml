@@ -7,247 +7,251 @@ description: Writer is a generative AI platform purpose-built for the enterprise
   translation, and content guardrails for enterprise content, summarization, and process-automation workflows.
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-- AI
-- LLM
-- Enterprise
-- Content Generation
-- Palmyra
-- Agents
+  - AI
+  - LLM
+  - Enterprise
+  - Content Generation
+  - Palmyra
+  - Agents
 created: '2026-05-08'
 modified: '2026-05-19'
 specificationVersion: '0.19'
 apis:
-- aid: writer:writer-chat-completion-api
-  name: Writer Chat Completion API
-  tags:
-  - Chat
-  - Completions
-  - LLM
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-reference/chat-api
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/chat-completion
-    type: Documentation
-  - url: https://dev.writer.com/api-reference/chat-api
-    type: APIReference
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/writer-file-api.yaml
-  - type: NaftikoCapability
-    url: capabilities/writer-generation-api.yaml
-  - type: NaftikoCapability
-    url: capabilities/writer-kg-api.yaml
-  - type: NaftikoCapability
-    url: capabilities/writer-tools-api.yaml
-  - type: NaftikoCapability
-    url: capabilities/writer-translation.yaml
-  - type: NaftikoCapability
-    url: capabilities/writer-vision.yaml
-  - type: NaftikoCapability
-    url: capabilities/writer-template.yaml
-  description: Generates multi-turn conversational completions using Palmyra family models with streaming, tool calling, and
-    structured outputs.
-- aid: writer:writer-text-generation-api
-  name: Writer Text Generation API
-  tags:
-  - Completions
-  - Text Generation
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-reference/completion-api
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/text-generation
-    type: Documentation
-  - url: https://dev.writer.com/api-reference/completion-api
-    type: APIReference
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Single-shot text completion endpoint for prompts that don't require conversational context.
-- aid: writer:writer-tool-calling-api
-  name: Writer Tool Calling API
-  tags:
-  - Tools
-  - Function Calling
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-guides/tool-calling
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/tool-calling
-    type: Documentation
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Defines and executes custom functions and external service integrations during chat completions.
-- aid: writer:writer-knowledge-graph-api
-  name: Writer Knowledge Graph API
-  tags:
-  - Knowledge Graph
-  - RAG
-  - Retrieval
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-reference/graph-api
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/knowledge-graph
-    type: Documentation
-  - url: https://dev.writer.com/api-reference/graph-api
-    type: APIReference
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Builds and queries graph-based retrieval indexes that connect enterprise data sources to agents for accurate,
-    grounded responses.
-- aid: writer:writer-files-api
-  name: Writer Files API
-  tags:
-  - Files
-  - Storage
-  - Documents
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-reference/file-api
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/file-management
-    type: Documentation
-  - url: https://dev.writer.com/api-reference/file-api
-    type: APIReference
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Upload, download, list, and delete files; attach them to Knowledge Graphs and Agents.
-- aid: writer:writer-applications-api
-  name: Writer Applications API
-  tags:
-  - Applications
-  - No-Code
-  - Agents
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-reference/application-api
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/applications
-    type: Documentation
-  - url: https://dev.writer.com/api-reference/application-api
-    type: APIReference
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Invokes no-code agents and AI Studio Applications as microservices or programmatically triggers Blueprints
-    via HTTP.
-- aid: writer:writer-vision-api
-  name: Writer Vision API
-  tags:
-  - Vision
-  - Multimodal
-  - Documents
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-guides/vision
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/vision
-    type: Documentation
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Submits images and documents with a prompt to generate an analysis using vision-capable Palmyra models.
-- aid: writer:writer-web-search-api
-  name: Writer Web Search API
-  tags:
-  - Web Search
-  - Real-Time
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-guides/web-search
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/web-search
-    type: Documentation
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Queries the web for real-time information to include in agent responses, with citation support.
-- aid: writer:writer-translation-api
-  name: Writer Translation API
-  tags:
-  - Translation
-  - Languages
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-guides/translation
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/translation
-    type: Documentation
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Converts text between 30+ supported languages with enterprise tone and style guidance.
-- aid: writer:writer-models-api
-  name: Writer Models API
-  tags:
-  - Models
-  - Catalog
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-reference/model-api
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-reference/model-api
-    type: APIReference
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Lists Palmyra models and external models (e.g., AWS Bedrock) accessible to the account, with metadata and parameters.
-- aid: writer:writer-guardrails-api
-  name: Writer Guardrails API
-  tags:
-  - Guardrails
-  - Safety
-  - PII
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-guides/guardrails
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/guardrails
-    type: Documentation
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Enforces content safety, PII protection, and compliance policies across AI agents and chat completions.
-- aid: writer:writer-api-keys-api
-  name: Writer API Keys API
-  tags:
-  - API Keys
-  - Authentication
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-  humanURL: https://dev.writer.com/api-guides/quickstart
-  baseURL: https://api.writer.com/v1
-  properties:
-  - url: https://dev.writer.com/api-guides/quickstart
-    type: Documentation
-  - url: openapi/writer-openapi.yml
-    type: OpenAPI
-  description: Programmatically creates, lists, and rotates API keys for authenticating to the Writer Platform.
+  - aid: writer:writer-chat-completion-api
+    name: Writer Chat Completion API
+    tags:
+    - Chat
+    - Completions
+    - LLM
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-reference/chat-api
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/chat-completion
+      type: Documentation
+    - url: https://dev.writer.com/api-reference/chat-api
+      type: APIReference
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    - type: NaftikoCapability
+      url: capabilities/writer-file-api.yaml
+    - type: NaftikoCapability
+      url: capabilities/writer-generation-api.yaml
+    - type: NaftikoCapability
+      url: capabilities/writer-kg-api.yaml
+    - type: NaftikoCapability
+      url: capabilities/writer-tools-api.yaml
+    - type: NaftikoCapability
+      url: capabilities/writer-translation.yaml
+    - type: NaftikoCapability
+      url: capabilities/writer-vision.yaml
+    - type: NaftikoCapability
+      url: capabilities/writer-template.yaml
+    description: Generates multi-turn conversational completions using Palmyra family models with streaming, tool calling, and
+      structured outputs.
+  - aid: writer:writer-text-generation-api
+    name: Writer Text Generation API
+    tags:
+    - Completions
+    - Text Generation
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-reference/completion-api
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/text-generation
+      type: Documentation
+    - url: https://dev.writer.com/api-reference/completion-api
+      type: APIReference
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Single-shot text completion endpoint for prompts that don't require conversational context.
+  - aid: writer:writer-tool-calling-api
+    name: Writer Tool Calling API
+    tags:
+    - Tools
+    - Function Calling
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-guides/tool-calling
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/tool-calling
+      type: Documentation
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Defines and executes custom functions and external service integrations during chat completions.
+  - aid: writer:writer-knowledge-graph-api
+    name: Writer Knowledge Graph API
+    tags:
+    - Knowledge Graph
+    - RAG
+    - Retrieval
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-reference/graph-api
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/knowledge-graph
+      type: Documentation
+    - url: https://dev.writer.com/api-reference/graph-api
+      type: APIReference
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Builds and queries graph-based retrieval indexes that connect enterprise data sources to agents for accurate,
+      grounded responses.
+  - aid: writer:writer-files-api
+    name: Writer Files API
+    tags:
+    - Files
+    - Storage
+    - Documents
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-reference/file-api
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/file-management
+      type: Documentation
+    - url: https://dev.writer.com/api-reference/file-api
+      type: APIReference
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Upload, download, list, and delete files; attach them to Knowledge Graphs and Agents.
+  - aid: writer:writer-applications-api
+    name: Writer Applications API
+    tags:
+    - Applications
+    - No-Code
+    - Agents
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-reference/application-api
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/applications
+      type: Documentation
+    - url: https://dev.writer.com/api-reference/application-api
+      type: APIReference
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Invokes no-code agents and AI Studio Applications as microservices or programmatically triggers Blueprints
+      via HTTP.
+  - aid: writer:writer-vision-api
+    name: Writer Vision API
+    tags:
+    - Vision
+    - Multimodal
+    - Documents
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-guides/vision
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/vision
+      type: Documentation
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Submits images and documents with a prompt to generate an analysis using vision-capable Palmyra models.
+  - aid: writer:writer-web-search-api
+    name: Writer Web Search API
+    tags:
+    - Web Search
+    - Real-Time
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-guides/web-search
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/web-search
+      type: Documentation
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Queries the web for real-time information to include in agent responses, with citation support.
+  - aid: writer:writer-translation-api
+    name: Writer Translation API
+    tags:
+    - Translation
+    - Languages
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-guides/translation
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/translation
+      type: Documentation
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Converts text between 30+ supported languages with enterprise tone and style guidance.
+  - aid: writer:writer-models-api
+    name: Writer Models API
+    tags:
+    - Models
+    - Catalog
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-reference/model-api
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-reference/model-api
+      type: APIReference
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Lists Palmyra models and external models (e.g., AWS Bedrock) accessible to the account, with metadata and parameters.
+  - aid: writer:writer-guardrails-api
+    name: Writer Guardrails API
+    tags:
+    - Guardrails
+    - Safety
+    - PII
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-guides/guardrails
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/guardrails
+      type: Documentation
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Enforces content safety, PII protection, and compliance policies across AI agents and chat completions.
+  - aid: writer:writer-api-keys-api
+    name: Writer API Keys API
+    tags:
+    - API Keys
+    - Authentication
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://dev.writer.com/api-guides/quickstart
+    baseURL: https://api.writer.com/v1
+    properties:
+    - url: https://dev.writer.com/api-guides/quickstart
+      type: Documentation
+    - url: openapi/writer-openapi.yml
+      type: OpenAPI
+    description: Programmatically creates, lists, and rotates API keys for authenticating to the Writer Platform.
 common:
-- type: Website
-  url: https://writer.com/
-- type: Documentation
-  url: https://dev.writer.com/
-- type: Plans
-  url: plans/writer-plans-pricing.yml
-- type: RateLimits
-  url: rate-limits/writer-rate-limits.yml
-- type: FinOps
-  url: finops/writer-finops.yml
-- type: Integrations
-  url: https://writer.com/partners/
+  - type: GitHubOrganization
+    url: https://github.com/writer
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/getwriter
+  - type: Website
+    url: https://writer.com/
+  - type: Documentation
+    url: https://dev.writer.com/
+  - type: Plans
+    url: plans/writer-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/writer-rate-limits.yml
+  - type: FinOps
+    url: finops/writer-finops.yml
+  - type: Integrations
+    url: https://writer.com/partners/
 integrations:
-- name: WRITER - Enterprise AI platform
-- name: Financial services
-- name: Healthcare & life sciences
-- name: Retail & consumer goods
-- name: Technology
-- name: Marketing
-- name: Sales
-- name: Writer’s Room blog
-- name: Engineering blog
-- name: 'Podcast: Humans of AI'
-- name: Events & webinars
-- name: Marketing AI ROI calculator
-- name: Arrow right
-- name: WRITER
-- name: LinkedIn
-- name: G2
+  - name: WRITER - Enterprise AI platform
+  - name: Financial services
+  - name: Healthcare & life sciences
+  - name: Retail & consumer goods
+  - name: Technology
+  - name: Marketing
+  - name: Sales
+  - name: Writer’s Room blog
+  - name: Engineering blog
+  - name: 'Podcast: Humans of AI'
+  - name: Events & webinars
+  - name: Marketing AI ROI calculator
+  - name: Arrow right
+  - name: WRITER
+  - name: LinkedIn
+  - name: G2
 maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+  - FN: Kin Lane
+    email: kin@apievangelist.com
