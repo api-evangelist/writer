@@ -235,6 +235,8 @@ common:
     url: finops/writer-finops.yml
   - type: Integrations
     url: https://writer.com/partners/
+  - type: LLMsTxt
+    url: https://api.writer.com/llms.txt
 integrations:
   - name: WRITER - Enterprise AI platform
   - name: Financial services
