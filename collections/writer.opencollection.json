@@ -1,0 +1,861 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Generation API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Chat completion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/chat",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate a chat completion based on the provided messages. The response shown below is for non-streaming. To learn about streaming responses, see the [chat completion guide](https://dev.writer.com/home/chat-completion)."
+        },
+        {
+          "info": {
+            "name": "Text generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate text completions using the specified model and prompt. This endpoint is useful for text generation tasks that don't require conversational context."
+        },
+        {
+          "info": {
+            "name": "List models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/models",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a list of available models that can be used for text generation, chat completions, and other AI tasks."
+        },
+        {
+          "info": {
+            "name": "List applications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications",
+            "params": [
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for the results based on creation time."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Return results before this application ID for pagination."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Return results after this application ID for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of applications to return in the response."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter applications by their type."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a paginated list of no-code agents (formerly called no-code applications) with optional filtering and sorting capabilities."
+        },
+        {
+          "info": {
+            "name": "Application details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications/:application_id",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the application to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves detailed information for a specific no-code agent (formerly called no-code applications), including its configuration and current status."
+        },
+        {
+          "info": {
+            "name": "Generate from application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/applications/:application_id",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a [no-code agent](/no-code/introduction) in AI Studio."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate content from an existing no-code agent (formerly called no-code applications) with inputs."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "KG API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List graphs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/graphs",
+            "params": [
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the order of the results. Valid values are asc for ascending and desc for descending."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the first object in the previous page. This parameter instructs the API to return the previous page of results."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the last object in the previous page. This parameter instructs the API to return the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the maximum number of objects returned in a page. The default value is 50. The minimum value is 1, and the maximum value is 100."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a list of Knowledge Graphs."
+        },
+        {
+          "info": {
+            "name": "Create graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/graphs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Question",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/graphs/question",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Ask a question to specified Knowledge Graphs."
+        },
+        {
+          "info": {
+            "name": "Retrieve graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/graphs/:graph_id",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Update graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.writer.com/v1/graphs/:graph_id",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the name and description of a Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Delete graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.writer.com/v1/graphs/:graph_id",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Add file to graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/graphs/:graph_id/file",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a file to a Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Remove file from graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.writer.com/v1/graphs/:graph_id/file/:file_id",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph to which the files belong."
+              },
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove a file from a Knowledge Graph."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "File API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/files/:file_id",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve detailed information about a specific file, including its metadata, status, and associated graphs."
+        },
+        {
+          "info": {
+            "name": "Delete file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.writer.com/v1/files/:file_id",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Permanently delete a file from the system. This action cannot be undone."
+        },
+        {
+          "info": {
+            "name": "List files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/files",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the first object in the previous page. This parameter instructs the API to return the previous page of results."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the last object in the previous page. This parameter instructs the API to return the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the maximum number of objects returned in a page. The default value is 50. The minimum value is 1, and the maximum value is 100."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the order of the results. Valid values are asc for ascending and desc for descending."
+              },
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the graph to which the files belong."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the status of the files to retrieve. Valid values are in_progress, completed or failed."
+              },
+              {
+                "name": "file_types",
+                "value": "",
+                "type": "query",
+                "description": "The extensions of the files to retrieve. Separate multiple extensions with a comma. For example: `pdf,jpg,docx`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a paginated list of files with optional filtering by status, graph association, and file type."
+        },
+        {
+          "info": {
+            "name": "Upload file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/files",
+            "headers": [
+              {
+                "name": "Content-Disposition",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "graphId",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the Knowledge Graph to associate the uploaded file with.\n\nNote: The response from the upload endpoint does not include the `graphId` field, but the association will be visible when you retrieve the file using the file retrieval endpoint."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Upload a new file to the system. Supports various file formats including PDF, DOC, DOCX, PPT, PPTX, JPG, PNG, EML, HTML, SRT, CSV, XLS, and XLSX."
+        },
+        {
+          "info": {
+            "name": "Download file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/files/:file_id/download",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Download the binary content of a file. The response will contain the file data in the appropriate MIME type."
+        },
+        {
+          "info": {
+            "name": "Retry failed files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/files/retry",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retry processing of files that previously failed to process. This will re-attempt the processing of the specified files."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "template",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve all jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications/:application_id/jobs",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the no-code app for which to retrieve jobs."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The pagination offset for retrieving the jobs."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The pagination limit for retrieving the jobs."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve all jobs created via the async API, linked to the provided application ID (or alias)."
+        },
+        {
+          "info": {
+            "name": "Generate from application (async)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/applications/:application_id/jobs",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the no-code app for which to create a job."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate content asynchronously from an existing no-code agent (formerly called no-code applications) with inputs."
+        },
+        {
+          "info": {
+            "name": "Retry job execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/applications/jobs/:job_id/retry",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the job to retry."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Re-triggers the async execution of a single job previously created via the Async api and terminated in error."
+        },
+        {
+          "info": {
+            "name": "Retrieve a single job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the job to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a single job created via the Async API."
+        },
+        {
+          "info": {
+            "name": "Retrieve graphs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications/:application_id/graphs",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the no-code agent for which to retrieve Knowledge Graphs."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve Knowledge Graphs associated with a no-code agent that has chat capabilities."
+        },
+        {
+          "info": {
+            "name": "Associate graphs",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.writer.com/v1/applications/:application_id/graphs",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the no-code agent to update.\n\nOnly no-code agents with chat capabilities can have associated Knowledge Graphs. No-code agents with text generation and research capabilities do not support Knowledge Graphs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates the list of Knowledge Graphs associated with a no-code chat agent."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Tools API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Parse PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/tools/pdf-parser/:file_id",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Parse PDF to other formats."
+        },
+        {
+          "info": {
+            "name": "Web search",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/tools/web-search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Search the web for information about a given query and return relevant results with source URLs."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Vision",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Analyze images",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/vision",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit images and documents with a prompt to generate an analysis. Supports JPG, PNG, PDF, and TXT files up to 7MB each."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Translation",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Translate text",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/translation",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Translate text from one language to another."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
