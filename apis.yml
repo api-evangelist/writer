@@ -6,7 +6,7 @@ description: >-
   Writer is a generative AI platform purpose-built for the enterprise. The Writer AI Studio Platform API exposes the
   proprietary Palmyra family of LLMs, knowledge-graph retrieval, no-code Application invocation, tool calling, vision,
   translation, and content guardrails for enterprise content, summarization, and process-automation workflows.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 tags:
   - AI
   - LLM
@@ -24,7 +24,7 @@ apis:
       - Chat
       - Completions
       - LLM
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-reference/chat-api
     baseURL: https://api.writer.com/v1
     properties:
@@ -42,7 +42,7 @@ apis:
     tags:
       - Completions
       - Text Generation
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-reference/completion-api
     baseURL: https://api.writer.com/v1
     properties:
@@ -58,7 +58,7 @@ apis:
     tags:
       - Tools
       - Function Calling
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-guides/tool-calling
     baseURL: https://api.writer.com/v1
     properties:
@@ -73,7 +73,7 @@ apis:
       - Knowledge Graph
       - RAG
       - Retrieval
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-reference/graph-api
     baseURL: https://api.writer.com/v1
     properties:
@@ -92,7 +92,7 @@ apis:
       - Files
       - Storage
       - Documents
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-reference/file-api
     baseURL: https://api.writer.com/v1
     properties:
@@ -109,7 +109,7 @@ apis:
       - Applications
       - No-Code
       - Agents
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-reference/application-api
     baseURL: https://api.writer.com/v1
     properties:
@@ -128,7 +128,7 @@ apis:
       - Vision
       - Multimodal
       - Documents
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-guides/vision
     baseURL: https://api.writer.com/v1
     properties:
@@ -142,7 +142,7 @@ apis:
     tags:
       - Web Search
       - Real-Time
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-guides/web-search
     baseURL: https://api.writer.com/v1
     properties:
@@ -156,7 +156,7 @@ apis:
     tags:
       - Translation
       - Languages
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-guides/translation
     baseURL: https://api.writer.com/v1
     properties:
@@ -170,7 +170,7 @@ apis:
     tags:
       - Models
       - Catalog
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-reference/model-api
     baseURL: https://api.writer.com/v1
     properties:
@@ -187,7 +187,7 @@ apis:
       - Guardrails
       - Safety
       - PII
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-guides/guardrails
     baseURL: https://api.writer.com/v1
     properties:
@@ -201,7 +201,7 @@ apis:
     tags:
       - API Keys
       - Authentication
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://dev.writer.com/api-guides/quickstart
     baseURL: https://api.writer.com/v1
     properties:
