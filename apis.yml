@@ -211,6 +211,10 @@ apis:
         type: OpenAPI
     description: Programmatically creates, lists, and rotates API keys for authenticating to the Writer Platform.
 common:
+  - type: DomainSecurity
+    url: security/writer-domain-security.yml
+  - type: Authentication
+    url: authentication/writer-authentication.yml
   - type: GitHubOrganization
     url: https://github.com/writer
   - type: LinkedIn
@@ -229,6 +233,8 @@ common:
     url: https://writer.com/partners/
   - type: LlmsText
     url: https://api.writer.com/llms.txt
+  - url: https://writer.com/blog/feed/
+    type: Blog
 integrations:
   - name: WRITER - Enterprise AI platform
   - name: Financial services

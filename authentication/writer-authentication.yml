@@ -1,0 +1,15 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/writer-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Bearer authentication header of the form `Bearer <token>`, where `<token>` is
+    your [Writer API key](https://dev.writer.com/api-reference/api-keys).
+  sources:
+  - openapi/writer-openapi.yml
