@@ -211,6 +211,8 @@ apis:
         type: OpenAPI
     description: Programmatically creates, lists, and rotates API keys for authenticating to the Writer Platform.
 common:
+  - type: AgenticAccess
+    url: agentic-access/writer-agentic-access.yml
   - type: DomainSecurity
     url: security/writer-domain-security.yml
   - type: Authentication
