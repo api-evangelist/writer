@@ -1,0 +1,380 @@
+openapi: 3.0.3
+info:
+  title: File API template API
+  version: '1.0'
+servers:
+- url: https://api.writer.com
+security:
+- bearerAuth: []
+tags:
+- name: template
+paths:
+  /v1/applications/{application_id}/jobs:
+    get:
+      tags:
+      - template
+      summary: Retrieve all jobs
+      description: Retrieve all jobs created via the async API, linked to the provided application ID (or alias).
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: application_id
+        in: path
+        description: The ID of the no-code app for which to retrieve jobs.
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/api_job_status'
+      - name: offset
+        in: query
+        description: The pagination offset for retrieving the jobs.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: The pagination limit for retrieving the jobs.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_async_application_jobs_response'
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request GET https://api.writer.com/v1/applications/{application_id}/jobs \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  // Automatically fetches more pages as needed.\n  for await (const applicationGenerateAsyncResponse of client.applications.jobs.list('application_id')) {\n    console.log(applicationGenerateAsyncResponse.id);\n  }\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\npage = client.applications.jobs.list(\n    application_id=\"application_id\",\n)\npage = page.result[0]\nprint(page.id)"
+    post:
+      tags:
+      - template
+      summary: Generate from application (async)
+      description: Generate content asynchronously from an existing no-code agent (formerly called no-code applications) with inputs.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: application_id
+        description: The ID of the no-code app for which to create a job.
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/generate_application_async_request'
+        required: true
+      responses:
+        '202':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generate_application_async_response'
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/applications/{application_id}/jobs \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"inputs\":[{\"id\": \"Image ID\", \"value\": [\"12345\"]}]}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const job = await client.applications.jobs.create('application_id', {\n    inputs: [{ id: 'id', value: ['string'] }],\n  });\n\n  console.log(job.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\njob = client.applications.jobs.create(\n    application_id=\"application_id\",\n    inputs=[{\n        \"id\": \"id\",\n        \"value\": [\"string\"],\n    }],\n)\nprint(job.id)"
+  /v1/applications/jobs/{job_id}/retry:
+    post:
+      tags:
+      - template
+      summary: Retry job execution
+      description: Re-triggers the async execution of a single job previously created via the Async api and terminated in error.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: job_id
+        description: The ID of the job to retry.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generate_application_async_response'
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/applications/jobs/{job_id}/retry \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const response = await client.applications.jobs.retry('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\n  console.log(response.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\nresponse = client.applications.jobs.retry(\n    \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n)\nprint(response.id)"
+  /v1/applications/jobs/{job_id}:
+    get:
+      tags:
+      - template
+      summary: Retrieve a single job
+      description: Retrieves a single job created via the Async API.
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: job_id
+        description: The ID of the job to retrieve.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/get_async_application_job_response'
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request GET https://api.writer.com/v1/applications/jobs/{job_id} \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const applicationGenerateAsyncResponse = await client.applications.jobs.retrieve(\n    '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n  );\n\n  console.log(applicationGenerateAsyncResponse.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\napplication_generate_async_response = client.applications.jobs.retrieve(\n    \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n)\nprint(application_generate_async_response.id)"
+  /v1/applications/{application_id}/graphs:
+    get:
+      tags:
+      - template
+      summary: Retrieve graphs
+      description: Retrieve Knowledge Graphs associated with a no-code agent that has chat capabilities.
+      parameters:
+      - name: application_id
+        in: path
+        description: The ID of the no-code agent for which to retrieve Knowledge Graphs.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/application_graphs_response'
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request GET https://api.writer.com/v1/applications/{application_id}/graphs \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const applicationGraphsResponse = await client.applications.graphs.list('application_id');\n\n  console.log(applicationGraphsResponse.graph_ids);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\napplication_graphs_response = client.applications.graphs.list(\n    \"application_id\",\n)\nprint(application_graphs_response.graph_ids)"
+    put:
+      tags:
+      - template
+      summary: Associate graphs
+      description: Updates the list of Knowledge Graphs associated with a no-code chat agent.
+      parameters:
+      - name: application_id
+        in: path
+        description: 'The ID of the no-code agent to update.
+
+
+          Only no-code agents with chat capabilities can have associated Knowledge Graphs. No-code agents with text generation and research capabilities do not support Knowledge Graphs.'
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/application_graph_ids_request'
+        required: true
+      responses:
+        '200':
+          description: Successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/application_graphs_response'
+      security:
+      - bearerAuth: []
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request PUT https://api.writer.com/v1/applications/{application_id}/graphs \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"graph_ids\":[\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\"]}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const applicationGraphsResponse = await client.applications.graphs.update('application_id', {\n    graph_ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],\n  });\n\n  console.log(applicationGraphsResponse.graph_ids);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\napplication_graphs_response = client.applications.graphs.update(\n    application_id=\"application_id\",\n    graph_ids=[\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\"],\n)\nprint(application_graphs_response.graph_ids)"
+components:
+  schemas:
+    application_graph_ids_request:
+      title: application_graph_ids_request
+      required:
+      - graph_ids
+      type: object
+      properties:
+        graph_ids:
+          type: array
+          description: A list of Knowledge Graph IDs to associate with the application. Note that this will replace the existing list of Knowledge Graphs associated with the application, not add to it.
+          items:
+            type: string
+            format: uuid
+    generate_application_async_request:
+      title: generate_application_async_request
+      required:
+      - inputs
+      type: object
+      properties:
+        inputs:
+          type: array
+          description: A list of input objects to generate content for.
+          items:
+            $ref: '#/components/schemas/generate_application_input'
+    get_async_application_job_response:
+      title: get_async_application_job_response
+      required:
+      - id
+      - status
+      - application_id
+      - created_at
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the job.
+        status:
+          $ref: '#/components/schemas/api_job_status'
+        application_id:
+          type: string
+          description: The ID of the application associated with this job.
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was last updated.
+        completed_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was completed.
+        data:
+          type: object
+          description: The result of the completed job, if applicable.
+          $ref: '#/components/schemas/generate_application_response'
+        error:
+          type: string
+          description: The error message if the job failed.
+    get_async_application_jobs_response:
+      title: get_async_application_jobs_response
+      required:
+      - result
+      type: object
+      properties:
+        result:
+          type: array
+          items:
+            $ref: '#/components/schemas/get_async_application_job_response'
+        totalCount:
+          type: integer
+          format: int64
+          description: The total number of jobs associated with the application.
+        pagination:
+          type: object
+          properties:
+            offset:
+              type: integer
+              format: int64
+              description: The pagination offset for retrieving the jobs.
+            limit:
+              type: integer
+              format: int32
+              description: The pagination limit for retrieving the jobs.
+    generate_application_input:
+      title: generate_application_input
+      required:
+      - id
+      - value
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the input field from the application. All input types from the No-code application are supported (i.e. Text input, Dropdown, File upload, Image input). The identifier should be the name of the input type.
+        value:
+          type: array
+          items:
+            type: string
+          description: "The value for the input field. \n\nIf the input type is \"File upload\", you must pass the `file_id` of an uploaded file. You cannot pass a file object directly. See the [file upload endpoint](https://dev.writer.com/api-reference/file-api/upload-files) for instructions on uploading files or the [list files endpoint](https://dev.writer.com/api-reference/file-api/get-all-files) for how to see a list of uploaded files and their IDs."
+    application_graphs_response:
+      title: application_graphs_response
+      required:
+      - graph_ids
+      type: object
+      properties:
+        graph_ids:
+          type: array
+          description: A list of Knowledge Graphs associated with the application.
+          items:
+            type: string
+            format: uuid
+    api_job_status:
+      title: api_job_status
+      description: The status of the job.
+      type: string
+      enum:
+      - in_progress
+      - failed
+      - completed
+    generate_application_response:
+      title: generate_application_response
+      required:
+      - suggestion
+      type: object
+      properties:
+        title:
+          type: string
+          description: The name of the output field.
+        suggestion:
+          type: string
+          description: The response from the model specified in the application.
+    generate_application_async_response:
+      title: generate_application_async_response
+      required:
+      - id
+      - status
+      - created_at
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the async job created.
+        status:
+          $ref: '#/components/schemas/api_job_status'
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was created.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication header of the form `Bearer <token>`, where `<token>` is your [Writer API key](https://dev.writer.com/api-reference/api-keys).
+x-mint:
+  mcp:
+    enabled: true

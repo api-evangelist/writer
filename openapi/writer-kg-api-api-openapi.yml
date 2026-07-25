@@ -1,0 +1,925 @@
+openapi: 3.0.3
+info:
+  title: File API KG API API
+  version: '1.0'
+servers:
+- url: https://api.writer.com
+security:
+- bearerAuth: []
+tags:
+- name: KG API
+paths:
+  /v1/graphs:
+    get:
+      security:
+      - bearerAuth: []
+      summary: List graphs
+      description: Retrieve a list of Knowledge Graphs.
+      tags:
+      - KG API
+      operationId: findGraphsWithFileStatus
+      parameters:
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          default: desc
+          enum:
+          - asc
+          - desc
+        description: Specifies the order of the results. Valid values are asc for ascending and desc for descending.
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the first object in the previous page. This parameter instructs the API to return the previous page of results.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: The ID of the last object in the previous page. This parameter instructs the API to return the next page of results.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+        description: Specifies the maximum number of objects returned in a page. The default value is 50. The minimum value is 1, and the maximum value is 100.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/graphs_response'
+              example:
+                data:
+                - id: 50daa3d0-e7d9-44a4-be42-b53e2379ebf7
+                  created_at: '2024-07-10T15:03:48.785843Z'
+                  name: Example Knowledge Graph
+                  description: Example description
+                  file_status:
+                    in_progress: 0
+                    completed: 0
+                    failed: 0
+                    total: 11
+                  type: manual
+                  urls: null
+                - id: e7392337-1c4e-4bc9-aaf5-b719bf1e938a
+                  created_at: '2024-07-10T15:03:39.881370Z'
+                  name: Another example Knowledge Graph
+                  description: Another example description
+                  file_status:
+                    in_progress: 0
+                    completed: 0
+                    failed: 0
+                    total: 0
+                  type: web
+                  urls:
+                  - url: https://docs.example.com
+                    status:
+                      status: success
+                      error_type: null
+                    type: single_page
+                first_id: 50daa3d0-e7d9-44a4-be42-b53e2379ebf7
+                last_id: e7392337-1c4e-4bc9-aaf5-b719bf1e938a
+                has_more: true
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request GET https://api.writer.com/v1/graphs \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  // Automatically fetches more pages as needed.\n  for await (const graph of client.graphs.list()) {\n    console.log(graph.id);\n  }\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\npage = client.graphs.list()\npage = page.data[0]\nprint(page.id)"
+    post:
+      security:
+      - bearerAuth: []
+      summary: Create graph
+      description: Create a new Knowledge Graph.
+      tags:
+      - KG API
+      operationId: createGraph
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/graph_request'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/graph_response'
+              example:
+                id: 50daa3d0-e7d9-44a4-be42-b53e2379ebf7
+                created_at: '2024-07-10T13:34:28.301201Z'
+                name: Example Knowledge Graph
+                description: Example description
+                urls: null
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/graphs \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"name\":\"string\"}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const graph = await client.graphs.create({ name: 'name' });\n\n  console.log(graph.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\ngraph = client.graphs.create(\n    name=\"name\",\n)\nprint(graph.id)"
+  /v1/graphs/question:
+    post:
+      security:
+      - bearerAuth: []
+      summary: Question
+      description: Ask a question to specified Knowledge Graphs.
+      tags:
+      - KG API
+      operationId: question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/question_request'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/question_response'
+              example:
+                question: What is the generic name for the drug Bavencio?
+                answer: avelumab
+                sources:
+                - file_id: '1234'
+                  snippet: Bavencio is the brand name for avelumab.
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/question_response_chunk'
+              example:
+                data:
+                - question: What is the generic name for the drug Bavencio?
+                  answer: avelumab
+                  sources:
+                  - file_id: '1234'
+                    snippet: Bavencio is the brand name for avelumab.
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/graphs/question \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"graph_ids\":[\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\"],\"question\":\"What is the generic name for the drug Bavencio?\"}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const question = await client.graphs.question({\n    graph_ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],\n    question: 'What is the generic name for the drug Bavencio?'\n});\n\n  console.log(question.answer);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nquestion = client.graphs.question(\n    graph_ids=[\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\"],\n    question=\"What is the generic name for the drug Bavencio?\"\n)\nprint(question.answer)"
+  /v1/graphs/{graph_id}:
+    get:
+      security:
+      - bearerAuth: []
+      summary: Retrieve graph
+      description: Retrieve a Knowledge Graph.
+      tags:
+      - KG API
+      operationId: findGraphWithFileStatus
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the Knowledge Graph.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/graph'
+              example:
+                id: 50daa3d0-e7d9-44a4-be42-b53e2379ebf7
+                created_at: '2024-07-10T15:03:48.785843Z'
+                name: Example Knowledge Graph
+                description: Example description
+                file_status:
+                  in_progress: 0
+                  completed: 0
+                  failed: 0
+                  total: 0
+                type: web
+                urls:
+                - url: https://example.com/docs
+                  status:
+                    status: success
+                    error_type: null
+                  type: sub_pages
+                - url: https://docs.example.com
+                  status:
+                    status: error
+                    error_type: invalid_url
+                  type: single_page
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request GET https://api.writer.com/v1/graphs/{graph_id} \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const graph = await client.graphs.retrieve('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\n  console.log(graph.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\ngraph = client.graphs.retrieve(\n    \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n)\nprint(graph.id)"
+    put:
+      security:
+      - bearerAuth: []
+      summary: Update graph
+      description: Update the name and description of a Knowledge Graph.
+      tags:
+      - KG API
+      operationId: updateGraph
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the Knowledge Graph.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/update_graph_request'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/graph_response'
+              example:
+                id: 50daa3d0-e7d9-44a4-be42-b53e2379ebf7
+                created_at: '2024-07-10T15:03:48.785843Z'
+                name: Updated graph name
+                description: Updated graph description
+                urls:
+                - url: https://example.com/docs
+                  status:
+                    status: success
+                    error_type: null
+                  type: sub_pages
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request PUT https://api.writer.com/v1/graphs/{graph_id} \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"name\":\"string\", \"description\":\"string\", \"urls\":[{\"url\":\"https://example.com/docs\", \"type\":\"sub_pages\", \"exclude_urls\":[\"https://example.com/docs/private\"]}]}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const graph = await client.graphs.update('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', \n    { name: 'name', description: 'description' }\n  );\n\n  console.log(graph.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\ngraph = client.graphs.update(\n    graph_id=\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n    name=\"name\",\n    description=\"description\",\n)\nprint(graph.id)"
+    delete:
+      security:
+      - bearerAuth: []
+      summary: Delete graph
+      description: Delete a Knowledge Graph.
+      tags:
+      - KG API
+      operationId: deleteGraph
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the Knowledge Graph.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delete_graph_response'
+              example:
+                id: e7392337-1c4e-4bc9-aaf5-b719bf1e938a
+                deleted: true
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request DELETE https://api.writer.com/v1/graphs/{graph_id} \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const graph = await client.graphs.delete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\n  console.log(graph.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\ngraph = client.graphs.delete(\n    \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n)\nprint(graph.id)"
+  /v1/graphs/{graph_id}/file:
+    post:
+      security:
+      - bearerAuth: []
+      summary: Add file to graph
+      description: Add a file to a Knowledge Graph.
+      tags:
+      - KG API
+      operationId: addFileToGraph
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the Knowledge Graph.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/graph_file_request'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file_response'
+              example:
+                id: 7c36a365-392f-43ba-840d-8f3103b42572
+                created_at: '2024-07-10T15:16:10.684826Z'
+                name: example.pdf
+                graph_id:
+                - 50daa3d0-e7d9-44a4-be42-b53e2379ebf7
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/graphs/{graph_id}/file \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"file_id\":\"string\"}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const file = await client.graphs.addFileToGraph('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', {\n    file_id: 'file_id',\n  });\n\n  console.log(file.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nfile = client.graphs.add_file_to_graph(\n    graph_id=\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n    file_id=\"file_id\",\n)\nprint(file.id)"
+  /v1/graphs/{graph_id}/file/{file_id}:
+    delete:
+      security:
+      - bearerAuth: []
+      summary: Remove file from graph
+      description: Remove a file from a Knowledge Graph.
+      tags:
+      - KG API
+      operationId: removeFileFromGraph
+      parameters:
+      - name: graph_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the Knowledge Graph to which the files belong.
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the file.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delete_file_response'
+              example:
+                id: 7c36a365-392f-43ba-840d-8f3103b42572
+                deleted: true
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request DELETE https://api.writer.com/v1/graphs/{graph_id}/file/{file_id} \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const response = await client.graphs.removeFileFromGraph('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e', 'file_id');\n\n  console.log(response.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nresponse = client.graphs.remove_file_from_graph(\n    file_id=\"file_id\",\n    graph_id=\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n)\nprint(response.id)"
+components:
+  schemas:
+    question_request:
+      title: question_request
+      required:
+      - graph_ids
+      - question
+      type: object
+      properties:
+        graph_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          minItems: 1
+          description: The unique identifiers of the Knowledge Graphs to query.
+        subqueries:
+          type: boolean
+          description: Specify whether to include subqueries.
+          default: false
+        question:
+          type: string
+          description: The question to answer using the Knowledge Graph.
+        stream:
+          type: boolean
+          description: Determines whether the model's output should be streamed. If true, the output is generated and sent incrementally, which can be useful for real-time applications.
+          default: false
+        query_config:
+          $ref: '#/components/schemas/graph_query_config'
+          description: Configuration options for Knowledge Graph queries, including search parameters and citation settings.
+    web_connector_url:
+      title: web_connector_url
+      required:
+      - url
+      - status
+      - type
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL to be processed by the web connector.
+        status:
+          $ref: '#/components/schemas/web_connector_url_state'
+          description: The current status of the URL processing.
+        exclude_urls:
+          type: array
+          description: An array of URLs to exclude from processing within this web connector.
+          items:
+            type: string
+        type:
+          $ref: '#/components/schemas/web_connector_url_type'
+          description: The type of web connector processing for this URL.
+    source:
+      title: source
+      description: A source snippet containing text and fileId from Knowledge Graph content.
+      required:
+      - file_id
+      - snippet
+      type: object
+      nullable: true
+      properties:
+        file_id:
+          type: string
+          description: The unique identifier of the file in your Writer account.
+        snippet:
+          type: string
+          description: The exact text snippet from the source document that was used to support the response.
+    graph_type:
+      title: graph_type
+      description: 'The type of Knowledge Graph:
+
+
+        - `manual`: files are uploaded via UI or API
+
+        - `connector`: files are uploaded via a data connector such as Google Drive or Confluence
+
+        - `web`: URLs are connected to the Knowledge Graph'
+      type: string
+      enum:
+      - manual
+      - connector
+      - web
+    delete_graph_response:
+      title: delete_graph_response
+      required:
+      - id
+      - deleted
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier of the deleted Knowledge Graph.
+        deleted:
+          type: boolean
+          description: Indicates whether the Knowledge Graph was successfully deleted.
+    references:
+      title: references
+      description: Detailed source information organized by reference type, providing comprehensive metadata about the sources used to generate the response.
+      type: object
+      properties:
+        files:
+          type: array
+          description: Array of file-based references from uploaded documents in the Knowledge Graph.
+          items:
+            $ref: '#/components/schemas/file'
+          minItems: 1
+        web:
+          type: array
+          description: Array of web-based references from online sources accessed during the query.
+          items:
+            $ref: '#/components/schemas/web'
+          minItems: 1
+    question_response_chunk:
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/question_response'
+    graph_request:
+      title: graph_request
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the Knowledge Graph (max 255 characters). Omitting this field leaves the name unchanged.
+        description:
+          type: string
+          description: A description of the Knowledge Graph (max 255 characters). Omitting this field leaves the description unchanged.
+    web_connector_url_error_type:
+      title: web_connector_url_error_type
+      description: The type of error that can occur during web connector URL processing.
+      type: string
+      enum:
+      - invalid_url
+      - not_searchable
+      - not_found
+      - paywall_or_login_page
+      - unexpected_error
+    graph_file_request:
+      title: graph_file_request
+      required:
+      - file_id
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: The unique identifier of the file.
+    web:
+      title: web
+      description: A web-based reference containing text snippets from online sources accessed during the query.
+      required:
+      - text
+      - url
+      - title
+      - score
+      type: object
+      properties:
+        text:
+          type: string
+          description: The exact text snippet from the web source that was used to support the response.
+        url:
+          type: string
+          description: The URL of the web page where this content was found.
+          format: uri
+        title:
+          type: string
+          description: The title of the web page where this content was found.
+        score:
+          type: number
+          description: Internal score used during the retrieval process for ranking and selecting relevant snippets.
+    web_connector_url_status:
+      title: web_connector_url_status
+      description: The status of web connector URL processing.
+      type: string
+      enum:
+      - validating
+      - success
+      - error
+    graph:
+      title: graph
+      required:
+      - id
+      - created_at
+      - name
+      - file_status
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the Knowledge Graph.
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the Knowledge Graph was created.
+        name:
+          type: string
+          description: The name of the Knowledge Graph.
+        description:
+          type: string
+          description: A description of the Knowledge Graph.
+        file_status:
+          $ref: '#/components/schemas/graph_file_status'
+          description: The processing status of files in the Knowledge Graph.
+        type:
+          $ref: '#/components/schemas/graph_type'
+          description: 'The type of Knowledge Graph.
+
+
+            - `manual`: files are uploaded via UI or API
+
+            - `connector`: files are uploaded via a data connector such as Google Drive or Confluence
+
+            - `web`: URLs are connected to the Knowledge Graph'
+        urls:
+          type: array
+          description: An array of web connector URLs associated with this Knowledge Graph.
+          items:
+            $ref: '#/components/schemas/web_connector_url'
+    graph_response:
+      title: graph_response
+      required:
+      - id
+      - created_at
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: A unique identifier of the Knowledge Graph.
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the Knowledge Graph was created.
+        name:
+          type: string
+          description: The name of the Knowledge Graph (max 255 characters).
+        description:
+          type: string
+          description: A description of the Knowledge Graph (max 255 characters).
+        urls:
+          type: array
+          description: An array of web connector URLs associated with this Knowledge Graph.
+          items:
+            $ref: '#/components/schemas/web_connector_url'
+    file:
+      title: file
+      description: A file-based reference containing text snippets from uploaded documents in the Knowledge Graph.
+      required:
+      - text
+      - fileId
+      - score
+      type: object
+      properties:
+        text:
+          type: string
+          description: The exact text snippet from the source document that was used to support the response.
+        fileId:
+          type: string
+          description: The unique identifier of the file in your Writer account.
+        score:
+          type: number
+          description: Internal score used during the retrieval process for ranking and selecting relevant snippets.
+        page:
+          type: integer
+          format: int32
+          description: Page number where this snippet was found in the source document.
+        cite:
+          type: string
+          description: Unique citation ID that appears in inline citations within the response text (null if not cited).
+    graph_query_config:
+      title: graph_query_config
+      description: Configuration options for Knowledge Graph queries.
+      type: object
+      properties:
+        max_subquestions:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 10
+          default: 6
+          description: 'Maximum number of subquestions to generate when processing complex queries. Set higher to improve detail, set lower to reduce response time. Range: 1-10, Default: 6.'
+        search_weight:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          default: 50
+          description: 'Weight given to search results when ranking and selecting relevant information. Higher values (closer to 100) prioritize keyword-based matching, while lower values (closer to 0) prioritize semantic similarity matching. Use higher values for exact keyword searches, lower values for conceptual similarity searches. Range: 0-100, Default: 50.'
+        grounding_level:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          default: 0
+          description: 'Level of grounding required for responses, controlling how closely answers must be tied to source material. Set lower for grounded outputs, higher for creativity. Higher values (closer to 1.0) allow more creative interpretation, while lower values (closer to 0.0) stick more closely to source material. Range: 0.0-1.0, Default: 0.0.'
+        max_snippets:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 60
+          default: 30
+          description: 'Maximum number of text snippets to retrieve from the Knowledge Graph for context. Works in concert with `search_weight` to control best matches vs broader coverage. While technically supports 1-60, values below 5 may return no results due to RAG implementation. Recommended range: 5-25. Due to RAG system behavior, you may see more snippets than requested. Range: 1-60, Default: 30.'
+        max_tokens:
+          type: integer
+          format: int32
+          minimum: 100
+          maximum: 8000
+          default: 4000
+          description: 'Maximum number of tokens the model can generate in the response. This controls the length of the AI''s answer. Set higher for longer answers, set lower for shorter, faster answers. Range: 100-8000, Default: 4000.'
+        keyword_threshold:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          default: 0.7
+          description: 'Threshold for keyword-based matching when searching Knowledge Graph content. Set higher for stricter relevance, lower for broader range. Higher values (closer to 1.0) require stronger keyword matches, while lower values (closer to 0.0) allow more lenient matching. Range: 0.0-1.0, Default: 0.7.'
+        semantic_threshold:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          default: 0.7
+          description: 'Threshold for semantic similarity matching when searching Knowledge Graph content. Set higher for stricter relevance, lower for broader range. Higher values (closer to 1.0) require stronger semantic similarity, while lower values (closer to 0.0) allow more lenient semantic matching. Range: 0.0-1.0, Default: 0.7.'
+        inline_citations:
+          type: boolean
+          default: false
+          description: 'Whether to include inline citations in the response, showing which Knowledge Graph sources were used. Default: false.'
+    update_graph_web_url:
+      title: update_graph_web_url
+      required:
+      - url
+      - type
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL to be processed by the web connector.
+        exclude_urls:
+          type: array
+          description: An array of URLs to exclude from processing within this web connector.
+          items:
+            type: string
+        type:
+          $ref: '#/components/schemas/web_connector_url_type'
+          description: The type of web connector processing for this URL.
+    update_graph_request:
+      title: update_graph_request
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the Knowledge Graph (max 255 characters). Omitting this field leaves the name unchanged.
+        description:
+          type: string
+          description: A description of the Knowledge Graph (max 255 characters). Omitting this field leaves the description unchanged.
+        urls:
+          type: array
+          description: An array of web connector URLs to update for this Knowledge Graph. You can only connect URLs to Knowledge Graphs with the type `web`. To clear the list of URLs, set this field to an empty array.
+          items:
+            $ref: '#/components/schemas/update_graph_web_url'
+    graph_file_status:
+      title: graph_file_status
+      required:
+      - in_progress
+      - completed
+      - failed
+      - total
+      type: object
+      properties:
+        in_progress:
+          type: integer
+          format: int64
+          description: The number of files currently being processed.
+        completed:
+          type: integer
+          format: int64
+          description: The number of files that have been successfully processed.
+        failed:
+          type: integer
+          format: int64
+          description: The number of files that failed to process.
+        total:
+          type: integer
+          format: int64
+          description: The total number of files associated with the Knowledge Graph.
+    web_connector_url_type:
+      title: web_connector_url_type
+      description: The type of web connector processing for a URL.
+      type: string
+      enum:
+      - single_page
+      - sub_pages
+    sub_query:
+      title: sub_query
+      description: A sub-question generated to break down complex queries into more manageable parts, along with its answer and supporting sources.
+      required:
+      - query
+      - answer
+      - sources
+      type: object
+      nullable: true
+      properties:
+        query:
+          type: string
+          description: The subquery that was generated to help answer the main question.
+        answer:
+          type: string
+          description: The answer to the subquery based on Knowledge Graph content.
+        sources:
+          type: array
+          description: Array of source snippets that were used to answer this subquery.
+          items:
+            $ref: '#/components/schemas/source'
+    web_connector_url_state:
+      title: web_connector_url_state
+      description: The state of a web connector URL processing.
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/web_connector_url_status'
+          description: The current status of the URL processing.
+        error_type:
+          $ref: '#/components/schemas/web_connector_url_error_type'
+          description: The type of error that occurred during processing, if any.
+    graphs_response:
+      title: graphs_response
+      required:
+      - data
+      - has_more
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/graph'
+        first_id:
+          type: string
+          format: uuid
+          description: The ID of the first Knowledge Graph in the current response.
+        last_id:
+          type: string
+          format: uuid
+          description: The ID of the last Knowledge Graph in the current response.
+        has_more:
+          type: boolean
+          description: Indicates if there are more Knowledge Graphs available beyond the current page.
+    question_response:
+      title: question_response
+      required:
+      - question
+      - answer
+      - sources
+      type: object
+      properties:
+        question:
+          type: string
+          description: The question that was asked.
+        answer:
+          type: string
+          description: The answer to the question.
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/source'
+        subqueries:
+          type: array
+          items:
+            $ref: '#/components/schemas/sub_query'
+        references:
+          $ref: '#/components/schemas/references'
+    file_response:
+      title: file_response
+      required:
+      - id
+      - created_at
+      - name
+      - graph_ids
+      - status
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier of the file.
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the file was uploaded.
+        name:
+          type: string
+          description: The name of the file.
+        graph_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: 'A list of Knowledge Graph IDs that the file is associated with.
+
+
+            If you provided a `graphId` during upload, the file is associated with that Knowledge Graph. However, the `graph_ids` field in the upload response is an empty list. The association will be visible in the `graph_ids` list when you retrieve the file using the file retrieval endpoint.'
+        status:
+          type: string
+          description: The processing status of the file.
+    delete_file_response:
+      title: delete_file_response
+      required:
+      - id
+      - deleted
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier of the deleted file.
+        deleted:
+          type: boolean
+          description: Indicates whether the file was successfully deleted.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication header of the form `Bearer <token>`, where `<token>` is your [Writer API key](https://dev.writer.com/api-reference/api-keys).
+x-mint:
+  mcp:
+    enabled: true

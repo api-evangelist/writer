@@ -1,0 +1,403 @@
+openapi: 3.0.3
+info:
+  title: File API Tools API API
+  version: '1.0'
+servers:
+- url: https://api.writer.com
+security:
+- bearerAuth: []
+tags:
+- name: Tools API
+paths:
+  /v1/tools/pdf-parser/{file_id}:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+      - Tools API
+      summary: Parse PDF
+      description: Parse PDF to other formats.
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the file.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/parse_pdf_request'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/parse_pdf_response'
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/tools/pdf-parser/{file_id} \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"format\":\"text\"}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const response = await client.tools.parsePdf('file_id', { format: 'text' });\n\n  console.log(response.content);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nresponse = client.tools.parse_pdf(\n    file_id=\"file_id\",\n    format=\"text\",\n)\nprint(response.content)"
+  /v1/tools/web-search:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+      - Tools API
+      summary: Web search
+      description: Search the web for information about a given query and return relevant results with source URLs.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/web_search_request'
+            example:
+              query: How do I get an API key for the Writer API?
+              include_domains:
+              - dev.writer.com
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/web_search_response'
+              example:
+                query: How do I get an API key for the Writer API?
+                answer: "To get an API key for the Writer API, you need to create one in the AI Studio. Here's how to do it:\n\n1. Go to the AI Studio home page.\n2. Click on \"API Keys\" in the navigation menu.\n \nOnce you've created your API key, you can use it to make API calls. It's recommended to set the API key as an environment variable named `WRITER_API_KEY` for easier access. \n\nFor example, you can store it in a `.env` file and then initialize the Writer client, which will automatically look for the `WRITER_API_KEY` environment variable."
+                sources:
+                - url: https://dev.writer.com/home/sdks
+                  raw_content: null
+                - url: https://dev.writer.com/api-guides/api-reference/application-api/applications
+                  raw_content: null
+                - url: https://dev.writer.com/api-reference/api-keys
+                  raw_content: null
+                - url: https://dev.writer.com/home/quickstart
+                  raw_content: null
+                - url: https://dev.writer.com/framework/chat-assistant
+                  raw_content: null
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/tools/web-search \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"query\":\"How do I get an API key for the Writer API?\",\"include_domains\":[\"dev.writer.com\"]}'"
+components:
+  schemas:
+    parse_pdf_response:
+      title: parse_pdf_response
+      required:
+      - content
+      type: object
+      properties:
+        content:
+          type: string
+          description: The extracted content from the PDF file, converted to the specified format.
+    web_search_response:
+      title: web_search_response
+      required:
+      - query
+      - sources
+      type: object
+      properties:
+        query:
+          type: string
+          description: The search query that was submitted.
+        answer:
+          type: string
+          description: Generated answer based on the search results. Not included if `include_answer` is `false`.
+        sources:
+          type: array
+          description: The search results found.
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                description: URL of the search result.
+              raw_content:
+                type: string
+                description: Raw content from the source URL. Not included if `include_raw_content` is `false`.
+    pdf_conversion_format:
+      title: pdf_conversion_format
+      type: string
+      enum:
+      - text
+      - markdown
+      description: The format into which the PDF content should be converted.
+    parse_pdf_request:
+      title: parse_pdf_request
+      required:
+      - format
+      type: object
+      properties:
+        format:
+          $ref: '#/components/schemas/pdf_conversion_format'
+    web_search_request:
+      type: object
+      properties:
+        query:
+          type: string
+          description: The search query.
+        topic:
+          type: string
+          enum:
+          - general
+          - news
+          default: general
+          description: The search topic category. Use `news` for current events and news articles, or `general` for broader web search.
+        search_depth:
+          type: string
+          enum:
+          - basic
+          - advanced
+          default: basic
+          description: 'Controls search comprehensiveness:
+
+
+            - `basic`: Returns fewer but highly relevant results
+
+            - `advanced`: Performs a deeper search with more results'
+        chunks_per_source:
+          type: integer
+          format: int32
+          description: Only applies when `search_depth` is `advanced`. Specifies how many text segments to extract from each source. Limited to 3 chunks maximum.
+        max_results:
+          type: integer
+          format: int32
+          description: Limits the number of search results returned. Cannot exceed 20 sources.
+        time_range:
+          type: string
+          enum:
+          - day
+          - week
+          - month
+          - year
+          - d
+          - w
+          - m
+          - y
+          description: Filters results to content published within the specified time range back from the current date. For example, `week` or `w` returns results from the past 7 days.
+        days:
+          type: integer
+          format: int32
+          description: For news topic searches, specifies how many days of news coverage to include.
+        include_raw_content:
+          oneOf:
+          - type: string
+            enum:
+            - text
+            - markdown
+          - type: boolean
+          default: false
+          description: 'Controls how raw content is included in search results:
+
+
+            - `text`: Returns plain text without formatting markup
+
+            - `markdown`: Returns structured content with markdown formatting (headers, links, bold text)
+
+            - `true`: Same as `markdown`
+
+            - `false`: Raw content is not included (default if unset)'
+        include_answer:
+          type: boolean
+          default: true
+          description: Whether to include a generated answer to the query in the response. If `false`, only search results are returned.
+        include_domains:
+          type: array
+          items:
+            type: string
+          description: Domains to include in the search. If unset, the search includes all domains.
+        exclude_domains:
+          type: array
+          items:
+            type: string
+          description: Domains to exclude from the search. If unset, the search includes all domains.
+        country:
+          type: string
+          enum:
+          - afghanistan
+          - albania
+          - algeria
+          - andorra
+          - angola
+          - argentina
+          - armenia
+          - australia
+          - austria
+          - azerbaijan
+          - bahamas
+          - bahrain
+          - bangladesh
+          - barbados
+          - belarus
+          - belgium
+          - belize
+          - benin
+          - bhutan
+          - bolivia
+          - bosnia and herzegovina
+          - botswana
+          - brazil
+          - brunei
+          - bulgaria
+          - burkina faso
+          - burundi
+          - cambodia
+          - cameroon
+          - canada
+          - cape verde
+          - central african republic
+          - chad
+          - chile
+          - china
+          - colombia
+          - comoros
+          - congo
+          - costa rica
+          - croatia
+          - cuba
+          - cyprus
+          - czech republic
+          - denmark
+          - djibouti
+          - dominican republic
+          - ecuador
+          - egypt
+          - el salvador
+          - equatorial guinea
+          - eritrea
+          - estonia
+          - ethiopia
+          - fiji
+          - finland
+          - france
+          - gabon
+          - gambia
+          - georgia
+          - germany
+          - ghana
+          - greece
+          - guatemala
+          - guinea
+          - haiti
+          - honduras
+          - hungary
+          - iceland
+          - india
+          - indonesia
+          - iran
+          - iraq
+          - ireland
+          - israel
+          - italy
+          - jamaica
+          - japan
+          - jordan
+          - kazakhstan
+          - kenya
+          - kuwait
+          - kyrgyzstan
+          - latvia
+          - lebanon
+          - lesotho
+          - liberia
+          - libya
+          - liechtenstein
+          - lithuania
+          - luxembourg
+          - madagascar
+          - malawi
+          - malaysia
+          - maldives
+          - mali
+          - malta
+          - mauritania
+          - mauritius
+          - mexico
+          - moldova
+          - monaco
+          - mongolia
+          - montenegro
+          - morocco
+          - mozambique
+          - myanmar
+          - namibia
+          - nepal
+          - netherlands
+          - new zealand
+          - nicaragua
+          - niger
+          - nigeria
+          - north korea
+          - north macedonia
+          - norway
+          - oman
+          - pakistan
+          - panama
+          - papua new guinea
+          - paraguay
+          - peru
+          - philippines
+          - poland
+          - portugal
+          - qatar
+          - romania
+          - russia
+          - rwanda
+          - saudi arabia
+          - senegal
+          - serbia
+          - singapore
+          - slovakia
+          - slovenia
+          - somalia
+          - south africa
+          - south korea
+          - south sudan
+          - spain
+          - sri lanka
+          - sudan
+          - sweden
+          - switzerland
+          - syria
+          - taiwan
+          - tajikistan
+          - tanzania
+          - thailand
+          - togo
+          - trinidad and tobago
+          - tunisia
+          - turkey
+          - turkmenistan
+          - uganda
+          - ukraine
+          - united arab emirates
+          - united kingdom
+          - united states
+          - uruguay
+          - uzbekistan
+          - venezuela
+          - vietnam
+          - yemen
+          - zambia
+          - zimbabwe
+          description: Localizes search results to a specific country. Only applies to general topic searches.
+        stream:
+          type: boolean
+          default: false
+          description: Enables streaming of search results as they become available.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication header of the form `Bearer <token>`, where `<token>` is your [Writer API key](https://dev.writer.com/api-reference/api-keys).
+x-mint:
+  mcp:
+    enabled: true

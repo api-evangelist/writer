@@ -1,0 +1,104 @@
+openapi: 3.0.3
+info:
+  title: File API Translation API
+  version: '1.0'
+servers:
+- url: https://api.writer.com
+security:
+- bearerAuth: []
+tags:
+- name: Translation
+paths:
+  /v1/translation:
+    post:
+      tags:
+      - Translation
+      summary: Translate text
+      description: Translate text from one language to another.
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/translation_request'
+            example:
+              model: palmyra-translate
+              source_language_code: en
+              target_language_code: es
+              text: Hello, world!
+              formality: true
+              length_control: true
+              mask_profanity: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              example:
+                data: ¡Hola, mundo!
+              schema:
+                $ref: '#/components/schemas/translation_response'
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/translation \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"model\":\"string\",\"source_language_code\":\"string\",\"target_language_code\":\"string\",\"text\":\"string\",\"formality\":false,\"length_control\":false,\"mask_profanity\":false}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const translationResponse = await client.translation.translate({\n    formality: true,\n    length_control: true,\n    mask_profanity: true,\n    model: 'palmyra-translate',\n    source_language_code: 'en',\n    target_language_code: 'es',\n    text: 'Hello, world!',\n  });\n\n  console.log(translationResponse.data);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\ntranslation_response = client.translation.translate(\n    formality=True,\n    length_control=True,\n    mask_profanity=True,\n    model=\"palmyra-translate\",\n    source_language_code=\"en\",\n    target_language_code=\"es\",\n    text=\"Hello, world!\",\n)\nprint(translation_response.data)"
+components:
+  schemas:
+    translation_request:
+      title: Translation Request
+      required:
+      - model
+      - source_language_code
+      - target_language_code
+      - text
+      - formality
+      - length_control
+      - mask_profanity
+      type: object
+      properties:
+        model:
+          type: string
+          description: The model to use for translation.
+          enum:
+          - palmyra-translate
+        source_language_code:
+          type: string
+          description: The [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code of the original text to translate. For example, `en` for English, `zh` for Chinese, `fr` for French, `es` for Spanish. If the language has a variant, the code appends the two-digit [ISO-3166 country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes). For example, Mexican Spanish is `es-MX`. See the [list of supported languages and language codes](https://dev.writer.com/api-reference/translation-api/language-support).
+        target_language_code:
+          type: string
+          description: The [ISO-639-1](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes) language code of the target language for the translation. For example, `en` for English, `zh` for Chinese, `fr` for French, `es` for Spanish. If the language has a variant, the code appends the two-digit [ISO-3166 country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes). For example, Mexican Spanish is `es-MX`. See the [list of supported languages and language codes](https://dev.writer.com/api-reference/translation-api/language-support).
+        text:
+          type: string
+          description: The text to translate. Maximum of 100,000 words.
+        formality:
+          type: boolean
+          description: Whether to use formal or informal language in the translation. See the [list of languages that support formality](https://dev.writer.com/api-reference/translation-api/language-support#formality). If the language does not support formality, this parameter is ignored.
+        length_control:
+          type: boolean
+          description: Whether to control the length of the translated text. See the [list of languages that support length control](https://dev.writer.com/api-reference/translation-api/language-support#length-control). If the language does not support length control, this parameter is ignored.
+        mask_profanity:
+          type: boolean
+          description: Whether to mask profane words in the translated text. See the [list of languages that do not support profanity masking](https://dev.writer.com/api-reference/translation-api/language-support#profanity-masking). If the language does not support profanity masking, this parameter is ignored.
+    translation_response:
+      title: Translation Response
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: string
+          description: The result of the translation.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication header of the form `Bearer <token>`, where `<token>` is your [Writer API key](https://dev.writer.com/api-reference/api-keys).
+x-mint:
+  mcp:
+    enabled: true

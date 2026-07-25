@@ -1,0 +1,463 @@
+openapi: 3.0.3
+info:
+  title: File API API
+  version: '1.0'
+servers:
+- url: https://api.writer.com
+security:
+- bearerAuth: []
+tags:
+- name: File API
+paths:
+  /v1/files/{file_id}:
+    get:
+      security:
+      - bearerAuth: []
+      summary: Retrieve file
+      description: Retrieve detailed information about a specific file, including its metadata, status, and associated graphs.
+      tags:
+      - File API
+      operationId: gatewayGetFile
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the file.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file_response'
+              example:
+                id: 7c36a365-392f-43ba-840d-8f3103b42572
+                created_at: '2024-07-10T13:34:28.301201Z'
+                name: example.pdf
+                graph_ids:
+                - 704ffd94-de04-4de2-9f8b-f9fc04831edd
+                status: completed
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request GET https://api.writer.com/v1/files/{file_id} \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const file = await client.files.retrieve('file_id');\n\n  console.log(file.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nfile = client.files.retrieve(\n    \"file_id\",\n)\nprint(file.id)"
+    delete:
+      security:
+      - bearerAuth: []
+      summary: Delete file
+      description: Permanently delete a file from the system. This action cannot be undone.
+      tags:
+      - File API
+      operationId: gatewayDeleteFile
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the file.
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delete_file_response'
+              example:
+                id: 7c36a365-392f-43ba-840d-8f3103b42572
+                deleted: true
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request DELETE https://api.writer.com/v1/files/{file_id} \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const file = await client.files.delete('file_id');\n\n  console.log(file.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nfile = client.files.delete(\n    \"file_id\",\n)\nprint(file.id)"
+  /v1/files:
+    get:
+      security:
+      - bearerAuth: []
+      summary: List files
+      description: Retrieve a paginated list of files with optional filtering by status, graph association, and file type.
+      tags:
+      - File API
+      operationId: gatewayGetFiles
+      parameters:
+      - name: before
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The ID of the first object in the previous page. This parameter instructs the API to return the previous page of results.
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+        description: The ID of the last object in the previous page. This parameter instructs the API to return the next page of results.
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 50
+        description: Specifies the maximum number of objects returned in a page. The default value is 50. The minimum value is 1, and the maximum value is 100.
+      - name: order
+        in: query
+        required: false
+        schema:
+          type: string
+          default: desc
+          enum:
+          - asc
+          - desc
+        description: Specifies the order of the results. Valid values are asc for ascending and desc for descending.
+      - name: graph_id
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the graph to which the files belong.
+      - name: status
+        in: query
+        required: false
+        schema:
+          enum:
+          - in_progress
+          - completed
+          - failed
+        description: Specifies the status of the files to retrieve. Valid values are in_progress, completed or failed.
+      - name: file_types
+        in: query
+        required: false
+        schema:
+          type: string
+        description: 'The extensions of the files to retrieve. Separate multiple extensions with a comma. For example: `pdf,jpg,docx`.'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/files_response'
+              example:
+                data:
+                - id: 7c36a365-392f-43ba-840d-8f3103b42572
+                  name: example.pdf
+                  created_at: '2024-07-10T12:00:00Z'
+                  graph_ids:
+                  - 31a8b75a-9a90-432f-8861-942229125333
+                  status: in_progress
+                - id: 4bbe6207-737e-486f-a287-c5e95536984a
+                  name: image.jpg
+                  created_at: '2024-07-09T15:30:00Z'
+                  graph_ids:
+                  - 31a8b75a-9a90-432f-8861-942229125333
+                  status: completed
+                - id: efc86bb4-30a4-40c9-a52a-ecee0d7e071f
+                  name: document.txt
+                  created_at: '2024-07-08T16:00:00Z'
+                  graph_ids:
+                  - 31a8b75a-9a90-432f-8861-942229125333
+                  status: failed
+                has_more: false
+                first_id: 7c36a365-392f-43ba-840d-8f3103b42572
+                last_id: efc86bb4-30a4-40c9-a52a-ecee0d7e071f
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request GET https://api.writer.com/v1/files \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  // Automatically fetches more pages as needed.\n  for await (const file of client.files.list()) {\n    console.log(file.id);\n  }\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\npage = client.files.list()\npage = page.data[0]\nprint(page.id)"
+    post:
+      security:
+      - bearerAuth: []
+      summary: Upload file
+      description: Upload a new file to the system. Supports various file formats including PDF, DOC, DOCX, PPT, PPTX, JPG, PNG, EML, HTML, SRT, CSV, XLS, and XLSX.
+      tags:
+      - File API
+      operationId: gatewayUploadFile
+      parameters:
+      - name: Content-Disposition
+        in: header
+        required: true
+        schema:
+          type: string
+        description: 'The disposition type of the file, typically used to indicate the form-data name. Use `attachment` with the filename parameter to specify the name of the file, for example: `attachment; filename=example.pdf`.'
+      - name: Content-Type
+        in: header
+        required: true
+        schema:
+          type: string
+        description: The [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types/Common_types) of the file being uploaded. Supports `txt`, `doc`, `docx`, `ppt`, `pptx`, `jpg`, `png`, `eml`, `html`, `pdf`, `srt`, `csv`, `xls`, `xlsx`, `mp3`, and `mp4` file extensions.
+      - name: Content-Length
+        in: header
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: The size of the file in bytes.
+      - name: graphId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+        description: 'The unique identifier of the Knowledge Graph to associate the uploaded file with.
+
+
+          Note: The response from the upload endpoint does not include the `graphId` field, but the association will be visible when you retrieve the file using the file retrieval endpoint.'
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+              format: binary
+          application/msword:
+            schema:
+              type: string
+              format: binary
+          application/vnd.openxmlformats-officedocument.wordprocessingml.document:
+            schema:
+              type: string
+              format: binary
+          application/vnd.ms-powerpoint:
+            schema:
+              type: string
+              format: binary
+          application/vnd.openxmlformats-officedocument.presentationml.presentation:
+            schema:
+              type: string
+              format: binary
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
+          image/png:
+            schema:
+              type: string
+              format: binary
+          message/rfc822:
+            schema:
+              type: string
+              format: binary
+          text/html:
+            schema:
+              type: string
+              format: binary
+          application/pdf:
+            schema:
+              type: string
+              format: binary
+          application/x-subrip:
+            schema:
+              type: string
+              format: binary
+          text/csv:
+            schema:
+              type: string
+              format: binary
+          application/vnd.ms-excel:
+            schema:
+              type: string
+              format: binary
+          application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+            schema:
+              type: string
+              format: binary
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/file_response'
+              example:
+                id: 7c36a365-392f-43ba-840d-8f3103b42572
+                name: example.pdf
+                created_at: '2024-07-10T14:30:00Z'
+                graph_id: []
+                status: in_progress
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/files \\\n --header \"Authorization: Bearer <token>\"\n --header \"Accept: */*\" \\\n --header \"Content-Disposition: attachment; filename=descriptions.pdf\" \\\n --header \"Content-Length: size_in_bytes\" \\\n --header \"Content-Type: application/pdf\" \\\n --data-binary \"@descriptions.pdf\""
+      - lang: JavaScript
+        source: "import fs from 'fs';\nimport Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const file = await client.files.upload({\n    content: fs.createReadStream('path/to/file/descriptions.pdf'),\n    'Content-Disposition': 'attachment; filename=descriptions.pdf',\n    'Content-Type': 'application/pdf',\n  });\n\n  console.log(file.id);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom pathlib import Path\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nfile = client.files.upload(\n    content=Path('/path/to/file/descriptions.pdf'),\n    content_disposition=\"attachment; filename=descriptions.pdf\",\n    content_type=\"application/pdf\"\n)\nprint(file.id)"
+  /v1/files/{file_id}/download:
+    get:
+      security:
+      - bearerAuth: []
+      tags:
+      - File API
+      summary: Download file
+      description: Download the binary content of a file. The response will contain the file data in the appropriate MIME type.
+      operationId: gatewayDownloadFile
+      parameters:
+      - name: file_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: The unique identifier of the file.
+      responses:
+        '200':
+          description: File download successful
+          headers:
+            Content-Type:
+              description: The MIME type of the file being downloaded
+              required: true
+              schema:
+                type: object
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+              examples:
+                fileDownloadExample:
+                  summary: Example binary file download
+                  value: File contents
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request GET https://api.writer.com/v1/files/{file_id}/download \\\n --header \"Authorization: Bearer <token>\""
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const response = await client.files.download('file_id');\n\n  console.log(response);\n\n  const content = await response.blob();\n  console.log(content);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nresponse = client.files.download(\n    \"file_id\",\n)\nprint(response)\ncontent = response.read()\nprint(content)"
+  /v1/files/retry:
+    post:
+      security:
+      - bearerAuth: []
+      tags:
+      - File API
+      summary: Retry failed files
+      description: Retry processing of files that previously failed to process. This will re-attempt the processing of the specified files.
+      operationId: gatewayRetryFailedFiles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/retry_files_request'
+        required: true
+      responses:
+        '200':
+          description: The retry request is being processed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/retry_files_response'
+              example:
+                success: true
+      x-codeSamples:
+      - lang: cURL
+        source: "curl --location --request POST https://api.writer.com/v1/files/retry \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n --data-raw '{\"file_ids\":[\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\", \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\", \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\"]}'"
+      - lang: JavaScript
+        source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const response = await client.files.retry({\n    file_ids: [\n      '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n      '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n      '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n    ],\n  });\n\n  console.log(response.success);\n}\n\nmain();"
+      - lang: Python
+        source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nresponse = client.files.retry(\n    file_ids=[\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\", \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\", \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\"],\n)\nprint(response.success)"
+components:
+  schemas:
+    retry_files_response:
+      title: retry_files_response
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Indicates whether the retry operation was successful.
+    retry_files_request:
+      title: retry_files_request
+      required:
+      - file_ids
+      type: object
+      properties:
+        file_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: The unique identifier of the files to retry.
+    files_response:
+      title: files_response
+      required:
+      - data
+      - has_more
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/file_response'
+        has_more:
+          type: boolean
+          description: Indicates if there are more files available beyond the current page.
+        first_id:
+          type: string
+          description: The ID of the first file in the current response.
+        last_id:
+          type: string
+          description: The ID of the last file in the current response.
+    file_response:
+      title: file_response
+      required:
+      - id
+      - created_at
+      - name
+      - graph_ids
+      - status
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier of the file.
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the file was uploaded.
+        name:
+          type: string
+          description: The name of the file.
+        graph_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: 'A list of Knowledge Graph IDs that the file is associated with.
+
+
+            If you provided a `graphId` during upload, the file is associated with that Knowledge Graph. However, the `graph_ids` field in the upload response is an empty list. The association will be visible in the `graph_ids` list when you retrieve the file using the file retrieval endpoint.'
+        status:
+          type: string
+          description: The processing status of the file.
+    delete_file_response:
+      title: delete_file_response
+      required:
+      - id
+      - deleted
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier of the deleted file.
+        deleted:
+          type: boolean
+          description: Indicates whether the file was successfully deleted.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication header of the form `Bearer <token>`, where `<token>` is your [Writer API key](https://dev.writer.com/api-reference/api-keys).
+x-mint:
+  mcp:
+    enabled: true
