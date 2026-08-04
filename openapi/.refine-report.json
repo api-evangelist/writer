@@ -1,0 +1,26 @@
+{
+  "provider": "writer",
+  "sources": [
+    "writer-file-api-api-openapi.yml",
+    "writer-generation-api-api-openapi.yml",
+    "writer-kg-api-api-openapi.yml",
+    "writer-template-api-openapi.yml",
+    "writer-tools-api-api-openapi.yml",
+    "writer-translation-api-openapi.yml",
+    "writer-vision-api-openapi.yml"
+  ],
+  "outputs": [
+    "writer-file-api-api-openapi.yml",
+    "writer-generation-api-api-openapi.yml",
+    "writer-kg-api-api-openapi.yml",
+    "writer-template-api-openapi.yml",
+    "writer-tools-api-api-openapi.yml",
+    "writer-translation-api-openapi.yml",
+    "writer-vision-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
