@@ -1,0 +1,174 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "File API Generation API API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Generation API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Chat completion",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/chat",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate a chat completion based on the provided messages. The response shown below is for non-streaming. To learn about streaming responses, see the [chat completion guide](https://dev.writer.com/home/chat-completion)."
+        },
+        {
+          "info": {
+            "name": "Text generation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/completions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate text completions using the specified model and prompt. This endpoint is useful for text generation tasks that don't require conversational context."
+        },
+        {
+          "info": {
+            "name": "List models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/models",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a list of available models that can be used for text generation, chat completions, and other AI tasks."
+        },
+        {
+          "info": {
+            "name": "List applications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications",
+            "params": [
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for the results based on creation time."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "Return results before this application ID for pagination."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "Return results after this application ID for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of applications to return in the response."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter applications by their type."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a paginated list of no-code agents (formerly called no-code applications) with optional filtering and sorting capabilities."
+        },
+        {
+          "info": {
+            "name": "Application details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications/:application_id",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the application to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves detailed information for a specific no-code agent (formerly called no-code applications), including its configuration and current status."
+        },
+        {
+          "info": {
+            "name": "Generate from application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/applications/:application_id",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of a [no-code agent](/no-code/introduction) in AI Studio."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate content from an existing no-code agent (formerly called no-code applications) with inputs."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

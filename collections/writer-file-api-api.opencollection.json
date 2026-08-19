@@ -1,0 +1,208 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "File API API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "File API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/files/:file_id",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve detailed information about a specific file, including its metadata, status, and associated graphs."
+        },
+        {
+          "info": {
+            "name": "Delete file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.writer.com/v1/files/:file_id",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Permanently delete a file from the system. This action cannot be undone."
+        },
+        {
+          "info": {
+            "name": "List files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/files",
+            "params": [
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the first object in the previous page. This parameter instructs the API to return the previous page of results."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the last object in the previous page. This parameter instructs the API to return the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the maximum number of objects returned in a page. The default value is 50. The minimum value is 1, and the maximum value is 100."
+              },
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the order of the results. Valid values are asc for ascending and desc for descending."
+              },
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the graph to which the files belong."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the status of the files to retrieve. Valid values are in_progress, completed or failed."
+              },
+              {
+                "name": "file_types",
+                "value": "",
+                "type": "query",
+                "description": "The extensions of the files to retrieve. Separate multiple extensions with a comma. For example: `pdf,jpg,docx`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a paginated list of files with optional filtering by status, graph association, and file type."
+        },
+        {
+          "info": {
+            "name": "Upload file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/files",
+            "headers": [
+              {
+                "name": "Content-Disposition",
+                "value": ""
+              },
+              {
+                "name": "Content-Type",
+                "value": ""
+              },
+              {
+                "name": "Content-Length",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "graphId",
+                "value": "",
+                "type": "query",
+                "description": "The unique identifier of the Knowledge Graph to associate the uploaded file with.\n\nNote: The response from the upload endpoint does not include the `graphId` field, but the association will be visible when you retrieve the file using the file retrieval endpoint."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Upload a new file to the system. Supports various file formats including PDF, DOC, DOCX, PPT, PPTX, JPG, PNG, EML, HTML, SRT, CSV, XLS, and XLSX."
+        },
+        {
+          "info": {
+            "name": "Download file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/files/:file_id/download",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Download the binary content of a file. The response will contain the file data in the appropriate MIME type."
+        },
+        {
+          "info": {
+            "name": "Retry failed files",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/files/retry",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retry processing of files that previously failed to process. This will re-attempt the processing of the specified files."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "File API Tools API API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tools API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Parse PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/tools/pdf-parser/:file_id",
+            "params": [
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Parse PDF to other formats."
+        },
+        {
+          "info": {
+            "name": "Web search",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/tools/web-search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Search the web for information about a given query and return relevant results with source URLs."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

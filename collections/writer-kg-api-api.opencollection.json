@@ -1,0 +1,232 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "File API KG API API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "KG API",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List graphs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/graphs",
+            "params": [
+              {
+                "name": "order",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the order of the results. Valid values are asc for ascending and desc for descending."
+              },
+              {
+                "name": "before",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the first object in the previous page. This parameter instructs the API to return the previous page of results."
+              },
+              {
+                "name": "after",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the last object in the previous page. This parameter instructs the API to return the next page of results."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the maximum number of objects returned in a page. The default value is 50. The minimum value is 1, and the maximum value is 100."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a list of Knowledge Graphs."
+        },
+        {
+          "info": {
+            "name": "Create graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/graphs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a new Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Question",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/graphs/question",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Ask a question to specified Knowledge Graphs."
+        },
+        {
+          "info": {
+            "name": "Retrieve graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/graphs/:graph_id",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve a Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Update graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.writer.com/v1/graphs/:graph_id",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update the name and description of a Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Delete graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.writer.com/v1/graphs/:graph_id",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Add file to graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/graphs/:graph_id/file",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a file to a Knowledge Graph."
+        },
+        {
+          "info": {
+            "name": "Remove file from graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.writer.com/v1/graphs/:graph_id/file/:file_id",
+            "params": [
+              {
+                "name": "graph_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Knowledge Graph to which the files belong."
+              },
+              {
+                "name": "file_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the file."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Remove a file from a Knowledge Graph."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

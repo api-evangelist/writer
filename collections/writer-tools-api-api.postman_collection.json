@@ -1,0 +1,280 @@
+{
+  "item": [
+    {
+      "id": "91bb9e11-4b18-49b8-9c73-79090b66bcff",
+      "name": "Tools API",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e3923fa7-d1ed-44e1-9f3f-b6e01b8efa42",
+          "name": "Parse PDF",
+          "request": {
+            "name": "Parse PDF",
+            "description": {
+              "content": "Parse PDF to other formats.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "tools",
+                "pdf-parser",
+                ":file_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "file_id",
+                  "description": "(Required) The unique identifier of the file."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"format\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "68938b4e-e819-4e72-8692-0eeae9b8eb85",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "tools",
+                    "pdf-parser",
+                    ":file_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "file_id",
+                      "description": "(Required) The unique identifier of the file."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"format\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b9505f5d-11a2-4e44-8595-67edd16ac0dd",
+          "name": "Web search",
+          "request": {
+            "name": "Web search",
+            "description": {
+              "content": "Search the web for information about a given query and return relevant results with source URLs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "tools",
+                "web-search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<string>\",\n  \"topic\": \"general\",\n  \"search_depth\": \"basic\",\n  \"chunks_per_source\": \"<integer>\",\n  \"max_results\": \"<integer>\",\n  \"time_range\": \"<string>\",\n  \"days\": \"<integer>\",\n  \"include_raw_content\": \"<string>\",\n  \"include_answer\": true,\n  \"include_domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"exclude_domains\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"country\": \"<string>\",\n  \"stream\": false\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ff24aa44-74e9-4598-a11f-24f4efcff68a",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "tools",
+                    "web-search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"How do I get an API key for the Writer API?\",\n  \"include_domains\": [\n    \"dev.writer.com\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"query\": \"How do I get an API key for the Writer API?\",\n  \"answer\": \"To get an API key for the Writer API, you need to create one in the AI Studio. Here's how to do it:\\n\\n1. Go to the AI Studio home page.\\n2. Click on \\\"API Keys\\\" in the navigation menu.\\n \\nOnce you've created your API key, you can use it to make API calls. It's recommended to set the API key as an environment variable named `WRITER_API_KEY` for easier access. \\n\\nFor example, you can store it in a `.env` file and then initialize the Writer client, which will automatically look for the `WRITER_API_KEY` environment variable.\",\n  \"sources\": [\n    {\n      \"url\": \"https://dev.writer.com/home/sdks\",\n      \"raw_content\": null\n    },\n    {\n      \"url\": \"https://dev.writer.com/api-guides/api-reference/application-api/applications\",\n      \"raw_content\": null\n    },\n    {\n      \"url\": \"https://dev.writer.com/api-reference/api-keys\",\n      \"raw_content\": null\n    },\n    {\n      \"url\": \"https://dev.writer.com/home/quickstart\",\n      \"raw_content\": null\n    },\n    {\n      \"url\": \"https://dev.writer.com/framework/chat-assistant\",\n      \"raw_content\": null\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.writer.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c6bc39cb-db9b-4aa2-bdf5-b43cbadb9021",
+    "name": "File API Tools API API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

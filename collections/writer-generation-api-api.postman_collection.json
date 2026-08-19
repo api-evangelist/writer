@@ -1,0 +1,719 @@
+{
+  "item": [
+    {
+      "id": "48dfd278-7748-4797-a03e-e111ccf3ca77",
+      "name": "Generation API",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e9506eb0-af51-4ead-b9bb-eeff01494212",
+          "name": "Chat completion",
+          "request": {
+            "name": "Chat completion",
+            "description": {
+              "content": "Generate a chat completion based on the provided messages. The response shown below is for non-streaming. To learn about streaming responses, see the [chat completion guide](https://dev.writer.com/home/chat-completion).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "chat"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"<string>\",\n  \"messages\": [\n    {\n      \"role\": \"<string>\",\n      \"content\": \"<string>\",\n      \"name\": \"<string>\",\n      \"tool_call_id\": \"<string>\",\n      \"tool_calls\": [\n        {\n          \"id\": \"<string>\",\n          \"type\": \"<string>\",\n          \"function\": {\n            \"name\": \"<string>\",\n            \"arguments\": \"<string>\"\n          },\n          \"index\": \"<integer>\"\n        }\n      ],\n      \"graph_data\": {\n        \"sources\": [\n          {\n            \"file_id\": \"<string>\",\n            \"snippet\": \"<string>\"\n          },\n          {\n            \"file_id\": \"<string>\",\n            \"snippet\": \"<string>\"\n          }\n        ],\n        \"status\": \"<string>\",\n        \"subqueries\": [\n          {\n            \"query\": \"<string>\",\n            \"answer\": \"<string>\",\n            \"sources\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"query\": \"<string>\",\n            \"answer\": \"<string>\",\n            \"sources\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ],\n        \"references\": {\n          \"files\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"web\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"refusal\": \"<string>\"\n    }\n  ],\n  \"max_tokens\": \"<integer>\",\n  \"temperature\": 1,\n  \"top_p\": \"<double>\",\n  \"n\": \"<integer>\",\n  \"stop\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"logprobs\": \"false\",\n  \"stream\": false,\n  \"tools\": [\n    {\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {\n          \"key_0\": true\n        }\n      },\n      \"type\": \"<string>\"\n    },\n    {\n      \"function\": {\n        \"name\": \"<string>\",\n        \"description\": \"<string>\",\n        \"parameters\": {\n          \"key_0\": 2080.5410333423893,\n          \"key_1\": 82.3740790011751,\n          \"key_2\": true\n        }\n      },\n      \"type\": \"<string>\"\n    }\n  ],\n  \"tool_choice\": {\n    \"value\": \"<string>\"\n  },\n  \"stream_options\": {\n    \"include_usage\": \"<boolean>\"\n  },\n  \"response_format\": {\n    \"type\": \"<string>\",\n    \"json_schema\": \"<object>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "99414e5b-620f-47eb-8e58-a27c946fda69",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "chat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"palmyra-x5\",\n  \"messages\": [\n    {\n      \"content\": \"Write a memo summarizing this earnings report.\",\n      \"role\": \"user\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"d4e8563a-e7e3-a9ac-201d-f265447731d5\",\n  \"object\": \"chat.completion\",\n  \"choices\": [\n    {\n      \"index\": 2703,\n      \"finish_reason\": \"stop\",\n      \"message\": {\n        \"content\": \"string\",\n        \"role\": \"assistant\",\n        \"refusal\": \"string\",\n        \"tool_calls\": [\n          {\n            \"id\": \"<string>\",\n            \"type\": \"<string>\",\n            \"function\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"index\": \"<integer>\"\n          }\n        ],\n        \"graph_data\": {\n          \"sources\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"status\": \"<string>\",\n          \"subqueries\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"references\": {\n            \"files\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"web\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"llm_data\": {\n          \"prompt\": \"string\",\n          \"model\": \"string\"\n        },\n        \"translation_data\": {\n          \"source_text\": \"string\",\n          \"source_language_code\": \"string\",\n          \"target_language_code\": \"string\"\n        },\n        \"web_search_data\": {\n          \"sources\": [\n            {\n              \"url\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"raw_content\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"url\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"raw_content\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      },\n      \"logprobs\": {\n        \"content\": [\n          {\n            \"token\": \"string\",\n            \"logprob\": 725.462232400853,\n            \"top_logprobs\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"bytes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"token\": \"string\",\n            \"logprob\": 5151.718661001697,\n            \"top_logprobs\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"bytes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ],\n        \"refusal\": [\n          {\n            \"token\": \"string\",\n            \"logprob\": 2157.794919355378,\n            \"top_logprobs\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"bytes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"token\": \"string\",\n            \"logprob\": 2533.1210946195124,\n            \"top_logprobs\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"bytes\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ]\n      }\n    }\n  ],\n  \"created\": 7809,\n  \"model\": \"string\",\n  \"usage\": {\n    \"prompt_tokens\": 9283,\n    \"total_tokens\": 4066,\n    \"completion_tokens\": 2330,\n    \"prompt_token_details\": {\n      \"cached_tokens\": 3462\n    },\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 2798\n    }\n  },\n  \"system_fingerprint\": \"string\",\n  \"service_tier\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a477527a-bb83-4910-94ab-bd8f7a3bdbd6",
+          "name": "Text generation",
+          "request": {
+            "name": "Text generation",
+            "description": {
+              "content": "Generate text completions using the specified model and prompt. This endpoint is useful for text generation tasks that don't require conversational context.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "completions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"max_tokens\": \"<long>\",\n  \"temperature\": \"<double>\",\n  \"top_p\": \"<double>\",\n  \"stop\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"best_of\": \"<integer>\",\n  \"random_seed\": \"<integer>\",\n  \"stream\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ef80bd55-da88-474d-8cca-4bd2a8b8a8c1",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "completions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"model\": \"<string>\",\n  \"prompt\": \"<string>\",\n  \"max_tokens\": \"<long>\",\n  \"temperature\": \"<double>\",\n  \"top_p\": \"<double>\",\n  \"stop\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"best_of\": \"<integer>\",\n  \"random_seed\": \"<integer>\",\n  \"stream\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"choices\": [\n    {\n      \"text\": \"Sure! Here's a search engine optimized article about...\",\n      \"log_probs\": null\n    }\n  ],\n  \"model\": \"palmyra-x-003-instruct\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "22db31c2-c803-45fd-8d9a-d561603379d0",
+          "name": "List models",
+          "request": {
+            "name": "List models",
+            "description": {
+              "content": "Retrieve a list of available models that can be used for text generation, chat completions, and other AI tasks.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "models"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "af35ec22-201e-43a1-91f4-a1a86fcf53f3",
+              "name": "Successful response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "models"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"models\": [\n    {\n      \"name\": \"string\",\n      \"id\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"id\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bd3056ca-b73d-4fde-b3b5-e3e240c0f14a",
+          "name": "List applications",
+          "request": {
+            "name": "List applications",
+            "description": {
+              "content": "Retrieves a paginated list of no-code agents (formerly called no-code applications) with optional filtering and sorting capabilities.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "applications"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc",
+                  "description": "Sort order for the results based on creation time."
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<uuid>",
+                  "description": "Return results before this application ID for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<uuid>",
+                  "description": "Return results after this application ID for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of applications to return in the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "<string>",
+                  "description": "Filter applications by their type."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6474ccca-f8ad-4f5e-b96c-979de0c49b46",
+              "name": "Successfully retrieved list of applications.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "applications"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "before",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"4cc0522e-a33f-61d1-f0c5-fd4c341fefd7\",\n      \"name\": \"string\",\n      \"type\": \"<string>\",\n      \"status\": \"draft\",\n      \"inputs\": [\n        {\n          \"name\": \"string\",\n          \"input_type\": \"text\",\n          \"required\": false,\n          \"description\": \"string\",\n          \"options\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": \"string\",\n          \"input_type\": \"text\",\n          \"required\": true,\n          \"description\": \"string\",\n          \"options\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"created_at\": \"1989-05-10T04:00:55.416Z\",\n      \"updated_at\": \"1966-09-03T18:00:05.868Z\",\n      \"last_deployed_at\": \"1987-02-20T02:45:30.910Z\"\n    },\n    {\n      \"id\": \"74616b2a-ea5d-7120-2b8d-1380d447c0f4\",\n      \"name\": \"string\",\n      \"type\": \"<string>\",\n      \"status\": \"draft\",\n      \"inputs\": [\n        {\n          \"name\": \"string\",\n          \"input_type\": \"file\",\n          \"required\": true,\n          \"description\": \"string\",\n          \"options\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"name\": \"string\",\n          \"input_type\": \"text\",\n          \"required\": false,\n          \"description\": \"string\",\n          \"options\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"created_at\": \"1993-03-02T00:59:50.020Z\",\n      \"updated_at\": \"1999-06-10T08:30:29.478Z\",\n      \"last_deployed_at\": \"2006-12-26T18:29:23.890Z\"\n    }\n  ],\n  \"has_more\": true,\n  \"first_id\": \"6e98c327-e6ca-73a6-28e6-c460a2d4ae13\",\n  \"last_id\": \"f8956596-3d06-7e53-db5a-a6e09b01843c\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7315d49c-c7c3-4832-9ee1-9da41cbc4d09",
+          "name": "Application details",
+          "request": {
+            "name": "Application details",
+            "description": {
+              "content": "Retrieves detailed information for a specific no-code agent (formerly called no-code applications), including its configuration and current status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "applications",
+                ":application_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "application_id",
+                  "description": "(Required) Unique identifier of the application to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6020bffe-c4e1-4b2c-b3f6-8b913ee68476",
+              "name": "Successfully retrieved application details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "applications",
+                    ":application_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "application_id",
+                      "description": "(Required) Unique identifier of the application to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"aae6535e-54a5-054a-5db4-6fe00a1f1a58\",\n  \"name\": \"string\",\n  \"type\": \"<string>\",\n  \"status\": \"deployed\",\n  \"inputs\": [\n    {\n      \"name\": \"string\",\n      \"input_type\": \"dropdown\",\n      \"required\": false,\n      \"description\": \"string\",\n      \"options\": {\n        \"list\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    },\n    {\n      \"name\": \"string\",\n      \"input_type\": \"dropdown\",\n      \"required\": false,\n      \"description\": \"string\",\n      \"options\": {\n        \"list\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    }\n  ],\n  \"created_at\": \"2006-09-23T03:51:10.567Z\",\n  \"updated_at\": \"1969-06-04T00:24:58.543Z\",\n  \"last_deployed_at\": \"1954-01-29T14:04:54.559Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9b2c8983-a948-4f2a-ba5b-437fbaab3c55",
+          "name": "Generate from application",
+          "request": {
+            "name": "Generate from application",
+            "description": {
+              "content": "Generate content from an existing no-code agent (formerly called no-code applications) with inputs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "applications",
+                ":application_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "application_id",
+                  "description": "(Required) The unique identifier of a [no-code agent](/no-code/introduction) in AI Studio."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inputs\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"stream\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "35a5e502-f37c-4874-ab6f-ddda1b93b47f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "applications",
+                    ":application_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "application_id",
+                      "description": "(Required) The unique identifier of a [no-code agent](/no-code/introduction) in AI Studio."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"inputs\": [\n    {\n      \"id\": \"<string>\",\n      \"value\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"id\": \"<string>\",\n      \"value\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"stream\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"Alt text\",\n  \"suggestion\": \"A modern dining room with a minimalist design.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.writer.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1ba5798a-73e0-49f0-963f-6293b94a5c87",
+    "name": "File API Generation API API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "File API template API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "template",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve all jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications/:application_id/jobs",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the no-code app for which to retrieve jobs."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The pagination offset for retrieving the jobs."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The pagination limit for retrieving the jobs."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve all jobs created via the async API, linked to the provided application ID (or alias)."
+        },
+        {
+          "info": {
+            "name": "Generate from application (async)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/applications/:application_id/jobs",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the no-code app for which to create a job."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate content asynchronously from an existing no-code agent (formerly called no-code applications) with inputs."
+        },
+        {
+          "info": {
+            "name": "Retry job execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.writer.com/v1/applications/jobs/:job_id/retry",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the job to retry."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Re-triggers the async execution of a single job previously created via the Async api and terminated in error."
+        },
+        {
+          "info": {
+            "name": "Retrieve a single job",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the job to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a single job created via the Async API."
+        },
+        {
+          "info": {
+            "name": "Retrieve graphs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.writer.com/v1/applications/:application_id/graphs",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the no-code agent for which to retrieve Knowledge Graphs."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve Knowledge Graphs associated with a no-code agent that has chat capabilities."
+        },
+        {
+          "info": {
+            "name": "Associate graphs",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.writer.com/v1/applications/:application_id/graphs",
+            "params": [
+              {
+                "name": "application_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the no-code agent to update.\n\nOnly no-code agents with chat capabilities can have associated Knowledge Graphs. No-code agents with text generation and research capabilities do not support Knowledge Graphs."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates the list of Knowledge Graphs associated with a no-code chat agent."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

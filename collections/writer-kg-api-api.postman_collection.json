@@ -1,0 +1,975 @@
+{
+  "item": [
+    {
+      "id": "18ad3177-66c6-43ff-a5ef-667bf0b24bd6",
+      "name": "KG API",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "b9d216b1-782d-4bc4-a342-908860f7975e",
+          "name": "List graphs",
+          "request": {
+            "name": "List graphs",
+            "description": {
+              "content": "Retrieve a list of Knowledge Graphs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "graphs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "desc",
+                  "description": "Specifies the order of the results. Valid values are asc for ascending and desc for descending."
+                },
+                {
+                  "disabled": false,
+                  "key": "before",
+                  "value": "<uuid>",
+                  "description": "The ID of the first object in the previous page. This parameter instructs the API to return the previous page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "after",
+                  "value": "<uuid>",
+                  "description": "The ID of the last object in the previous page. This parameter instructs the API to return the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Specifies the maximum number of objects returned in a page. The default value is 50. The minimum value is 1, and the maximum value is 100."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "1a1a3f33-659e-49e6-8579-727df8f3cd23",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "graphs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "order",
+                      "value": "desc"
+                    },
+                    {
+                      "key": "before",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "after",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"50daa3d0-e7d9-44a4-be42-b53e2379ebf7\",\n      \"created_at\": \"2024-07-10T15:03:48.785843Z\",\n      \"name\": \"Example Knowledge Graph\",\n      \"description\": \"Example description\",\n      \"file_status\": {\n        \"in_progress\": 0,\n        \"completed\": 0,\n        \"failed\": 0,\n        \"total\": 11\n      },\n      \"type\": \"manual\",\n      \"urls\": null\n    },\n    {\n      \"id\": \"e7392337-1c4e-4bc9-aaf5-b719bf1e938a\",\n      \"created_at\": \"2024-07-10T15:03:39.881370Z\",\n      \"name\": \"Another example Knowledge Graph\",\n      \"description\": \"Another example description\",\n      \"file_status\": {\n        \"in_progress\": 0,\n        \"completed\": 0,\n        \"failed\": 0,\n        \"total\": 0\n      },\n      \"type\": \"web\",\n      \"urls\": [\n        {\n          \"url\": \"https://docs.example.com\",\n          \"status\": {\n            \"status\": \"success\",\n            \"error_type\": null\n          },\n          \"type\": \"single_page\"\n        }\n      ]\n    }\n  ],\n  \"first_id\": \"50daa3d0-e7d9-44a4-be42-b53e2379ebf7\",\n  \"last_id\": \"e7392337-1c4e-4bc9-aaf5-b719bf1e938a\",\n  \"has_more\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7acb28de-aa0a-49e7-8f96-69fcc1d8a739",
+          "name": "Create graph",
+          "request": {
+            "name": "Create graph",
+            "description": {
+              "content": "Create a new Knowledge Graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "graphs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1dc60cba-f84e-4459-9fb7-250ab62a7ea5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "graphs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"50daa3d0-e7d9-44a4-be42-b53e2379ebf7\",\n  \"created_at\": \"2024-07-10T13:34:28.301201Z\",\n  \"name\": \"Example Knowledge Graph\",\n  \"description\": \"Example description\",\n  \"urls\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f04d22c6-5952-44af-b7b1-39c06b6ce9cb",
+          "name": "Question",
+          "request": {
+            "name": "Question",
+            "description": {
+              "content": "Ask a question to specified Knowledge Graphs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "graphs",
+                "question"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"graph_ids\": [\n    \"<uuid>\"\n  ],\n  \"question\": \"<string>\",\n  \"subqueries\": false,\n  \"stream\": false,\n  \"query_config\": {\n    \"max_subquestions\": 6,\n    \"search_weight\": 50,\n    \"grounding_level\": 0,\n    \"max_snippets\": 30,\n    \"max_tokens\": 4000,\n    \"keyword_threshold\": 0.7,\n    \"semantic_threshold\": 0.7,\n    \"inline_citations\": false\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "af6f2c6e-e754-470c-81b3-3068267d4796",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "graphs",
+                    "question"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"graph_ids\": [\n    \"<uuid>\"\n  ],\n  \"question\": \"<string>\",\n  \"subqueries\": false,\n  \"stream\": false,\n  \"query_config\": {\n    \"max_subquestions\": 6,\n    \"search_weight\": 50,\n    \"grounding_level\": 0,\n    \"max_snippets\": 30,\n    \"max_tokens\": 4000,\n    \"keyword_threshold\": 0.7,\n    \"semantic_threshold\": 0.7,\n    \"inline_citations\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"question\": \"What is the generic name for the drug Bavencio?\",\n  \"answer\": \"avelumab\",\n  \"sources\": [\n    {\n      \"file_id\": \"1234\",\n      \"snippet\": \"Bavencio is the brand name for avelumab.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b508cce-74d5-4fbf-9e19-ffd93de47c62",
+          "name": "Retrieve graph",
+          "request": {
+            "name": "Retrieve graph",
+            "description": {
+              "content": "Retrieve a Knowledge Graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "graphs",
+                ":graph_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "graph_id",
+                  "description": "(Required) The unique identifier of the Knowledge Graph."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dfa3c55b-cad6-4a28-b02e-ebacad4a1a54",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "graphs",
+                    ":graph_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "graph_id",
+                      "description": "(Required) The unique identifier of the Knowledge Graph."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"50daa3d0-e7d9-44a4-be42-b53e2379ebf7\",\n  \"created_at\": \"2024-07-10T15:03:48.785843Z\",\n  \"name\": \"Example Knowledge Graph\",\n  \"description\": \"Example description\",\n  \"file_status\": {\n    \"in_progress\": 0,\n    \"completed\": 0,\n    \"failed\": 0,\n    \"total\": 0\n  },\n  \"type\": \"web\",\n  \"urls\": [\n    {\n      \"url\": \"https://example.com/docs\",\n      \"status\": {\n        \"status\": \"success\",\n        \"error_type\": null\n      },\n      \"type\": \"sub_pages\"\n    },\n    {\n      \"url\": \"https://docs.example.com\",\n      \"status\": {\n        \"status\": \"error\",\n        \"error_type\": \"invalid_url\"\n      },\n      \"type\": \"single_page\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "98a64de8-59db-40d0-bb3e-34348a031b2c",
+          "name": "Update graph",
+          "request": {
+            "name": "Update graph",
+            "description": {
+              "content": "Update the name and description of a Knowledge Graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "graphs",
+                ":graph_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "graph_id",
+                  "description": "(Required) The unique identifier of the Knowledge Graph."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"urls\": [\n    {\n      \"url\": \"<string>\",\n      \"type\": \"<string>\",\n      \"exclude_urls\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"url\": \"<string>\",\n      \"type\": \"<string>\",\n      \"exclude_urls\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fbf151bc-fbef-4bc4-9b7e-ef776dc2d026",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "graphs",
+                    ":graph_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "graph_id",
+                      "description": "(Required) The unique identifier of the Knowledge Graph."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"urls\": [\n    {\n      \"url\": \"<string>\",\n      \"type\": \"<string>\",\n      \"exclude_urls\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"url\": \"<string>\",\n      \"type\": \"<string>\",\n      \"exclude_urls\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"50daa3d0-e7d9-44a4-be42-b53e2379ebf7\",\n  \"created_at\": \"2024-07-10T15:03:48.785843Z\",\n  \"name\": \"Updated graph name\",\n  \"description\": \"Updated graph description\",\n  \"urls\": [\n    {\n      \"url\": \"https://example.com/docs\",\n      \"status\": {\n        \"status\": \"success\",\n        \"error_type\": null\n      },\n      \"type\": \"sub_pages\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "42fc14d2-419a-4f51-be13-46618ab59282",
+          "name": "Delete graph",
+          "request": {
+            "name": "Delete graph",
+            "description": {
+              "content": "Delete a Knowledge Graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "graphs",
+                ":graph_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "graph_id",
+                  "description": "(Required) The unique identifier of the Knowledge Graph."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0a27a7cf-b3c2-445f-85ae-f512dbc95de9",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "graphs",
+                    ":graph_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "graph_id",
+                      "description": "(Required) The unique identifier of the Knowledge Graph."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"e7392337-1c4e-4bc9-aaf5-b719bf1e938a\",\n  \"deleted\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f6c977ba-e09a-46f0-a000-674cc48abaf2",
+          "name": "Add file to graph",
+          "request": {
+            "name": "Add file to graph",
+            "description": {
+              "content": "Add a file to a Knowledge Graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "graphs",
+                ":graph_id",
+                "file"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "graph_id",
+                  "description": "(Required) The unique identifier of the Knowledge Graph."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"file_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0c34d324-0a4a-471a-8a8d-e580497d134f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "graphs",
+                    ":graph_id",
+                    "file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "graph_id",
+                      "description": "(Required) The unique identifier of the Knowledge Graph."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"file_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7c36a365-392f-43ba-840d-8f3103b42572\",\n  \"created_at\": \"2024-07-10T15:16:10.684826Z\",\n  \"name\": \"example.pdf\",\n  \"graph_id\": [\n    \"50daa3d0-e7d9-44a4-be42-b53e2379ebf7\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "654d777c-34c8-49da-857f-cc204069499c",
+          "name": "Remove file from graph",
+          "request": {
+            "name": "Remove file from graph",
+            "description": {
+              "content": "Remove a file from a Knowledge Graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "graphs",
+                ":graph_id",
+                "file",
+                ":file_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "graph_id",
+                  "description": "(Required) The unique identifier of the Knowledge Graph to which the files belong."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "file_id",
+                  "description": "(Required) The unique identifier of the file."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "09c05a8f-26ec-45ee-a0b5-c64585496187",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "graphs",
+                    ":graph_id",
+                    "file",
+                    ":file_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "graph_id",
+                      "description": "(Required) The unique identifier of the Knowledge Graph to which the files belong."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "file_id",
+                      "description": "(Required) The unique identifier of the file."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7c36a365-392f-43ba-840d-8f3103b42572\",\n  \"deleted\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.writer.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e49eb335-1eb4-4675-9a3d-1ba40cbe834a",
+    "name": "File API KG API API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}
