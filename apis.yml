@@ -21,6 +21,13 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/writer.png
 tags:
+  - Artificial Intelligence
+  - LLM
+  - Enterprise
+  - Content Generation
+  - Palmyra
+  - Agents
+tags_raw:
   - AI
   - LLM
   - Enterprise
@@ -169,6 +176,8 @@ apis:
   humanURL: https://dev.writer.com/api-reference/chat-api
   baseURL: https://api.writer.com/v1
   tags:
+  - Template
+  tags_raw:
   - template
   properties:
   - type: OpenAPI
