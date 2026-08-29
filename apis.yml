@@ -6,6 +6,18 @@ description: >-
   Writer is a generative AI platform purpose-built for the enterprise. The Writer AI Studio Platform API exposes the
   proprietary Palmyra family of LLMs, knowledge-graph retrieval, no-code Application invocation, tool calling, vision,
   translation, and content guardrails for enterprise content, summarization, and process-automation workflows.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: enterprise
   onboarding: self-serve
