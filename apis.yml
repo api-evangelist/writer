@@ -2,10 +2,10 @@ aid: writer
 url: https://raw.githubusercontent.com/api-evangelist/writer/refs/heads/main/apis.yml
 name: Writer
 kind: company
-description: >-
-  Writer is a generative AI platform purpose-built for the enterprise. The Writer AI Studio Platform API exposes the
-  proprietary Palmyra family of LLMs, knowledge-graph retrieval, no-code Application invocation, tool calling, vision,
-  translation, and content guardrails for enterprise content, summarization, and process-automation workflows.
+description: Writer is a generative AI platform purpose-built for the enterprise. The Writer AI Studio
+  Platform API exposes the proprietary Palmyra family of LLMs, knowledge-graph retrieval, no-code Application
+  invocation, tool calling, vision, translation, and content guardrails for enterprise content, summarization,
+  and process-automation workflows.
 deliveryModel:
   model: saas
   open_source: false
@@ -34,25 +34,25 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/writer.png
 tags:
-  - Artificial Intelligence
-  - LLM
-  - Enterprise
-  - Content Generation
-  - Palmyra
-  - Agents
+- Artificial Intelligence
+- LLM
+- Enterprise
+- Content Generation
+- Palmyra
+- Agents
 tags_raw:
-  - AI
-  - LLM
-  - Enterprise
-  - Content Generation
-  - Palmyra
-  - Agents
+- AI
+- LLM
+- Enterprise
+- Content Generation
+- Palmyra
+- Agents
 created: '2026-05-08'
-modified: '2026-05-19'
+modified: '2026-09-16'
 specificationVersion: '0.23'
 apis:
 - aid: writer:writer-file-api-api
-  name: Writer File API API
+  name: Writer File API
   description: The File API API from Writer — 4 operation(s) for file api.
   humanURL: https://dev.writer.com/api-reference/chat-api
   baseURL: https://api.writer.com/v1
@@ -96,7 +96,7 @@ apis:
   - type: Documentation
     url: https://dev.writer.com/api-guides/quickstart
 - aid: writer:writer-generation-api-api
-  name: Writer Generation API API
+  name: Writer Generation API
   description: The Generation API API from Writer — 5 operation(s) for generation api.
   humanURL: https://dev.writer.com/api-reference/chat-api
   baseURL: https://api.writer.com/v1
@@ -140,7 +140,7 @@ apis:
   - type: Documentation
     url: https://dev.writer.com/api-guides/quickstart
 - aid: writer:writer-kg-api-api
-  name: Writer KG API API
+  name: Writer KG API
   description: The KG API API from Writer — 5 operation(s) for kg api.
   humanURL: https://dev.writer.com/api-reference/chat-api
   baseURL: https://api.writer.com/v1
@@ -230,7 +230,7 @@ apis:
   - type: Documentation
     url: https://dev.writer.com/api-guides/quickstart
 - aid: writer:writer-tools-api-api
-  name: Writer Tools API API
+  name: Writer Tools API
   description: The Tools API API from Writer — 2 operation(s) for tools api.
   humanURL: https://dev.writer.com/api-reference/chat-api
   baseURL: https://api.writer.com/v1
@@ -362,49 +362,49 @@ apis:
   - type: Documentation
     url: https://dev.writer.com/api-guides/quickstart
 common:
-  - type: AgenticAccess
-    url: agentic-access/writer-agentic-access.yml
-  - type: DomainSecurity
-    url: security/writer-domain-security.yml
-  - type: Authentication
-    url: authentication/writer-authentication.yml
-  - type: GitHubOrganization
-    url: https://github.com/writer
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/getwriter
-  - type: Website
-    url: https://writer.com/
-  - type: Documentation
-    url: https://dev.writer.com/
-  - type: Plans
-    url: plans/writer-plans-pricing.yml
-  - type: RateLimits
-    url: rate-limits/writer-rate-limits.yml
-  - type: FinOps
-    url: finops/writer-finops.yml
-  - type: Integrations
-    url: https://writer.com/partners/
-  - type: LlmsText
-    url: https://api.writer.com/llms.txt
-  - url: https://writer.com/blog/feed/
-    type: Blog
+- type: AgenticAccess
+  url: agentic-access/writer-agentic-access.yml
+- type: DomainSecurity
+  url: security/writer-domain-security.yml
+- type: Authentication
+  url: authentication/writer-authentication.yml
+- type: GitHubOrganization
+  url: https://github.com/writer
+- type: LinkedIn
+  url: https://www.linkedin.com/company/getwriter
+- type: Website
+  url: https://writer.com/
+- type: Documentation
+  url: https://dev.writer.com/
+- type: Plans
+  url: plans/writer-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/writer-rate-limits.yml
+- type: FinOps
+  url: finops/writer-finops.yml
+- type: Integrations
+  url: https://writer.com/partners/
+- type: LlmsText
+  url: https://api.writer.com/llms.txt
+- url: https://writer.com/blog/feed/
+  type: Blog
 integrations:
-  - name: WRITER - Enterprise AI platform
-  - name: Financial services
-  - name: Healthcare & life sciences
-  - name: Retail & consumer goods
-  - name: Technology
-  - name: Marketing
-  - name: Sales
-  - name: Writer’s Room blog
-  - name: Engineering blog
-  - name: 'Podcast: Humans of AI'
-  - name: Events & webinars
-  - name: Marketing AI ROI calculator
-  - name: Arrow right
-  - name: WRITER
-  - name: LinkedIn
-  - name: G2
+- name: WRITER - Enterprise AI platform
+- name: Financial services
+- name: Healthcare & life sciences
+- name: Retail & consumer goods
+- name: Technology
+- name: Marketing
+- name: Sales
+- name: Writer’s Room blog
+- name: Engineering blog
+- name: 'Podcast: Humans of AI'
+- name: Events & webinars
+- name: Marketing AI ROI calculator
+- name: Arrow right
+- name: WRITER
+- name: LinkedIn
+- name: G2
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
