@@ -189,7 +189,7 @@ apis:
   humanURL: https://dev.writer.com/api-reference/chat-api
   baseURL: https://api.writer.com/v1
   tags:
-  - Template
+  - Templates
   tags_raw:
   - template
   properties:
