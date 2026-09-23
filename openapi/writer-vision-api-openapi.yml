@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: File API Vision API
+  title: Vision API
   version: '1.0'
 servers:
 - url: https://api.writer.com
@@ -47,6 +47,8 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const visionResponse = await client.vision.analyze({\n    model: 'palmyra-vision',\n    prompt: 'Describe the difference between the image {{image_1}} and the image {{image_2}}.',\n    variables: [\n      { name: 'image_1', file_id: 'f1234' },\n      { name: 'image_2', file_id: 'f9876' },\n    ],\n  });\n\n  console.log(visionResponse.data);\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\nvision_response = client.vision.analyze(\n    model=\"palmyra-vision\",\n    prompt=\"Describe the difference between the image {{image_1}} and the image {{image_2}}.\",\n    variables=[{\n        \"name\": \"image_1\",\n        \"file_id\": \"f1234\",\n    }, {\n        \"name\": \"image_2\",\n        \"file_id\": \"f9876\",\n    }],\n)\nprint(vision_response.data)"
+      operationId: postV1Vision
+      x-operation-id-source: derived
 components:
   schemas:
     vision_request_file_variable:

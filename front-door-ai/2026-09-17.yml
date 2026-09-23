@@ -1,0 +1,32 @@
+# Front Door AI Index — writer — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: writer
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: writer.com
+  final_host: writer.com
+  ownership: own
+  owner: writer
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 52
+  host_score: 52
+  density: 56.4
+  words: 922
+  tiers:
+    agentic: 12
+    core: 40
+    model: 0
+  ambiguous: 16
+  top_terms:
+    AI: 38
+    agent: 15
+    AI agent: 9
+    agentic: 2
+    LLMs: 1
+    generative ai: 1
+    intelligence: 1
+    prompts: 1

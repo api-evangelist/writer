@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: File API API
+  title: File API
   version: '1.0'
 servers:
 - url: https://api.writer.com
@@ -368,25 +368,6 @@ paths:
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nresponse = client.files.retry(\n    file_ids=[\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\", \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\", \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\"],\n)\nprint(response.success)"
 components:
   schemas:
-    retry_files_response:
-      title: retry_files_response
-      type: object
-      properties:
-        success:
-          type: boolean
-          description: Indicates whether the retry operation was successful.
-    retry_files_request:
-      title: retry_files_request
-      required:
-      - file_ids
-      type: object
-      properties:
-        file_ids:
-          type: array
-          items:
-            type: string
-            format: uuid
-          description: The unique identifier of the files to retry.
     files_response:
       title: files_response
       required:
@@ -407,6 +388,31 @@ components:
         last_id:
           type: string
           description: The ID of the last file in the current response.
+    delete_file_response:
+      title: delete_file_response
+      required:
+      - id
+      - deleted
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier of the deleted file.
+        deleted:
+          type: boolean
+          description: Indicates whether the file was successfully deleted.
+    retry_files_request:
+      title: retry_files_request
+      required:
+      - file_ids
+      type: object
+      properties:
+        file_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: The unique identifier of the files to retry.
     file_response:
       title: file_response
       required:
@@ -439,19 +445,13 @@ components:
         status:
           type: string
           description: The processing status of the file.
-    delete_file_response:
-      title: delete_file_response
-      required:
-      - id
-      - deleted
+    retry_files_response:
+      title: retry_files_response
       type: object
       properties:
-        id:
-          type: string
-          description: A unique identifier of the deleted file.
-        deleted:
+        success:
           type: boolean
-          description: Indicates whether the file was successfully deleted.
+          description: Indicates whether the retry operation was successful.
   securitySchemes:
     bearerAuth:
       type: http

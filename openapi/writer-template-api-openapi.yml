@@ -1,18 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: File API template API
+  title: Template API
   version: '1.0'
 servers:
 - url: https://api.writer.com
 security:
 - bearerAuth: []
 tags:
-- name: template
+- name: Template
 paths:
   /v1/applications/{application_id}/jobs:
     get:
       tags:
-      - template
+      - Template
       summary: Retrieve all jobs
       description: Retrieve all jobs created via the async API, linked to the provided application ID (or alias).
       security:
@@ -57,9 +57,11 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  // Automatically fetches more pages as needed.\n  for await (const applicationGenerateAsyncResponse of client.applications.jobs.list('application_id')) {\n    console.log(applicationGenerateAsyncResponse.id);\n  }\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\npage = client.applications.jobs.list(\n    application_id=\"application_id\",\n)\npage = page.result[0]\nprint(page.id)"
+      operationId: getV1ApplicationsByApplicationIdJobs
+      x-operation-id-source: derived
     post:
       tags:
-      - template
+      - Template
       summary: Generate from application (async)
       description: Generate content asynchronously from an existing no-code agent (formerly called no-code applications) with inputs.
       security:
@@ -91,10 +93,12 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const job = await client.applications.jobs.create('application_id', {\n    inputs: [{ id: 'id', value: ['string'] }],\n  });\n\n  console.log(job.id);\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\njob = client.applications.jobs.create(\n    application_id=\"application_id\",\n    inputs=[{\n        \"id\": \"id\",\n        \"value\": [\"string\"],\n    }],\n)\nprint(job.id)"
+      operationId: postV1ApplicationsByApplicationIdJobs
+      x-operation-id-source: derived
   /v1/applications/jobs/{job_id}/retry:
     post:
       tags:
-      - template
+      - Template
       summary: Retry job execution
       description: Re-triggers the async execution of a single job previously created via the Async api and terminated in error.
       security:
@@ -121,10 +125,12 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const response = await client.applications.jobs.retry('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');\n\n  console.log(response.id);\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\nresponse = client.applications.jobs.retry(\n    \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n)\nprint(response.id)"
+      operationId: postV1ApplicationsJobsByJobIdRetry
+      x-operation-id-source: derived
   /v1/applications/jobs/{job_id}:
     get:
       tags:
-      - template
+      - Template
       summary: Retrieve a single job
       description: Retrieves a single job created via the Async API.
       security:
@@ -151,10 +157,12 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const applicationGenerateAsyncResponse = await client.applications.jobs.retrieve(\n    '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',\n  );\n\n  console.log(applicationGenerateAsyncResponse.id);\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\napplication_generate_async_response = client.applications.jobs.retrieve(\n    \"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n)\nprint(application_generate_async_response.id)"
+      operationId: getV1ApplicationsJobsByJobId
+      x-operation-id-source: derived
   /v1/applications/{application_id}/graphs:
     get:
       tags:
-      - template
+      - Template
       summary: Retrieve graphs
       description: Retrieve Knowledge Graphs associated with a no-code agent that has chat capabilities.
       parameters:
@@ -180,9 +188,11 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const applicationGraphsResponse = await client.applications.graphs.list('application_id');\n\n  console.log(applicationGraphsResponse.graph_ids);\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\napplication_graphs_response = client.applications.graphs.list(\n    \"application_id\",\n)\nprint(application_graphs_response.graph_ids)"
+      operationId: getV1ApplicationsByApplicationIdGraphs
+      x-operation-id-source: derived
     put:
       tags:
-      - template
+      - Template
       summary: Associate graphs
       description: Updates the list of Knowledge Graphs associated with a no-code chat agent.
       parameters:
@@ -217,20 +227,10 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const applicationGraphsResponse = await client.applications.graphs.update('application_id', {\n    graph_ids: ['182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e'],\n  });\n\n  console.log(applicationGraphsResponse.graph_ids);\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\napplication_graphs_response = client.applications.graphs.update(\n    application_id=\"application_id\",\n    graph_ids=[\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\"],\n)\nprint(application_graphs_response.graph_ids)"
+      operationId: putV1ApplicationsByApplicationIdGraphs
+      x-operation-id-source: derived
 components:
   schemas:
-    application_graph_ids_request:
-      title: application_graph_ids_request
-      required:
-      - graph_ids
-      type: object
-      properties:
-        graph_ids:
-          type: array
-          description: A list of Knowledge Graph IDs to associate with the application. Note that this will replace the existing list of Knowledge Graphs associated with the application, not add to it.
-          items:
-            type: string
-            format: uuid
     generate_application_async_request:
       title: generate_application_async_request
       required:
@@ -242,43 +242,14 @@ components:
           description: A list of input objects to generate content for.
           items:
             $ref: '#/components/schemas/generate_application_input'
-    get_async_application_job_response:
-      title: get_async_application_job_response
-      required:
-      - id
-      - status
-      - application_id
-      - created_at
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The unique identifier for the job.
-        status:
-          $ref: '#/components/schemas/api_job_status'
-        application_id:
-          type: string
-          description: The ID of the application associated with this job.
-        created_at:
-          type: string
-          format: date-time
-          description: The timestamp when the job was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: The timestamp when the job was last updated.
-        completed_at:
-          type: string
-          format: date-time
-          description: The timestamp when the job was completed.
-        data:
-          type: object
-          description: The result of the completed job, if applicable.
-          $ref: '#/components/schemas/generate_application_response'
-        error:
-          type: string
-          description: The error message if the job failed.
+    api_job_status:
+      title: api_job_status
+      description: The status of the job.
+      type: string
+      enum:
+      - in_progress
+      - failed
+      - completed
     get_async_application_jobs_response:
       title: get_async_application_jobs_response
       required:
@@ -331,14 +302,18 @@ components:
           items:
             type: string
             format: uuid
-    api_job_status:
-      title: api_job_status
-      description: The status of the job.
-      type: string
-      enum:
-      - in_progress
-      - failed
-      - completed
+    application_graph_ids_request:
+      title: application_graph_ids_request
+      required:
+      - graph_ids
+      type: object
+      properties:
+        graph_ids:
+          type: array
+          description: A list of Knowledge Graph IDs to associate with the application. Note that this will replace the existing list of Knowledge Graphs associated with the application, not add to it.
+          items:
+            type: string
+            format: uuid
     generate_application_response:
       title: generate_application_response
       required:
@@ -369,6 +344,43 @@ components:
           type: string
           format: date-time
           description: The timestamp when the job was created.
+    get_async_application_job_response:
+      title: get_async_application_job_response
+      required:
+      - id
+      - status
+      - application_id
+      - created_at
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the job.
+        status:
+          $ref: '#/components/schemas/api_job_status'
+        application_id:
+          type: string
+          description: The ID of the application associated with this job.
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was last updated.
+        completed_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was completed.
+        data:
+          type: object
+          description: The result of the completed job, if applicable.
+          $ref: '#/components/schemas/generate_application_response'
+        error:
+          type: string
+          description: The error message if the job failed.
   securitySchemes:
     bearerAuth:
       type: http

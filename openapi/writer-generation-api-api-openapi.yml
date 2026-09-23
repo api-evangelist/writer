@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: File API Generation API API
+  title: Generation API
   version: '1.0'
 servers:
 - url: https://api.writer.com
@@ -16,7 +16,7 @@ paths:
       tags:
       - Generation API
       summary: Chat completion
-      description: Generate a chat completion based on the provided messages. The response shown below is for non-streaming. To learn about streaming responses, see the [chat completion guide](https://dev.writer.com/home/chat-completion).
+      description: Generate a chat completion based on the provided messages. The response shown below is for non-streaming. To learn about streaming responses, see the chat completion guide.
       operationId: chat
       requestBody:
         content:
@@ -247,6 +247,8 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  // Automatically fetches more pages as needed.\n  for await (const applicationListResponse of client.applications.list()) {\n    console.log(applicationListResponse.id);\n  }\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\npage = client.applications.list()\npage = page.data[0]\nprint(page.id)"
+      operationId: getV1Applications
+      x-operation-id-source: derived
   /v1/applications/{application_id}:
     get:
       security:
@@ -276,6 +278,8 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const application = await client.applications.retrieve('application_id');\n\n  console.log(application.id);\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    api_key=os.environ.get(\"WRITER_API_KEY\"),  # This is the default and can be omitted\n)\napplication = client.applications.retrieve(\n    \"application_id\",\n)\nprint(application.id)"
+      operationId: getV1ApplicationsByApplicationId
+      x-operation-id-source: derived
     post:
       security:
       - bearerAuth: []
@@ -322,8 +326,45 @@ paths:
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nresponse = client.applications.generate_content(\n    application_id=\"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e\",\n    inputs=[{\n        \"id\": \"id\",\n        \"value\": [\"string\", \"string\", \"string\"],\n    }, {\n        \"id\": \"id\",\n        \"value\": [\"string\", \"string\", \"string\"],\n    }, {\n        \"id\": \"id\",\n        \"value\": [\"string\", \"string\", \"string\"],\n    }],\n)\nprint(response.suggestion)"
 components:
   schemas:
-    graph_tool:
-      title: Graph tool
+    sub_query:
+      title: sub_query
+      description: A sub-question generated to break down complex queries into more manageable parts, along with its answer and supporting sources.
+      required:
+      - query
+      - answer
+      - sources
+      type:
+      - object
+      - 'null'
+      properties:
+        query:
+          type: string
+          description: The subquery that was generated to help answer the main question.
+        answer:
+          type: string
+          description: The answer to the subquery based on Knowledge Graph content.
+        sources:
+          type: array
+          description: Array of source snippets that were used to answer this subquery.
+          items:
+            $ref: '#/components/schemas/source'
+    llm_data:
+      title: llm_data
+      required:
+      - prompt
+      - model
+      type:
+      - object
+      - 'null'
+      properties:
+        prompt:
+          type: string
+          description: The prompt processed by the model.
+        model:
+          type: string
+          description: The model used by the tool.
+    llm_tool:
+      title: LLM tool
       required:
       - function
       - type
@@ -333,15 +374,15 @@ components:
           type: string
           description: The type of tool.
           enum:
-          - graph
+          - llm
         function:
-          $ref: '#/components/schemas/graph_function'
-    top_log_prob:
-      title: top_log_prob
-      description: An array of mappings for each token to its top log probabilities, showing detailed prediction probabilities.
+          $ref: '#/components/schemas/llm_function'
+    logprobs_token:
+      title: logprobs_token
       required:
       - token
       - logprob
+      - top_logprobs
       type: object
       properties:
         token:
@@ -354,58 +395,77 @@ components:
           items:
             type: integer
             format: int32
-    string_tool_choice_options:
-      title: string_tool_choice_options
-      type: string
-      enum:
-      - none
-      - auto
-      - required
-    generate_application_delta:
-      title: generate_application_delta
+        top_logprobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/top_log_prob'
+    translation_data:
+      title: translation_data
+      required:
+      - source_text
+      - source_language_code
+      - target_language_code
       type: object
       properties:
-        title:
+        source_text:
           type: string
-          description: The name of the output.
-        content:
+          description: The text the tool translated.
+        source_language_code:
           type: string
-          description: The main text output.
-        stages:
-          type: array
-          nullable: true
-          description: A list of stages that show the 'thinking process'.
-          items:
-            $ref: '#/components/schemas/generate_application_chunk_stage'
-          minItems: 1
-    vision_tool:
-      title: Vision tool
+          description: The language code of the source text.
+        target_language_code:
+          type: string
+          description: The language code of the target text.
+    image_fragment:
+      title: Image
+      description: 'Represents an image content fragment within a chat message. Note: This content type is only supported with the Palmyra X5 model.'
       required:
-      - function
       - type
+      - image_url
       type: object
       properties:
         type:
           type: string
-          description: The type of tool.
+          description: The type of content fragment. Must be `image_url` for image fragments.
           enum:
-          - vision
-        function:
-          $ref: '#/components/schemas/vision_function'
-    llm_data:
-      title: llm_data
+          - image_url
+        image_url:
+          type: object
+          description: The image URL object containing the location of the image.
+          required:
+          - url
+          properties:
+            url:
+              type: string
+              description: The URL pointing to the image file. Supports common image formats like JPEG, PNG, GIF, etc.
+    chat_completion_choice:
       required:
-      - prompt
-      - model
+      - index
+      - finish_reason
+      - message
       type: object
-      nullable: true
       properties:
-        prompt:
-          type: string
-          description: The prompt processed by the model.
-        model:
-          type: string
-          description: The model used by the tool.
+        index:
+          type: integer
+          format: int32
+          description: The index of the choice in the list of completions generated by the model.
+        finish_reason:
+          $ref: '#/components/schemas/chat_completion_finish_reason'
+          description: Describes the condition under which the model ceased generating content. Common reasons include 'length' (reached the maximum output size), 'stop' (encountered a stop sequence), 'content_filter' (harmful content filtered out), or 'tool_calls' (encountered tool calls).
+        message:
+          $ref: '#/components/schemas/chat_completion_response_message'
+        logprobs:
+          description: Log probability information for the choice.
+          $ref: '#/components/schemas/logprobs'
+    application_input_type:
+      title: application_input_type
+      description: Type of input field determining its behavior and validation rules.
+      type: string
+      enum:
+      - text
+      - dropdown
+      - file
+      - media
     chat_completion_chunk:
       required:
       - id
@@ -452,52 +512,107 @@ components:
             role: user
         created: 1678587532773
         model: palmyra-x5
-    application_input_text_options:
-      title: Text
-      description: Configuration options specific to text input fields.
+    application_input_dropdown_options:
+      title: Dropdown
+      description: Configuration options specific to dropdown-type input fields.
       required:
-      - max_fields
-      - min_fields
+      - list
       type: object
       properties:
-        max_fields:
+        list:
+          type: array
+          description: List of available options in the dropdown menu.
+          items:
+            type: string
+    web_search_data:
+      title: web_search_data
+      required:
+      - sources
+      type: object
+      properties:
+        sources:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+              raw_content:
+                type: string
+    chat_completion_usage:
+      title: chat_completion_usage
+      description: Usage information for the chat completion response. Please note that at this time Knowledge Graph tool usage is not included in this object.
+      required:
+      - prompt_tokens
+      - total_tokens
+      - completion_tokens
+      type: object
+      properties:
+        prompt_tokens:
           type: integer
           format: int32
-          description: Maximum number of text fields allowed.
-        min_fields:
+        total_tokens:
           type: integer
           format: int32
-          description: Minimum number of text fields required.
-    text_fragment:
-      title: Text
-      description: Represents a text content fragment within a chat message.
+        completion_tokens:
+          type: integer
+          format: int32
+        prompt_token_details:
+          $ref: '#/components/schemas/prompt_token_details'
+        completion_tokens_details:
+          $ref: '#/components/schemas/completion_token_details'
+    web_search_function:
+      title: web_search_function
+      description: A tool that uses web search to find information.
       required:
-      - type
-      - text
+      - exclude_domains
+      - include_domains
       type: object
       properties:
-        type:
-          type: string
-          description: The type of content fragment. Must be `text` for text fragments.
-          enum:
-          - text
-        text:
-          type: string
-          description: The actual text content of the message fragment.
-    llm_tool:
-      title: LLM tool
+        exclude_domains:
+          type: array
+          description: An array of domains to exclude from the search results.
+          items:
+            type: string
+        include_domains:
+          type: array
+          description: An array of domains to include in the search results.
+          items:
+            type: string
+    llm_function:
+      title: LLM function
+      description: A tool that uses another Writer model to generate a response.
       required:
-      - function
-      - type
+      - description
+      - model
       type: object
       properties:
-        type:
+        description:
           type: string
-          description: The type of tool.
-          enum:
-          - llm
-        function:
-          $ref: '#/components/schemas/llm_function'
+          description: A description of the model to use.
+        model:
+          type: string
+          description: The model to use.
+    generate_application_response:
+      title: generate_application_response
+      required:
+      - suggestion
+      type: object
+      properties:
+        title:
+          type: string
+          description: The name of the output field.
+        suggestion:
+          type: string
+          description: The response from the model specified in the application.
+    generate_application_response_chunk:
+      title: generate_application_response_chunk
+      required:
+      - delta
+      type: object
+      properties:
+        delta:
+          $ref: '#/components/schemas/generate_application_delta'
     tool_function:
       title: tool_function
       description: A tool that uses a custom function.
@@ -515,95 +630,42 @@ components:
           type: object
           additionalProperties: true
           description: The parameters of the function.
-    application_input_file_options:
-      title: File
-      description: Configuration options specific to file upload input fields.
+    graph_stage_status:
+      title: graph_stage_status
+      type:
+      - string
+      - 'null'
+      enum:
+      - processing
+      - finished
+    source:
+      title: source
+      description: A source snippet containing text and fileId from Knowledge Graph content.
       required:
-      - max_files
-      - file_types
-      - max_word_count
-      - max_file_size_mb
-      - upload_types
-      type: object
+      - file_id
+      - snippet
+      type:
+      - object
+      - 'null'
       properties:
-        max_files:
-          type: integer
-          format: int32
-          description: Maximum number of files that can be uploaded.
-        file_types:
-          type: array
-          description: List of allowed file extensions.
-          items:
-            type: string
-        max_word_count:
-          type: integer
-          format: int32
-          description: Maximum number of words allowed in text files.
-        max_file_size_mb:
-          type: integer
-          format: int32
-          description: Maximum file size allowed in megabytes.
-        upload_types:
-          type: array
-          description: List of allowed upload types for file inputs.
-          items:
-            $ref: '#/components/schemas/file_upload_type'
-    file:
-      title: file
-      description: A file-based reference containing text snippets from uploaded documents in the Knowledge Graph.
-      required:
-      - text
-      - fileId
-      - score
-      type: object
-      properties:
-        text:
-          type: string
-          description: The exact text snippet from the source document that was used to support the response.
-        fileId:
+        file_id:
           type: string
           description: The unique identifier of the file in your Writer account.
-        score:
-          type: number
-          description: Internal score used during the retrieval process for ranking and selecting relevant snippets.
-        page:
-          type: integer
-          format: int32
-          description: Page number where this snippet was found in the source document.
-        cite:
+        snippet:
           type: string
-          description: Unique citation ID that appears in inline citations within the response text (null if not cited).
-    models_response:
+          description: The exact text snippet from the source document that was used to support the response.
+    model_info:
       required:
-      - models
+      - name
+      - id
       type: object
       properties:
-        models:
-          type: array
-          description: The [ID of the model](https://dev.writer.com/home/models) to use for processing the request.
-          items:
-            $ref: '#/components/schemas/model_info'
-      example:
-        models:
-        - name: Palmyra X 003 Instruct
-          id: palmyra-x-003-instruct
-        - name: Palmyra Med
-          id: palmyra-med
-        - name: Palmyra Financial
-          id: palmyra-fin
-        - name: Palmyra X4
-          id: palmyra-x4
-        - name: Palmyra X5
-          id: palmyra-x5
-        - name: Palmyra Creative
-          id: palmyra-creative
-    streaming_data:
-      required:
-      - value
-      type: object
-      properties:
-        value:
+        name:
           type: string
+          description: The name of the particular LLM that you want to use.
+        id:
+          type: string
+          description: The ID of the particular LLM that you want to use
     tool_call_streaming:
       title: tool_call
       type: object
@@ -621,215 +683,98 @@ components:
           - function
         function:
           $ref: '#/components/schemas/function'
-    chat_message_role:
+    completions_response:
+      required:
+      - choices
+      type: object
+      properties:
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/completions_choice'
+          minItems: 1
+          description: A list of choices generated by the model, each containing the text of the completion and associated metadata such as log probabilities.
+        model:
+          type: string
+          description: The identifier of the model that was used to generate the responses in the 'choices' array.
+      example:
+        choices:
+        - text: Sure! Here's a search engine optimized article about...
+          log_probs: null
+        model: palmyra-x-003-instruct
+    chat_message_request_role:
       type: string
+      description: The role of the chat message. You can provide a system prompt by setting the role to `system`, or specify that a message is the result of a [tool call](https://dev.writer.com/home/tool-calling) by setting the role to `tool`.
       enum:
       - user
       - assistant
       - system
-    sub_query:
-      title: sub_query
-      description: A sub-question generated to break down complex queries into more manageable parts, along with its answer and supporting sources.
-      required:
-      - query
-      - answer
-      - sources
+      - tool
+    references:
+      title: references
+      description: Detailed source information organized by reference type, providing comprehensive metadata about the sources used to generate the response.
       type: object
-      nullable: true
       properties:
-        query:
-          type: string
-          description: The subquery that was generated to help answer the main question.
-        answer:
-          type: string
-          description: The answer to the subquery based on Knowledge Graph content.
-        sources:
+        files:
           type: array
-          description: Array of source snippets that were used to answer this subquery.
+          description: Array of file-based references from uploaded documents in the Knowledge Graph.
           items:
-            $ref: '#/components/schemas/source'
-    logprobs_token:
-      title: logprobs_token
-      required:
-      - token
-      - logprob
-      - top_logprobs
-      type: object
-      properties:
-        token:
-          type: string
-        logprob:
-          type: number
-          format: double
-        bytes:
+            $ref: '#/components/schemas/file'
+          minItems: 1
+        web:
           type: array
+          description: Array of web-based references from online sources accessed during the query.
           items:
-            type: integer
-            format: int32
-        top_logprobs:
-          type: array
-          items:
-            $ref: '#/components/schemas/top_log_prob'
-    generate_application_request:
-      title: generate_application_request
-      required:
-      - inputs
-      type: object
-      properties:
-        inputs:
-          type: array
-          items:
-            $ref: '#/components/schemas/generate_application_input'
-        stream:
-          type: boolean
-          description: Indicates whether the response should be streamed. Currently only supported for research assistant applications.
-    image_fragment:
-      title: Image
-      description: 'Represents an image content fragment within a chat message. Note: This content type is only supported with the Palmyra X5 model.'
-      required:
-      - type
-      - image_url
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type of content fragment. Must be `image_url` for image fragments.
-          enum:
-          - image_url
-        image_url:
-          type: object
-          description: The image URL object containing the location of the image.
-          required:
-          - url
-          properties:
-            url:
-              type: string
-              description: The URL pointing to the image file. Supports common image formats like JPEG, PNG, GIF, etc.
-    function:
-      title: function
-      type: object
-      required:
-      - name
-      - arguments
-      properties:
-        name:
-          type: string
-        arguments:
-          type: string
-    completion_token_details:
-      title: completion_token_details
-      required:
-      - reasoning_tokens
-      type: object
-      properties:
-        reasoning_tokens:
-          type: integer
-          format: int32
-    tool_call:
-      title: tool_call
-      type: object
+            $ref: '#/components/schemas/web'
+          minItems: 1
+    chat_response:
       required:
       - id
-      - type
-      - function
-      properties:
-        index:
-          type: integer
-          format: int32
-        id:
-          type: string
-        type:
-          type: string
-          enum:
-          - function
-        function:
-          $ref: '#/components/schemas/function'
-    graph_function:
-      title: graph_function
-      description: A tool that uses Knowledge Graphs as context for responses.
-      required:
-      - graph_ids
-      - subqueries
-      type: object
-      properties:
-        description:
-          type: string
-          description: A description of the graph content.
-        graph_ids:
-          type: array
-          description: An array of graph IDs to use in the tool.
-          items:
-            type: string
-            format: uuid
-          minItems: 1
-        subqueries:
-          type: boolean
-          description: Boolean to indicate whether to include subqueries in the response.
-        query_config:
-          $ref: '#/components/schemas/graph_query_config'
-          description: Configuration options for Knowledge Graph queries, including search parameters and citation settings.
-    application_status:
-      title: application_status
-      description: 'Current deployment status of the application. Note: currently only `deployed` applications are returned.'
-      type: string
-      enum:
-      - deployed
-      - draft
-    web:
-      title: web
-      description: A web-based reference containing text snippets from online sources accessed during the query.
-      required:
-      - text
-      - url
-      - title
-      - score
-      type: object
-      properties:
-        text:
-          type: string
-          description: The exact text snippet from the web source that was used to support the response.
-        url:
-          type: string
-          description: The URL of the web page where this content was found.
-          format: uri
-        title:
-          type: string
-          description: The title of the web page where this content was found.
-        score:
-          type: number
-          description: Internal score used during the retrieval process for ranking and selecting relevant snippets.
-    tool:
-      type: object
-      discriminator:
-        propertyName: type
-        mapping:
-          function: '#/components/schemas/function_tool'
-          graph: '#/components/schemas/graph_tool'
-          llm: '#/components/schemas/llm_tool'
-          translation: '#/components/schemas/translation_tool'
-          vision: '#/components/schemas/vision_tool'
-          web_search: '#/components/schemas/web_search_tool'
-      oneOf:
-      - $ref: '#/components/schemas/function_tool'
-      - $ref: '#/components/schemas/graph_tool'
-      - $ref: '#/components/schemas/llm_tool'
-      - $ref: '#/components/schemas/translation_tool'
-      - $ref: '#/components/schemas/vision_tool'
-      - $ref: '#/components/schemas/web_search_tool'
-    llm_function:
-      title: LLM function
-      description: A tool that uses another Writer model to generate a response.
-      required:
-      - description
+      - object
+      - choices
+      - created
       - model
       type: object
       properties:
-        description:
+        id:
           type: string
-          description: A description of the model to use.
+          format: uuid
+          description: A globally unique identifier (UUID) for the response generated by the API. This ID can be used to reference the specific operation or transaction within the system for tracking or debugging purposes.
+        object:
+          type: string
+          description: The type of object returned, which is always `chat.completion` for chat responses.
+          enum:
+          - chat.completion
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/chat_completion_choice'
+          minItems: 1
+          description: An array of objects representing the different outcomes or results produced by the model based on the input provided.
+        created:
+          type: integer
+          format: int64
+          description: The Unix timestamp (in seconds) when the response was created. This timestamp can be used to verify the timing of the response relative to other events or operations.
         model:
           type: string
-          description: The model to use.
+          description: Identifies the specific model used to generate the response.
+        usage:
+          $ref: '#/components/schemas/chat_completion_usage'
+        system_fingerprint:
+          type: string
+          description: A string representing the backend configuration that the model runs with.
+        service_tier:
+          type: string
+          description: The service tier used for processing the request.
+      example:
+        id: 3c90c3cc-0d44-4b50-8888-8dd25736052a
+        choices:
+        - finish_reason: stop
+          message:
+            content: Hello! How can I assist you today?
+            role: user
+        created: 1678587532773
+        model: palmyra-x5
     graph_data:
       title: graph_data
       type: object
@@ -846,6 +791,67 @@ components:
             $ref: '#/components/schemas/sub_query'
         references:
           $ref: '#/components/schemas/references'
+    top_log_prob:
+      title: top_log_prob
+      description: An array of mappings for each token to its top log probabilities, showing detailed prediction probabilities.
+      required:
+      - token
+      - logprob
+      type: object
+      properties:
+        token:
+          type: string
+        logprob:
+          type: number
+          format: double
+        bytes:
+          type: array
+          items:
+            type: integer
+            format: int32
+    graph_tool:
+      title: Graph tool
+      required:
+      - function
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of tool.
+          enum:
+          - graph
+        function:
+          $ref: '#/components/schemas/graph_function'
+    file_upload_type:
+      title: file_upload_type
+      description: Type of file upload method supported by the application.
+      type: string
+      enum:
+      - url
+      - file_id
+    chat_completion_streaming_choice:
+      required:
+      - index
+      - finish_reason
+      - delta
+      type: object
+      properties:
+        index:
+          type: integer
+          format: int32
+          description: The index of the choice in the list of completions generated by the model.
+        finish_reason:
+          $ref: '#/components/schemas/chat_completion_finish_reason'
+          description: Describes the condition under which the model ceased generating content. Common reasons include 'length' (reached the maximum output size), 'stop' (encountered a stop sequence), 'content_filter' (harmful content filtered out), or 'tool_calls' (encountered tool calls).
+        message:
+          $ref: '#/components/schemas/chat_completion_response_message'
+        delta:
+          description: A chat completion delta generated by streamed model responses.
+          $ref: '#/components/schemas/chat_completion_streaming_delta'
+        logprobs:
+          description: Log probability information for the choice.
+          $ref: '#/components/schemas/logprobs'
     get_applications_response:
       title: get_applications_response
       description: Response object containing a paginated list of applications.
@@ -870,37 +876,8 @@ components:
         has_more:
           type: boolean
           description: Indicates if there are more results available in subsequent pages.
-    stream_options:
-      title: stream_options
-      description: Additional options for streaming.
-      required:
-      - include_usage
-      type: object
-      properties:
-        include_usage:
-          type: boolean
-          description: Indicate whether to include usage information.
-    completions_response:
-      required:
-      - choices
-      type: object
-      properties:
-        choices:
-          type: array
-          items:
-            $ref: '#/components/schemas/completions_choice'
-          minItems: 1
-          description: A list of choices generated by the model, each containing the text of the completion and associated metadata such as log probabilities.
-        model:
-          type: string
-          description: The identifier of the model that was used to generate the responses in the 'choices' array.
-      example:
-        choices:
-        - text: Sure! Here's a search engine optimized article about...
-          log_probs: null
-        model: palmyra-x-003-instruct
-    web_search_tool:
-      title: Web search tool
+    function_tool:
+      title: Function tool
       required:
       - function
       - type
@@ -910,230 +887,9 @@ components:
           type: string
           description: The type of tool.
           enum:
-          - web_search
+          - function
         function:
-          $ref: '#/components/schemas/web_search_function'
-    chat_completion_streaming_choice:
-      required:
-      - index
-      - finish_reason
-      - delta
-      type: object
-      properties:
-        index:
-          type: integer
-          format: int32
-          description: The index of the choice in the list of completions generated by the model.
-        finish_reason:
-          $ref: '#/components/schemas/chat_completion_finish_reason'
-          description: Describes the condition under which the model ceased generating content. Common reasons include 'length' (reached the maximum output size), 'stop' (encountered a stop sequence), 'content_filter' (harmful content filtered out), or 'tool_calls' (encountered tool calls).
-          nullable: true
-        message:
-          $ref: '#/components/schemas/chat_completion_response_message'
-        delta:
-          description: A chat completion delta generated by streamed model responses.
-          $ref: '#/components/schemas/chat_completion_streaming_delta'
-        logprobs:
-          description: Log probability information for the choice.
-          $ref: '#/components/schemas/logprobs'
-    application_input_media_options:
-      title: Media
-      description: Configuration options specific to media upload input fields.
-      required:
-      - file_types
-      - max_image_size_mb
-      type: object
-      properties:
-        file_types:
-          type: array
-          description: List of allowed media file types.
-          items:
-            type: string
-        max_image_size_mb:
-          type: integer
-          format: int32
-          description: Maximum media file size allowed in megabytes.
-    chat_completion_choice:
-      required:
-      - index
-      - finish_reason
-      - message
-      type: object
-      properties:
-        index:
-          type: integer
-          format: int32
-          description: The index of the choice in the list of completions generated by the model.
-        finish_reason:
-          $ref: '#/components/schemas/chat_completion_finish_reason'
-          description: Describes the condition under which the model ceased generating content. Common reasons include 'length' (reached the maximum output size), 'stop' (encountered a stop sequence), 'content_filter' (harmful content filtered out), or 'tool_calls' (encountered tool calls).
-        message:
-          $ref: '#/components/schemas/chat_completion_response_message'
-        logprobs:
-          description: Log probability information for the choice.
-          $ref: '#/components/schemas/logprobs'
-    completions_choice:
-      required:
-      - text
-      type: object
-      properties:
-        text:
-          type: string
-          description: The generated text output from the model, which forms the main content of the response.
-        log_probs:
-          $ref: '#/components/schemas/logprobs'
-    vision_tool_request_file_variable:
-      title: Vision Tool Request File Variable
-      required:
-      - name
-      - file_id
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the file variable. You must reference this name in the `message.content` field of the request to the chat completions endpoint. Use double curly braces (`{{}}`) to reference the file. For example, `Describe the difference between the image {{image_1}} and the image {{image_2}}`.
-        file_id:
-          type: string
-          description: 'The File ID of the file to analyze. The file must be uploaded to the Writer platform before you use it with the Vision tool. Supported file types: JPG, PNG, PDF, TXT. The maximum allowed file size is 7MB.'
-    file_upload_type:
-      title: file_upload_type
-      description: Type of file upload method supported by the application.
-      type: string
-      enum:
-      - url
-      - file_id
-    chat_message_request_role:
-      type: string
-      description: The role of the chat message. You can provide a system prompt by setting the role to `system`, or specify that a message is the result of a [tool call](https://dev.writer.com/home/tool-calling) by setting the role to `tool`.
-      enum:
-      - user
-      - assistant
-      - system
-      - tool
-    application_input_type:
-      title: application_input_type
-      description: Type of input field determining its behavior and validation rules.
-      type: string
-      enum:
-      - text
-      - dropdown
-      - file
-      - media
-    generate_application_input:
-      title: generate_application_input
-      required:
-      - id
-      - value
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the input field from the application. All input types from the No-code application are supported (i.e. Text input, Dropdown, File upload, Image input). The identifier should be the name of the input type.
-        value:
-          type: array
-          items:
-            type: string
-          description: "The value for the input field. \n\nIf the input type is \"File upload\", you must pass the `file_id` of an uploaded file. You cannot pass a file object directly. See the [file upload endpoint](https://dev.writer.com/api-reference/file-api/upload-files) for instructions on uploading files or the [list files endpoint](https://dev.writer.com/api-reference/file-api/get-all-files) for how to see a list of uploaded files and their IDs."
-    composite_content:
-      title: composite_content
-      description: 'A union type that can contain either text or image content fragments. This enables chat messages to include mixed content types, allowing users to send both text and images in a single message. Note: Image fragments are only supported with the Palmyra X5 model.'
-      oneOf:
-      - $ref: '#/components/schemas/text_fragment'
-      - $ref: '#/components/schemas/image_fragment'
-    json_object_tool_choice:
-      title: JSON object
-      required:
-      - value
-      type: object
-      properties:
-        value:
-          type: object
-          description: 'A JSON object that specifies the tool to call. For example, `{"type": "function", "function": {"name": "get_current_weather"}}`'
-          additionalProperties: true
-    prompt_token_details:
-      title: prompt_token_details
-      required:
-      - cached_tokens
-      type: object
-      properties:
-        cached_tokens:
-          type: integer
-          format: int32
-    string_tool_choice:
-      title: String
-      required:
-      - value
-      type: object
-      properties:
-        value:
-          $ref: '#/components/schemas/string_tool_choice_options'
-    graph_stage_status:
-      title: graph_stage_status
-      type: string
-      nullable: true
-      enum:
-      - processing
-      - finished
-    completions_request:
-      required:
-      - model
-      - prompt
-      type: object
-      properties:
-        model:
-          type: string
-          description: The [ID of the model](https://dev.writer.com/home/models) to use for generating text. Supports `palmyra-x5`, `palmyra-x4`, `palmyra-fin`, `palmyra-med`, `palmyra-creative`, and `palmyra-x-003-instruct`.
-        prompt:
-          type: string
-          description: The input text that the model will process to generate a response.
-        max_tokens:
-          type: integer
-          format: int64
-          description: The maximum number of tokens that the model can generate in the response.
-        temperature:
-          type: number
-          format: double
-          description: Controls the randomness of the model's outputs. Higher values lead to more random outputs, while lower values make the model more deterministic.
-        top_p:
-          type: number
-          format: double
-          description: Used to control the nucleus sampling, where only the most probable tokens with a cumulative probability of top_p are considered for sampling, providing a way to fine-tune the randomness of predictions.
-        stop:
-          oneOf:
-          - type: array
-            items:
-              type: string
-          - type: string
-          description: Specifies stopping conditions for the model's output generation. This can be an array of strings or a single string that the model will look for as a signal to stop generating further tokens.
-        best_of:
-          type: integer
-          format: int32
-          description: Specifies the number of completions to generate and return the best one. Useful for generating multiple outputs and choosing the best based on some criteria.
-        random_seed:
-          type: integer
-          format: int32
-          description: A seed used to initialize the random number generator for the model, ensuring reproducibility of the output when the same inputs are provided.
-        stream:
-          type: boolean
-          description: Determines whether the model's output should be streamed. If true, the output is generated and sent incrementally, which can be useful for real-time applications.
-      example:
-        model: palmyra-x-003-instruct
-        prompt: Write me an SEO article about...
-        max_tokens: 150
-        temperature: 0.7
-        top_p: 0.9
-        stop:
-        - .
-        best_of: 1
-        random_seed: 42
-        stream: false
-    application_input_options:
-      description: Type-specific configuration options for input fields.
-      oneOf:
-      - $ref: '#/components/schemas/application_input_dropdown_options'
-      - $ref: '#/components/schemas/application_input_file_options'
-      - $ref: '#/components/schemas/application_input_media_options'
-      - $ref: '#/components/schemas/application_input_text_options'
+          $ref: '#/components/schemas/tool_function'
     chat_request:
       required:
       - model
@@ -1198,6 +954,47 @@ components:
         messages:
         - content: Write a memo summarizing this earnings report.
           role: user
+    application_input:
+      title: application_input
+      description: Configuration for an individual input field in the application.
+      required:
+      - name
+      - input_type
+      - required
+      type: object
+      properties:
+        name:
+          type: string
+          description: Identifier for the input field.
+        input_type:
+          $ref: '#/components/schemas/application_input_type'
+        description:
+          type: string
+          description: Human-readable description of the input field's purpose.
+        required:
+          type: boolean
+          description: Indicates if this input field is mandatory.
+        options:
+          $ref: '#/components/schemas/application_input_options'
+    response_format:
+      title: response_format
+      description: 'The response format to use for the chat completion, available with `palmyra-x4` and `palmyra-x5`.
+
+
+        `text` is the default response format. [JSON Schema](https://json-schema.org/) is supported for structured responses. If you specify `json_schema`, you must also provide a `json_schema` object.'
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of response format to use.
+          enum:
+          - text
+          - json_schema
+        json_schema:
+          type: object
+          description: The JSON schema to use for the response format.
     generate_application_chunk_stage:
       title: generate_application_chunk_stage
       required:
@@ -1213,12 +1010,168 @@ components:
           type: string
           description: The text content of the stage.
         sources:
-          type: array
-          nullable: true
+          type:
+          - array
+          - 'null'
           description: A list of sources (URLs) that that stage used to process that particular step.
           items:
             type: string
           minItems: 1
+    chat_completion_finish_reason:
+      type: string
+      enum:
+      - stop
+      - length
+      - content_filter
+      - tool_calls
+    tool_call:
+      title: tool_call
+      type: object
+      required:
+      - id
+      - type
+      - function
+      properties:
+        index:
+          type: integer
+          format: int32
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - function
+        function:
+          $ref: '#/components/schemas/function'
+    application_input_text_options:
+      title: Text
+      description: Configuration options specific to text input fields.
+      required:
+      - max_fields
+      - min_fields
+      type: object
+      properties:
+        max_fields:
+          type: integer
+          format: int32
+          description: Maximum number of text fields allowed.
+        min_fields:
+          type: integer
+          format: int32
+          description: Minimum number of text fields required.
+    tool_choice:
+      description: 'Configure how the model will call functions:
+
+        - `auto`: allows the model to automatically choose the tool to use, or not call a tool
+
+        - `none`: disables tool calling; the model will instead generate a message
+
+        - `required`: requires the model to call one or more tools
+
+
+        You can also use a JSON object to force the model to call a specific tool. For example, `{"type": "function", "function": {"name": "get_current_weather"}}` requires the model to call the `get_current_weather` function, regardless of the prompt.'
+      oneOf:
+      - $ref: '#/components/schemas/string_tool_choice'
+      - $ref: '#/components/schemas/json_object_tool_choice'
+    generate_application_input:
+      title: generate_application_input
+      required:
+      - id
+      - value
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the input field from the application. All input types from the No-code application are supported (i.e. Text input, Dropdown, File upload, Image input). The identifier should be the name of the input type.
+        value:
+          type: array
+          items:
+            type: string
+          description: "The value for the input field. \n\nIf the input type is \"File upload\", you must pass the `file_id` of an uploaded file. You cannot pass a file object directly. See the [file upload endpoint](https://dev.writer.com/api-reference/file-api/upload-files) for instructions on uploading files or the [list files endpoint](https://dev.writer.com/api-reference/file-api/get-all-files) for how to see a list of uploaded files and their IDs."
+    function:
+      title: function
+      type: object
+      required:
+      - name
+      - arguments
+      properties:
+        name:
+          type: string
+        arguments:
+          type: string
+    generate_application_request:
+      title: generate_application_request
+      required:
+      - inputs
+      type: object
+      properties:
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/generate_application_input'
+        stream:
+          type: boolean
+          description: Indicates whether the response should be streamed. Currently only supported for research assistant applications.
+    web_search_tool:
+      title: Web search tool
+      required:
+      - function
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of tool.
+          enum:
+          - web_search
+        function:
+          $ref: '#/components/schemas/web_search_function'
+    application_input_media_options:
+      title: Media
+      description: Configuration options specific to media upload input fields.
+      required:
+      - file_types
+      - max_image_size_mb
+      type: object
+      properties:
+        file_types:
+          type: array
+          description: List of allowed media file types.
+          items:
+            type: string
+        max_image_size_mb:
+          type: integer
+          format: int32
+          description: Maximum media file size allowed in megabytes.
+    web:
+      title: web
+      description: A web-based reference containing text snippets from online sources accessed during the query.
+      required:
+      - text
+      - url
+      - title
+      - score
+      type: object
+      properties:
+        text:
+          type: string
+          description: The exact text snippet from the web source that was used to support the response.
+        url:
+          type: string
+          description: The URL of the web page where this content was found.
+          format: uri
+        title:
+          type: string
+          description: The title of the web page where this content was found.
+        score:
+          type: number
+          description: Internal score used during the retrieval process for ranking and selecting relevant snippets.
+    composite_content:
+      title: composite_content
+      description: 'A union type that can contain either text or image content fragments. This enables chat messages to include mixed content types, allowing users to send both text and images in a single message. Note: Image fragments are only supported with the Palmyra X5 model.'
+      oneOf:
+      - $ref: '#/components/schemas/text_fragment'
+      - $ref: '#/components/schemas/image_fragment'
     chat_completion_response_message:
       required:
       - content
@@ -1249,110 +1202,146 @@ components:
         web_search_data:
           $ref: '#/components/schemas/web_search_data'
         refusal:
-          type: string
-          nullable: true
-    source:
-      title: source
-      description: A source snippet containing text and fileId from Knowledge Graph content.
+          type:
+          - string
+          - 'null'
+    string_tool_choice:
+      title: String
       required:
-      - file_id
-      - snippet
-      type: object
-      nullable: true
-      properties:
-        file_id:
-          type: string
-          description: The unique identifier of the file in your Writer account.
-        snippet:
-          type: string
-          description: The exact text snippet from the source document that was used to support the response.
-    references:
-      title: references
-      description: Detailed source information organized by reference type, providing comprehensive metadata about the sources used to generate the response.
+      - value
       type: object
       properties:
-        files:
-          type: array
-          description: Array of file-based references from uploaded documents in the Knowledge Graph.
-          items:
-            $ref: '#/components/schemas/file'
-          minItems: 1
-        web:
-          type: array
-          description: Array of web-based references from online sources accessed during the query.
-          items:
-            $ref: '#/components/schemas/web'
-          minItems: 1
-    web_search_function:
-      title: web_search_function
-      description: A tool that uses web search to find information.
-      required:
-      - exclude_domains
-      - include_domains
-      type: object
-      properties:
-        exclude_domains:
-          type: array
-          description: An array of domains to exclude from the search results.
-          items:
-            type: string
-        include_domains:
-          type: array
-          description: An array of domains to include in the search results.
-          items:
-            type: string
-    vision_function:
-      title: Vision function
-      description: A tool that uses Palmyra Vision to analyze images and documents. Supports JPG, PNG, PDF, and TXT files up to 7MB each.
-      required:
-      - model
-      - variables
-      type: object
-      properties:
-        variables:
-          type: array
-          items:
-            $ref: '#/components/schemas/vision_tool_request_file_variable'
-        model:
-          type: string
-          description: The model to use for image analysis.
-          enum:
-          - palmyra-vision
+        value:
+          $ref: '#/components/schemas/string_tool_choice_options'
     application_type:
       title: application_type
       description: The type of no-code application.
       type: string
       enum:
       - generation
-    web_search_data:
-      title: web_search_data
-      required:
-      - sources
+    chat_completion_streaming_delta:
       type: object
+      description: 'The chat completion message from the model. Note: this field is deprecated for streaming. Use `delta` instead.'
       properties:
-        sources:
+        content:
+          type: string
+          description: The text content produced by the model. This field contains the actual output generated, reflecting the model's response to the input query or command.
+        role:
+          $ref: '#/components/schemas/chat_message_role'
+          description: Specifies the role associated with the content, indicating whether the message is from the 'assistant' or another defined role, helping to contextualize the output within the interaction flow.
+        tool_calls:
           type: array
           items:
-            type: object
-            properties:
-              url:
-                type: string
-              raw_content:
-                type: string
-    function_tool:
-      title: Function tool
+            $ref: '#/components/schemas/tool_call_streaming'
+          minItems: 1
+        graph_data:
+          $ref: '#/components/schemas/graph_data'
+        llm_data:
+          $ref: '#/components/schemas/llm_data'
+        translation_data:
+          $ref: '#/components/schemas/translation_data'
+        refusal:
+          type:
+          - string
+          - 'null'
+    json_object_tool_choice:
+      title: JSON object
       required:
-      - function
-      - type
+      - value
       type: object
       properties:
-        type:
+        value:
+          type: object
+          description: 'A JSON object that specifies the tool to call. For example, `{"type": "function", "function": {"name": "get_current_weather"}}`'
+          additionalProperties: true
+    models_response:
+      required:
+      - models
+      type: object
+      properties:
+        models:
+          type: array
+          description: The [ID of the model](https://dev.writer.com/home/models) to use for processing the request.
+          items:
+            $ref: '#/components/schemas/model_info'
+      example:
+        models:
+        - name: Palmyra X 003 Instruct
+          id: palmyra-x-003-instruct
+        - name: Palmyra Med
+          id: palmyra-med
+        - name: Palmyra Financial
+          id: palmyra-fin
+        - name: Palmyra X4
+          id: palmyra-x4
+        - name: Palmyra X5
+          id: palmyra-x5
+        - name: Palmyra Creative
+          id: palmyra-creative
+    chat_message:
+      title: chat_message
+      required:
+      - role
+      type: object
+      properties:
+        content:
+          description: The content of the message. Can be either a string (for text-only messages) or an array of content fragments (for mixed text and image messages).
+          oneOf:
+          - type: string
+            title: TextContent
+          - type: array
+            title: MixedContent
+            items:
+              $ref: '#/components/schemas/composite_content'
+            minItems: 1
+        role:
+          $ref: '#/components/schemas/chat_message_request_role'
+        name:
+          type:
+          - string
+          - 'null'
+          description: An optional name for the message sender. Useful for identifying different users, personas, or tools in multi-participant conversations.
+        tool_call_id:
+          type:
+          - string
+          - 'null'
+        tool_calls:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/tool_call'
+          minItems: 1
+        graph_data:
+          $ref: '#/components/schemas/graph_data'
+        refusal:
+          type:
+          - string
+          - 'null'
+    chat_message_role:
+      type: string
+      enum:
+      - user
+      - assistant
+      - system
+    generate_application_delta:
+      title: generate_application_delta
+      type: object
+      properties:
+        title:
           type: string
-          description: The type of tool.
-          enum:
-          - function
-        function:
-          $ref: '#/components/schemas/tool_function'
+          description: The name of the output.
+        content:
+          type: string
+          description: The main text output.
+        stages:
+          type:
+          - array
+          - 'null'
+          description: A list of stages that show the 'thinking process'.
+          items:
+            $ref: '#/components/schemas/generate_application_chunk_stage'
+          minItems: 1
     translation_function:
       title: Translation function
       description: A tool that uses Palmyra Translate to translate text.
@@ -1383,259 +1372,106 @@ components:
         mask_profanity:
           type: boolean
           description: Whether to mask profane words in the translated text. See the [list of languages that do not support profanity masking](https://dev.writer.com/api-reference/translation-api/language-support#profanity-masking). If the language does not support profanity masking, this parameter is ignored.
-    translation_data:
-      title: translation_data
+    completions_request:
       required:
-      - source_text
-      - source_language_code
-      - target_language_code
-      type: object
-      properties:
-        source_text:
-          type: string
-          description: The text the tool translated.
-        source_language_code:
-          type: string
-          description: The language code of the source text.
-        target_language_code:
-          type: string
-          description: The language code of the target text.
-    chat_response:
-      required:
-      - id
-      - object
-      - choices
-      - created
       - model
+      - prompt
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          description: A globally unique identifier (UUID) for the response generated by the API. This ID can be used to reference the specific operation or transaction within the system for tracking or debugging purposes.
-        object:
-          type: string
-          description: The type of object returned, which is always `chat.completion` for chat responses.
-          enum:
-          - chat.completion
-        choices:
-          type: array
-          items:
-            $ref: '#/components/schemas/chat_completion_choice'
-          minItems: 1
-          description: An array of objects representing the different outcomes or results produced by the model based on the input provided.
-        created:
-          type: integer
-          format: int64
-          description: The Unix timestamp (in seconds) when the response was created. This timestamp can be used to verify the timing of the response relative to other events or operations.
         model:
           type: string
-          description: Identifies the specific model used to generate the response.
-        usage:
-          $ref: '#/components/schemas/chat_completion_usage'
-        system_fingerprint:
+          description: The [ID of the model](https://dev.writer.com/home/models) to use for generating text. Supports `palmyra-x5`, `palmyra-x4`, `palmyra-fin`, `palmyra-med`, `palmyra-creative`, and `palmyra-x-003-instruct`.
+        prompt:
           type: string
-          description: A string representing the backend configuration that the model runs with.
-        service_tier:
-          type: string
-          description: The service tier used for processing the request.
+          description: The input text that the model will process to generate a response.
+        max_tokens:
+          type: integer
+          format: int64
+          description: The maximum number of tokens that the model can generate in the response.
+        temperature:
+          type: number
+          format: double
+          description: Controls the randomness of the model's outputs. Higher values lead to more random outputs, while lower values make the model more deterministic.
+        top_p:
+          type: number
+          format: double
+          description: Used to control the nucleus sampling, where only the most probable tokens with a cumulative probability of top_p are considered for sampling, providing a way to fine-tune the randomness of predictions.
+        stop:
+          oneOf:
+          - type: array
+            items:
+              type: string
+          - type: string
+          description: Specifies stopping conditions for the model's output generation. This can be an array of strings or a single string that the model will look for as a signal to stop generating further tokens.
+        best_of:
+          type: integer
+          format: int32
+          description: Specifies the number of completions to generate and return the best one. Useful for generating multiple outputs and choosing the best based on some criteria.
+        random_seed:
+          type: integer
+          format: int32
+          description: A seed used to initialize the random number generator for the model, ensuring reproducibility of the output when the same inputs are provided.
+        stream:
+          type: boolean
+          description: Determines whether the model's output should be streamed. If true, the output is generated and sent incrementally, which can be useful for real-time applications.
       example:
-        id: 3c90c3cc-0d44-4b50-8888-8dd25736052a
-        choices:
-        - finish_reason: stop
-          message:
-            content: Hello! How can I assist you today?
-            role: user
-        created: 1678587532773
-        model: palmyra-x5
-    tool_choice:
-      description: 'Configure how the model will call functions:
-
-        - `auto`: allows the model to automatically choose the tool to use, or not call a tool
-
-        - `none`: disables tool calling; the model will instead generate a message
-
-        - `required`: requires the model to call one or more tools
-
-
-        You can also use a JSON object to force the model to call a specific tool. For example, `{"type": "function", "function": {"name": "get_current_weather"}}` requires the model to call the `get_current_weather` function, regardless of the prompt.'
-      oneOf:
-      - $ref: '#/components/schemas/string_tool_choice'
-      - $ref: '#/components/schemas/json_object_tool_choice'
-    chat_completion_usage:
-      title: chat_completion_usage
-      description: Usage information for the chat completion response. Please note that at this time Knowledge Graph tool usage is not included in this object.
+        model: palmyra-x-003-instruct
+        prompt: Write me an SEO article about...
+        max_tokens: 150
+        temperature: 0.7
+        top_p: 0.9
+        stop:
+        - .
+        best_of: 1
+        random_seed: 42
+        stream: false
+    streaming_data:
       required:
-      - prompt_tokens
-      - total_tokens
-      - completion_tokens
+      - value
       type: object
       properties:
-        prompt_tokens:
-          type: integer
-          format: int32
-        total_tokens:
-          type: integer
-          format: int32
-        completion_tokens:
-          type: integer
-          format: int32
-        prompt_token_details:
-          $ref: '#/components/schemas/prompt_token_details'
-        completion_tokens_details:
-          $ref: '#/components/schemas/completion_token_details'
-    application_input_dropdown_options:
-      title: Dropdown
-      description: Configuration options specific to dropdown-type input fields.
+        value:
+          type: string
+    application_input_file_options:
+      title: File
+      description: Configuration options specific to file upload input fields.
       required:
-      - list
+      - max_files
+      - file_types
+      - max_word_count
+      - max_file_size_mb
+      - upload_types
       type: object
       properties:
-        list:
+        max_files:
+          type: integer
+          format: int32
+          description: Maximum number of files that can be uploaded.
+        file_types:
           type: array
-          description: List of available options in the dropdown menu.
+          description: List of allowed file extensions.
           items:
             type: string
-    application_input:
-      title: application_input
-      description: Configuration for an individual input field in the application.
-      required:
-      - name
-      - input_type
+        max_word_count:
+          type: integer
+          format: int32
+          description: Maximum number of words allowed in text files.
+        max_file_size_mb:
+          type: integer
+          format: int32
+          description: Maximum file size allowed in megabytes.
+        upload_types:
+          type: array
+          description: List of allowed upload types for file inputs.
+          items:
+            $ref: '#/components/schemas/file_upload_type'
+    string_tool_choice_options:
+      title: string_tool_choice_options
+      type: string
+      enum:
+      - none
+      - auto
       - required
-      type: object
-      properties:
-        name:
-          type: string
-          description: Identifier for the input field.
-        input_type:
-          $ref: '#/components/schemas/application_input_type'
-        description:
-          type: string
-          description: Human-readable description of the input field's purpose.
-        required:
-          type: boolean
-          description: Indicates if this input field is mandatory.
-        options:
-          $ref: '#/components/schemas/application_input_options'
-    translation_tool:
-      title: Translation tool
-      description: A tool that uses Palmyra Translate to translate text. Note that this tool does not stream results. The response is returned after the translation is complete.
-      required:
-      - function
-      - type
-      type: object
-      properties:
-        type:
-          type: string
-          description: The type of tool.
-          enum:
-          - translation
-        function:
-          $ref: '#/components/schemas/translation_function'
-    chat_completion_streaming_delta:
-      type: object
-      description: 'The chat completion message from the model. Note: this field is deprecated for streaming. Use `delta` instead.'
-      properties:
-        content:
-          type: string
-          description: The text content produced by the model. This field contains the actual output generated, reflecting the model's response to the input query or command.
-        role:
-          $ref: '#/components/schemas/chat_message_role'
-          description: Specifies the role associated with the content, indicating whether the message is from the 'assistant' or another defined role, helping to contextualize the output within the interaction flow.
-        tool_calls:
-          type: array
-          items:
-            $ref: '#/components/schemas/tool_call_streaming'
-          minItems: 1
-        graph_data:
-          $ref: '#/components/schemas/graph_data'
-        llm_data:
-          $ref: '#/components/schemas/llm_data'
-        translation_data:
-          $ref: '#/components/schemas/translation_data'
-        refusal:
-          type: string
-          nullable: true
-    chat_message:
-      title: chat_message
-      required:
-      - role
-      type: object
-      properties:
-        content:
-          description: The content of the message. Can be either a string (for text-only messages) or an array of content fragments (for mixed text and image messages).
-          nullable: true
-          oneOf:
-          - type: string
-            title: TextContent
-          - type: array
-            title: MixedContent
-            items:
-              $ref: '#/components/schemas/composite_content'
-            minItems: 1
-        role:
-          $ref: '#/components/schemas/chat_message_request_role'
-        name:
-          type: string
-          description: An optional name for the message sender. Useful for identifying different users, personas, or tools in multi-participant conversations.
-          nullable: true
-        tool_call_id:
-          type: string
-          nullable: true
-        tool_calls:
-          type: array
-          items:
-            $ref: '#/components/schemas/tool_call'
-          nullable: true
-          minItems: 1
-        graph_data:
-          $ref: '#/components/schemas/graph_data'
-          nullable: true
-        refusal:
-          type: string
-          nullable: true
-    application_with_inputs:
-      title: application_with_inputs
-      description: Detailed application object including its input configuration.
-      required:
-      - id
-      - name
-      - type
-      - status
-      - inputs
-      - created_at
-      - updated_at
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier for the application.
-        name:
-          type: string
-          description: Display name of the application.
-        type:
-          $ref: '#/components/schemas/application_type'
-        status:
-          $ref: '#/components/schemas/application_status'
-        inputs:
-          type: array
-          description: List of input configurations for the application.
-          items:
-            $ref: '#/components/schemas/application_input'
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the application was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: Timestamp when the application was last updated.
-        last_deployed_at:
-          type: string
-          format: date-time
-          description: Timestamp when the application was last deployed.
     graph_query_config:
       title: graph_query_config
       description: Configuration options for Knowledge Graph queries.
@@ -1694,81 +1530,261 @@ components:
           type: boolean
           default: false
           description: 'Whether to include inline citations in the response, showing which Knowledge Graph sources were used. Default: false.'
-    generate_application_response_chunk:
-      title: generate_application_response_chunk
+    application_with_inputs:
+      title: application_with_inputs
+      description: Detailed application object including its input configuration.
       required:
-      - delta
-      type: object
-      properties:
-        delta:
-          $ref: '#/components/schemas/generate_application_delta'
-    model_info:
-      required:
-      - name
       - id
+      - name
+      - type
+      - status
+      - inputs
+      - created_at
+      - updated_at
       type: object
       properties:
-        name:
-          type: string
-          description: The name of the particular LLM that you want to use.
         id:
           type: string
-          description: The ID of the particular LLM that you want to use
-    chat_completion_finish_reason:
-      type: string
-      enum:
-      - stop
-      - length
-      - content_filter
-      - tool_calls
-    response_format:
-      title: response_format
-      description: 'The response format to use for the chat completion, available with `palmyra-x4` and `palmyra-x5`.
-
-
-        `text` is the default response format. [JSON Schema](https://json-schema.org/) is supported for structured responses. If you specify `json_schema`, you must also provide a `json_schema` object.'
+          format: uuid
+          description: Unique identifier for the application.
+        name:
+          type: string
+          description: Display name of the application.
+        type:
+          $ref: '#/components/schemas/application_type'
+        status:
+          $ref: '#/components/schemas/application_status'
+        inputs:
+          type: array
+          description: List of input configurations for the application.
+          items:
+            $ref: '#/components/schemas/application_input'
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the application was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the application was last updated.
+        last_deployed_at:
+          type: string
+          format: date-time
+          description: Timestamp when the application was last deployed.
+    vision_tool:
+      title: Vision tool
       required:
+      - function
       - type
       type: object
       properties:
         type:
           type: string
-          description: The type of response format to use.
+          description: The type of tool.
           enum:
-          - text
-          - json_schema
-        json_schema:
-          type: object
-          description: The JSON schema to use for the response format.
-    generate_application_response:
-      title: generate_application_response
+          - vision
+        function:
+          $ref: '#/components/schemas/vision_function'
+    vision_function:
+      title: Vision function
+      description: A tool that uses Palmyra Vision to analyze images and documents. Supports JPG, PNG, PDF, and TXT files up to 7MB each.
       required:
-      - suggestion
+      - model
+      - variables
       type: object
       properties:
-        title:
+        variables:
+          type: array
+          items:
+            $ref: '#/components/schemas/vision_tool_request_file_variable'
+        model:
           type: string
-          description: The name of the output field.
-        suggestion:
-          type: string
-          description: The response from the model specified in the application.
-    logprobs:
+          description: The model to use for image analysis.
+          enum:
+          - palmyra-vision
+    tool:
       type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          function: '#/components/schemas/function_tool'
+          graph: '#/components/schemas/graph_tool'
+          llm: '#/components/schemas/llm_tool'
+          translation: '#/components/schemas/translation_tool'
+          vision: '#/components/schemas/vision_tool'
+          web_search: '#/components/schemas/web_search_tool'
+      oneOf:
+      - $ref: '#/components/schemas/function_tool'
+      - $ref: '#/components/schemas/graph_tool'
+      - $ref: '#/components/schemas/llm_tool'
+      - $ref: '#/components/schemas/translation_tool'
+      - $ref: '#/components/schemas/vision_tool'
+      - $ref: '#/components/schemas/web_search_tool'
+    translation_tool:
+      title: Translation tool
+      description: A tool that uses Palmyra Translate to translate text. Note that this tool does not stream results. The response is returned after the translation is complete.
+      required:
+      - function
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of tool.
+          enum:
+          - translation
+        function:
+          $ref: '#/components/schemas/translation_function'
+    application_status:
+      title: application_status
+      description: 'Current deployment status of the application. Note: currently only `deployed` applications are returned.'
+      type: string
+      enum:
+      - deployed
+      - draft
+    prompt_token_details:
+      title: prompt_token_details
+      required:
+      - cached_tokens
+      type: object
+      properties:
+        cached_tokens:
+          type: integer
+          format: int32
+    logprobs:
+      type:
+      - object
+      - 'null'
       required:
       - content
       - refusal
-      nullable: true
       properties:
         content:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/logprobs_token'
-          nullable: true
         refusal:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/logprobs_token'
-          nullable: true
+    vision_tool_request_file_variable:
+      title: Vision Tool Request File Variable
+      required:
+      - name
+      - file_id
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the file variable. You must reference this name in the `message.content` field of the request to the chat completions endpoint. Use double curly braces (`{{}}`) to reference the file. For example, `Describe the difference between the image {{image_1}} and the image {{image_2}}`.
+        file_id:
+          type: string
+          description: 'The File ID of the file to analyze. The file must be uploaded to the Writer platform before you use it with the Vision tool. Supported file types: JPG, PNG, PDF, TXT. The maximum allowed file size is 7MB.'
+    completions_choice:
+      required:
+      - text
+      type: object
+      properties:
+        text:
+          type: string
+          description: The generated text output from the model, which forms the main content of the response.
+        log_probs:
+          $ref: '#/components/schemas/logprobs'
+    text_fragment:
+      title: Text
+      description: Represents a text content fragment within a chat message.
+      required:
+      - type
+      - text
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of content fragment. Must be `text` for text fragments.
+          enum:
+          - text
+        text:
+          type: string
+          description: The actual text content of the message fragment.
+    file:
+      title: file
+      description: A file-based reference containing text snippets from uploaded documents in the Knowledge Graph.
+      required:
+      - text
+      - fileId
+      - score
+      type: object
+      properties:
+        text:
+          type: string
+          description: The exact text snippet from the source document that was used to support the response.
+        fileId:
+          type: string
+          description: The unique identifier of the file in your Writer account.
+        score:
+          type: number
+          description: Internal score used during the retrieval process for ranking and selecting relevant snippets.
+        page:
+          type: integer
+          format: int32
+          description: Page number where this snippet was found in the source document.
+        cite:
+          type: string
+          description: Unique citation ID that appears in inline citations within the response text (null if not cited).
+    completion_token_details:
+      title: completion_token_details
+      required:
+      - reasoning_tokens
+      type: object
+      properties:
+        reasoning_tokens:
+          type: integer
+          format: int32
+    application_input_options:
+      description: Type-specific configuration options for input fields.
+      oneOf:
+      - $ref: '#/components/schemas/application_input_dropdown_options'
+      - $ref: '#/components/schemas/application_input_file_options'
+      - $ref: '#/components/schemas/application_input_media_options'
+      - $ref: '#/components/schemas/application_input_text_options'
+    graph_function:
+      title: graph_function
+      description: A tool that uses Knowledge Graphs as context for responses.
+      required:
+      - graph_ids
+      - subqueries
+      type: object
+      properties:
+        description:
+          type: string
+          description: A description of the graph content.
+        graph_ids:
+          type: array
+          description: An array of graph IDs to use in the tool.
+          items:
+            type: string
+            format: uuid
+          minItems: 1
+        subqueries:
+          type: boolean
+          description: Boolean to indicate whether to include subqueries in the response.
+        query_config:
+          $ref: '#/components/schemas/graph_query_config'
+          description: Configuration options for Knowledge Graph queries, including search parameters and citation settings.
+    stream_options:
+      title: stream_options
+      description: Additional options for streaming.
+      required:
+      - include_usage
+      type: object
+      properties:
+        include_usage:
+          type: boolean
+          description: Indicate whether to include usage information.
   securitySchemes:
     bearerAuth:
       type: http

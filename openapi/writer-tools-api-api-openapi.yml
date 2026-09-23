@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: File API Tools API API
+  title: Tools API
   version: '1.0'
 servers:
 - url: https://api.writer.com
@@ -44,6 +44,8 @@ paths:
         source: "import Writer from 'writer-sdk';\n\nconst client = new Writer({\n  apiKey: process.env['WRITER_API_KEY'], // This is the default and can be omitted\n});\n\nasync function main() {\n  const response = await client.tools.parsePdf('file_id', { format: 'text' });\n\n  console.log(response.content);\n}\n\nmain();"
       - lang: Python
         source: "import os\nfrom writerai import Writer\n\nclient = Writer(\n    # This is the default and can be omitted\n    api_key=os.environ.get(\"WRITER_API_KEY\"),\n)\nresponse = client.tools.parse_pdf(\n    file_id=\"file_id\",\n    format=\"text\",\n)\nprint(response.content)"
+      operationId: postV1ToolsPdfParserByFileId
+      x-operation-id-source: derived
   /v1/tools/web-search:
     post:
       security:
@@ -86,17 +88,10 @@ paths:
       x-codeSamples:
       - lang: cURL
         source: "curl --location --request POST https://api.writer.com/v1/tools/web-search \\\n --header \"Authorization: Bearer <token>\" \\\n --header \"Content-Type: application/json\" \\\n--data-raw '{\"query\":\"How do I get an API key for the Writer API?\",\"include_domains\":[\"dev.writer.com\"]}'"
+      operationId: postV1ToolsWebSearch
+      x-operation-id-source: derived
 components:
   schemas:
-    parse_pdf_response:
-      title: parse_pdf_response
-      required:
-      - content
-      type: object
-      properties:
-        content:
-          type: string
-          description: The extracted content from the PDF file, converted to the specified format.
     web_search_response:
       title: web_search_response
       required:
@@ -122,21 +117,6 @@ components:
               raw_content:
                 type: string
                 description: Raw content from the source URL. Not included if `include_raw_content` is `false`.
-    pdf_conversion_format:
-      title: pdf_conversion_format
-      type: string
-      enum:
-      - text
-      - markdown
-      description: The format into which the PDF content should be converted.
-    parse_pdf_request:
-      title: parse_pdf_request
-      required:
-      - format
-      type: object
-      properties:
-        format:
-          $ref: '#/components/schemas/pdf_conversion_format'
     web_search_request:
       type: object
       properties:
@@ -392,6 +372,30 @@ components:
           type: boolean
           default: false
           description: Enables streaming of search results as they become available.
+    pdf_conversion_format:
+      title: pdf_conversion_format
+      type: string
+      enum:
+      - text
+      - markdown
+      description: The format into which the PDF content should be converted.
+    parse_pdf_response:
+      title: parse_pdf_response
+      required:
+      - content
+      type: object
+      properties:
+        content:
+          type: string
+          description: The extracted content from the PDF file, converted to the specified format.
+    parse_pdf_request:
+      title: parse_pdf_request
+      required:
+      - format
+      type: object
+      properties:
+        format:
+          $ref: '#/components/schemas/pdf_conversion_format'
   securitySchemes:
     bearerAuth:
       type: http

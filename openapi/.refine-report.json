@@ -1,26 +1,39 @@
 {
   "provider": "writer",
   "sources": [
-    "writer-file-api-api-openapi.yml",
-    "writer-generation-api-api-openapi.yml",
-    "writer-kg-api-api-openapi.yml",
-    "writer-template-api-openapi.yml",
-    "writer-tools-api-api-openapi.yml",
-    "writer-translation-api-openapi.yml",
-    "writer-vision-api-openapi.yml"
+    "_original/writer-openapi.yml"
   ],
   "outputs": [
     "writer-file-api-api-openapi.yml",
     "writer-generation-api-api-openapi.yml",
     "writer-kg-api-api-openapi.yml",
-    "writer-template-api-openapi.yml",
     "writer-tools-api-api-openapi.yml",
     "writer-translation-api-openapi.yml",
-    "writer-vision-api-openapi.yml"
+    "writer-vision-api-openapi.yml",
+    "writer-template-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "writer-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "writer-openapi.yml: declared missing tag: File API",
+    "writer-openapi.yml: declared missing tag: Generation API",
+    "writer-openapi.yml: declared missing tag: KG API",
+    "writer-openapi.yml: declared missing tag: Tools API",
+    "writer-openapi.yml: declared missing tag: Translation",
+    "writer-openapi.yml: declared missing tag: Vision",
+    "writer-openapi.yml: declared missing tag: template",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "writer-file-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "writer-generation-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "writer-kg-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "writer-template-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "writer-tools-api-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "writer-translation-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "writer-vision-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
