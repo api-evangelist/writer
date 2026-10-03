@@ -231,65 +231,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    generate_application_input:
-      title: generate_application_input
-      required:
-      - id
-      - value
-      type: object
-      properties:
-        id:
-          type: string
-          description: The unique identifier for the input field from the application. All input types from the No-code application are supported (i.e. Text input, Dropdown, File upload, Image input). The identifier should be the name of the input type.
-        value:
-          type: array
-          items:
-            type: string
-          description: "The value for the input field. \n\nIf the input type is \"File upload\", you must pass the `file_id` of an uploaded file. You cannot pass a file object directly. See the [file upload endpoint](https://dev.writer.com/api-reference/file-api/upload-files) for instructions on uploading files or the [list files endpoint](https://dev.writer.com/api-reference/file-api/get-all-files) for how to see a list of uploaded files and their IDs."
-    api_job_status:
-      title: api_job_status
-      description: The status of the job.
-      type: string
-      enum:
-      - in_progress
-      - failed
-      - completed
-    application_graph_ids_request:
-      title: application_graph_ids_request
-      required:
-      - graph_ids
-      type: object
-      properties:
-        graph_ids:
-          type: array
-          description: A list of Knowledge Graph IDs to associate with the application. Note that this will replace the existing list of Knowledge Graphs associated with the application, not add to it.
-          items:
-            type: string
-            format: uuid
-    generate_application_response:
-      title: generate_application_response
-      required:
-      - suggestion
-      type: object
-      properties:
-        title:
-          type: string
-          description: The name of the output field.
-        suggestion:
-          type: string
-          description: The response from the model specified in the application.
-    application_graphs_response:
-      title: application_graphs_response
-      required:
-      - graph_ids
-      type: object
-      properties:
-        graph_ids:
-          type: array
-          description: A list of Knowledge Graphs associated with the application.
-          items:
-            type: string
-            format: uuid
     get_async_application_jobs_response:
       title: get_async_application_jobs_response
       required:
@@ -315,35 +256,30 @@ components:
               type: integer
               format: int32
               description: The pagination limit for retrieving the jobs.
-    generate_application_async_request:
-      title: generate_application_async_request
+    application_graphs_response:
+      title: application_graphs_response
       required:
-      - inputs
+      - graph_ids
       type: object
       properties:
-        inputs:
+        graph_ids:
           type: array
-          description: A list of input objects to generate content for.
+          description: A list of Knowledge Graphs associated with the application.
           items:
-            $ref: '#/components/schemas/generate_application_input'
-    generate_application_async_response:
-      title: generate_application_async_response
+            type: string
+            format: uuid
+    application_graph_ids_request:
+      title: application_graph_ids_request
       required:
-      - id
-      - status
-      - created_at
+      - graph_ids
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          description: The unique identifier for the async job created.
-        status:
-          $ref: '#/components/schemas/api_job_status'
-        created_at:
-          type: string
-          format: date-time
-          description: The timestamp when the job was created.
+        graph_ids:
+          type: array
+          description: A list of Knowledge Graph IDs to associate with the application. Note that this will replace the existing list of Knowledge Graphs associated with the application, not add to it.
+          items:
+            type: string
+            format: uuid
     get_async_application_job_response:
       title: get_async_application_job_response
       required:
@@ -381,6 +317,70 @@ components:
         error:
           type: string
           description: The error message if the job failed.
+    api_job_status:
+      title: api_job_status
+      description: The status of the job.
+      type: string
+      enum:
+      - in_progress
+      - failed
+      - completed
+    generate_application_async_response:
+      title: generate_application_async_response
+      required:
+      - id
+      - status
+      - created_at
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier for the async job created.
+        status:
+          $ref: '#/components/schemas/api_job_status'
+        created_at:
+          type: string
+          format: date-time
+          description: The timestamp when the job was created.
+    generate_application_response:
+      title: generate_application_response
+      required:
+      - suggestion
+      type: object
+      properties:
+        title:
+          type: string
+          description: The name of the output field.
+        suggestion:
+          type: string
+          description: The response from the model specified in the application.
+    generate_application_input:
+      title: generate_application_input
+      required:
+      - id
+      - value
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the input field from the application. All input types from the No-code application are supported (i.e. Text input, Dropdown, File upload, Image input). The identifier should be the name of the input type.
+        value:
+          type: array
+          items:
+            type: string
+          description: "The value for the input field. \n\nIf the input type is \"File upload\", you must pass the `file_id` of an uploaded file. You cannot pass a file object directly. See the [file upload endpoint](https://dev.writer.com/api-reference/file-api/upload-files) for instructions on uploading files or the [list files endpoint](https://dev.writer.com/api-reference/file-api/get-all-files) for how to see a list of uploaded files and their IDs."
+    generate_application_async_request:
+      title: generate_application_async_request
+      required:
+      - inputs
+      type: object
+      properties:
+        inputs:
+          type: array
+          description: A list of input objects to generate content for.
+          items:
+            $ref: '#/components/schemas/generate_application_input'
   securitySchemes:
     bearerAuth:
       type: http

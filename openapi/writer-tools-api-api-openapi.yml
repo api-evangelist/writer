@@ -92,15 +92,21 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    parse_pdf_response:
-      title: parse_pdf_response
+    parse_pdf_request:
+      title: parse_pdf_request
       required:
-      - content
+      - format
       type: object
       properties:
-        content:
-          type: string
-          description: The extracted content from the PDF file, converted to the specified format.
+        format:
+          $ref: '#/components/schemas/pdf_conversion_format'
+    pdf_conversion_format:
+      title: pdf_conversion_format
+      type: string
+      enum:
+      - text
+      - markdown
+      description: The format into which the PDF content should be converted.
     web_search_response:
       title: web_search_response
       required:
@@ -126,21 +132,15 @@ components:
               raw_content:
                 type: string
                 description: Raw content from the source URL. Not included if `include_raw_content` is `false`.
-    parse_pdf_request:
-      title: parse_pdf_request
+    parse_pdf_response:
+      title: parse_pdf_response
       required:
-      - format
+      - content
       type: object
       properties:
-        format:
-          $ref: '#/components/schemas/pdf_conversion_format'
-    pdf_conversion_format:
-      title: pdf_conversion_format
-      type: string
-      enum:
-      - text
-      - markdown
-      description: The format into which the PDF content should be converted.
+        content:
+          type: string
+          description: The extracted content from the PDF file, converted to the specified format.
     web_search_request:
       type: object
       properties:
