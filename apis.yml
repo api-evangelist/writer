@@ -40,6 +40,7 @@ tags:
 - Content Generation
 - Palmyra
 - Agents
+- Foundation Models
 tags_raw:
 - AI
 - LLM
@@ -47,6 +48,7 @@ tags_raw:
 - Content Generation
 - Palmyra
 - Agents
+- Foundation Models
 created: '2026-05-08'
 modified: '2026-09-16'
 specificationVersion: '0.23'
