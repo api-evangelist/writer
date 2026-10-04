@@ -92,21 +92,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    parse_pdf_request:
-      title: parse_pdf_request
-      required:
-      - format
-      type: object
-      properties:
-        format:
-          $ref: '#/components/schemas/pdf_conversion_format'
-    pdf_conversion_format:
-      title: pdf_conversion_format
-      type: string
-      enum:
-      - text
-      - markdown
-      description: The format into which the PDF content should be converted.
     web_search_response:
       title: web_search_response
       required:
@@ -141,6 +126,21 @@ components:
         content:
           type: string
           description: The extracted content from the PDF file, converted to the specified format.
+    pdf_conversion_format:
+      title: pdf_conversion_format
+      type: string
+      enum:
+      - text
+      - markdown
+      description: The format into which the PDF content should be converted.
+    parse_pdf_request:
+      title: parse_pdf_request
+      required:
+      - format
+      type: object
+      properties:
+        format:
+          $ref: '#/components/schemas/pdf_conversion_format'
     web_search_request:
       type: object
       properties:

@@ -51,15 +51,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    translation_response:
-      title: Translation Response
-      required:
-      - data
-      type: object
-      properties:
-        data:
-          type: string
-          description: The result of the translation.
     translation_request:
       title: Translation Request
       required:
@@ -95,6 +86,15 @@ components:
         mask_profanity:
           type: boolean
           description: Whether to mask profane words in the translated text. See the [list of languages that do not support profanity masking](https://dev.writer.com/api-reference/translation-api/language-support#profanity-masking). If the language does not support profanity masking, this parameter is ignored.
+    translation_response:
+      title: Translation Response
+      required:
+      - data
+      type: object
+      properties:
+        data:
+          type: string
+          description: The result of the translation.
   securitySchemes:
     bearerAuth:
       type: http
