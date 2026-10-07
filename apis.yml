@@ -364,6 +364,8 @@ apis:
   - type: Documentation
     url: https://dev.writer.com/api-guides/quickstart
 common:
+- type: Pricing
+  url: https://writer.com/plans/
 - type: AgenticAccess
   url: agentic-access/writer-agentic-access.yml
 - type: DomainSecurity
