@@ -1,0 +1,35 @@
+# harvested from https://github.com/writer/cerebro/blob/9dd6c92664bc6d15430a821b97995b4a53294a6d/.spectral.yaml on 2026-10-09 — a Spectral ruleset published in the provider's own GitHub repository (writer/cerebro); found by GitHub code search, fetched verbatim
+x-method: harvested
+x-stamped: 2026-10-09
+x-source-url: https://github.com/writer/cerebro/blob/9dd6c92664bc6d15430a821b97995b4a53294a6d/.spectral.yaml
+extends:
+  - spectral:oas
+
+rules:
+  info-contact: error
+  operation-tags: error
+  operation-description: off
+  operation-operationId: off
+  # Cerebro documents intentional rejection operations, such as GET /api/v1/mcp
+  # returning 405 to prevent clients from treating it as an SSE transport.
+  operation-success-response: off
+
+  no-undocumented-tag:
+    description: Placeholder tags are not allowed in committed OpenAPI contracts.
+    message: Remove `Undocumented` tag and provide concrete endpoint metadata.
+    severity: error
+    given: $.paths[*][*].tags[*]
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: ^Undocumented$
+
+  no-placeholder-summary:
+    description: Placeholder operation summaries are not allowed.
+    message: Replace placeholder summaries with endpoint-specific summaries.
+    severity: error
+    given: $.paths[*][*].summary
+    then:
+      function: pattern
+      functionOptions:
+        notMatch: '[Pp][Ll][Aa][Cc][Ee][Hh][Oo][Ll][Dd][Ee][Rr]'

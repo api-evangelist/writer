@@ -392,6 +392,8 @@ common:
   url: https://api.writer.com/llms.txt
 - url: https://writer.com/blog/feed/
   type: Blog
+- type: SpectralRules
+  url: https://github.com/writer/cerebro/blob/9dd6c92664bc6d15430a821b97995b4a53294a6d/.spectral.yaml
 integrations:
 - name: WRITER - Enterprise AI platform
 - name: Financial services

@@ -1,142 +1,53 @@
-specification: API Commons Plans
-specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
-provider: Writer
-providerId: writer
-created: '2026-05-08'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-08, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-08'
-reconciled: false
-tags:
-- AI
-- LLM
-- Enterprise
-- Content Generation
-- Palmyra
-- Agents
-- Plans
-description: >-
-  Writer offers a Starter trial and an Enterprise plan for the AI HQ /
-  WRITER Agent product, plus AI Studio Platform API access (per-token
-  pricing for Palmyra models, Knowledge Graph, vision, etc.) typically
-  bundled into Enterprise contracts. Public per-seat and per-token rates
-  are not disclosed and require sales contact.
-notes: >-
-  Per-seat and per-token rates for AI Studio are not publicly disclosed.
-  Mark reconciled=false for the developer pricing surface; AI HQ Starter
-  vs Enterprise tiering is reconciled.
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://writer.com/plans/
 sources:
-- https://writer.com/pricing/
-- https://dev.writer.com/
+- https://writer.com/plans/
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T112025
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: negotiated
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+  managed_tier: Starter
+published: false
+note: No numeric prices shown; page states Starter offers monthly or annual per-seat plans with fixed
+  credit limits and a 20% nonprofit/edu discount, but no amounts.
+plan_count: 2
 plans:
-- id: writer-starter
-  name: Starter (Trial)
-  type: free
-  description: >-
-    14-day free trial of WRITER Agent / AI HQ for up to 5 users with
-    capped Playbooks, 1 Personality profile, basic connectors, and
-    limited Knowledge Graph access. No credit card required.
-  entries:
-  - label: Trial Length
-    name: trial_length
-    type: flat
-    metric: days
-    limit: 14
-    timeFrame: trial
-    geo: global
-    unit: 1
-    price: $0
-    userMultiplied: false
-  - label: Users
-    name: users
-    type: flat
-    metric: seats
-    limit: 5
-    timeFrame: trial
-    geo: global
-    unit: 1
-    price: included
-    userMultiplied: false
-  - label: Playbooks
-    name: playbooks
-    type: flat
-    metric: count
-    limit: 5
-    timeFrame: trial
-    geo: global
-    unit: 1
-    price: included
-    userMultiplied: false
-  - label: Personality Profiles
-    name: personality_profiles
-    type: flat
-    metric: count
-    limit: 1
-    timeFrame: trial
-    geo: global
-    unit: 1
-    price: included
-    userMultiplied: false
-  elements:
-  - name: WRITER Agent
-  - name: Basic Connectors
-  - name: Limited Knowledge Graph
-- id: writer-enterprise
-  name: Enterprise
-  type: enterprise
-  description: >-
-    Custom-priced enterprise plan with unlimited users, teams, and free
-    collaborators; unlimited Playbooks; advanced orchestration; full
-    Knowledge Graph; departmental brand profiles; granular governance;
-    optional solution packs; and priority support.
-  entries:
-  - label: Annual Subscription
-    name: enterprise
-    type: flat
-    metric: contract
-    limit: -1
-    timeFrame: year
-    geo: global
-    unit: 1
-    price: contact sales
-    userMultiplied: true
-  elements:
-  - name: Unlimited Users
-  - name: Unlimited Playbooks
-  - name: Full Knowledge Graph
-  - name: Departmental Brand Profiles
-  - name: Governance
-  - name: Priority Support
-  - name: Solution Packs
-- id: writer-ai-studio
-  name: AI Studio Platform API
-  type: usage
-  description: >-
-    Programmatic API access to Palmyra models, Knowledge Graph, Vision,
-    Tools, Translation, Web Search, Applications, and Guardrails - typically
-    contracted as part of Enterprise. Per-token / per-call rates are not
-    publicly disclosed.
-  entries:
-  - label: API Access (per-token)
-    name: api_tokens
-    type: usage
-    metric: tokens
-    limit: -1
-    timeFrame: month
-    geo: global
-    unit: 1000000
-    price: contact sales
-    userMultiplied: false
-  elements:
-  - name: Palmyra Models
-  - name: Knowledge Graph
-  - name: Vision
-  - name: Web Search
-  - name: Translation
-  - name: Applications
-  - name: Guardrails
-maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+- name: Starter
+  price_text: Try for free
+  period: none
+  included_quota: Up to 5 users, 5 Playbooks, 1 team, basic connectors, 14-day free trial. No credit card
+    required.
+- name: ENTERPRISE
+  price_text: Contact sales
+  period: none
+  included_quota: Everything in Starter, plus unlimited users, playbooks, advanced controls
+rate_limit_statements:
+- Expanded rate limits
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models: []
+  units: []
+  plans:
+  - name: Starter
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: ENTERPRISE
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
