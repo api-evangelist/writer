@@ -15,3 +15,26 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
+- slug: writer-openrouter
+  label: OpenRouter
+  partner: openrouter
+  partner_name: OpenRouter
+  type: coverage
+  channel: partner-built
+  evidence: https://openrouter.ai/api/v1/models
+  source: edge
+  relationship: system-coverage
+  status: not-a-workflow
+  arazzo: null
+- slug: writer-ping-identity-own
+  label: Ping Identity (own)
+  partner: ping-identity
+  partner_name: Ping Identity (own)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.pingone.com/item/writer-sso-and-user-provisioning-for-pingfederate
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null

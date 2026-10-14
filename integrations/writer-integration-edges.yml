@@ -3,6 +3,7 @@ method: searched
 checked:
 - https://azuremarketplace.microsoft.com/
 - https://openrouter.ai/api/v1/models
+- ping-identity/integrations/ping-identity-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: Microsoft Azure Marketplace
@@ -40,3 +41,22 @@ edges:
   matched_by: verified-token-table
   detected_by: sweep-model-routing.py
   first_seen: '2026-10-13'
+- partner_name: Ping Identity (own)
+  partner: ping-identity
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.pingone.com/item/writer-sso-and-user-provisioning-for-pingfederate
+  mirror_of: ping-identity/integrations/ping-identity-integration-edges.yml
+  apps:
+  - Writer SSO and User Provisioning for PingFederate
+  - Writer SSO and User Provisioning for PingOne
+  listing_count: 2
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+source:
+- ping-identity/integrations/ping-identity-integration-edges.yml
