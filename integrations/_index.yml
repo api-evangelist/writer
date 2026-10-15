@@ -61,7 +61,7 @@
     app_slug: writer
     beta: false
     builder: unknown (not in the directory record)
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
 - slug: writer-pipedream
   label: Pipedream
@@ -87,5 +87,5 @@
     actions: true
     sources: false
     builder: Pipedream repo (component)
-  status: pending-generation
+  status: not-a-workflow
   arazzo: null
