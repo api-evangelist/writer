@@ -92,31 +92,13 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    web_search_response:
-      title: web_search_response
-      required:
-      - query
-      - sources
-      type: object
-      properties:
-        query:
-          type: string
-          description: The search query that was submitted.
-        answer:
-          type: string
-          description: Generated answer based on the search results. Not included if `include_answer` is `false`.
-        sources:
-          type: array
-          description: The search results found.
-          items:
-            type: object
-            properties:
-              url:
-                type: string
-                description: URL of the search result.
-              raw_content:
-                type: string
-                description: Raw content from the source URL. Not included if `include_raw_content` is `false`.
+    pdf_conversion_format:
+      title: pdf_conversion_format
+      type: string
+      enum:
+      - text
+      - markdown
+      description: The format into which the PDF content should be converted.
     parse_pdf_response:
       title: parse_pdf_response
       required:
@@ -126,21 +108,6 @@ components:
         content:
           type: string
           description: The extracted content from the PDF file, converted to the specified format.
-    pdf_conversion_format:
-      title: pdf_conversion_format
-      type: string
-      enum:
-      - text
-      - markdown
-      description: The format into which the PDF content should be converted.
-    parse_pdf_request:
-      title: parse_pdf_request
-      required:
-      - format
-      type: object
-      properties:
-        format:
-          $ref: '#/components/schemas/pdf_conversion_format'
     web_search_request:
       type: object
       properties:
@@ -396,6 +363,39 @@ components:
           type: boolean
           default: false
           description: Enables streaming of search results as they become available.
+    parse_pdf_request:
+      title: parse_pdf_request
+      required:
+      - format
+      type: object
+      properties:
+        format:
+          $ref: '#/components/schemas/pdf_conversion_format'
+    web_search_response:
+      title: web_search_response
+      required:
+      - query
+      - sources
+      type: object
+      properties:
+        query:
+          type: string
+          description: The search query that was submitted.
+        answer:
+          type: string
+          description: Generated answer based on the search results. Not included if `include_answer` is `false`.
+        sources:
+          type: array
+          description: The search results found.
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                description: URL of the search result.
+              raw_content:
+                type: string
+                description: Raw content from the source URL. Not included if `include_raw_content` is `false`.
   securitySchemes:
     bearerAuth:
       type: http
