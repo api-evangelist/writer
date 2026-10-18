@@ -89,3 +89,16 @@
     builder: Pipedream repo (component)
   status: not-a-workflow
   arazzo: null
+- slug: writer-slack-own
+  label: Slack (own)
+  partner: slack
+  partner_name: Slack (own)
+  category: Slack app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://slack.com/marketplace/A07JCFEUDAB-writer
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
