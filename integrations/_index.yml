@@ -15,31 +15,6 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
-- slug: writer-ping-identity-own
-  label: Ping Identity (own)
-  partner: ping-identity
-  partner_name: Ping Identity (own)
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://marketplace.pingone.com/item/writer-sso-and-user-provisioning-for-pingfederate
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
-- slug: writer-slack-own
-  label: Slack (own)
-  partner: slack
-  partner_name: Slack (own)
-  category: Slack app
-  type: marketplace
-  marketplace: own
-  channel: partner-built
-  evidence: https://slack.com/marketplace/A07JCFEUDAB-writer
-  source: edge
-  relationship: platform-app
-  status: not-a-workflow
-  arazzo: null
 - slug: writer-openrouter
   label: OpenRouter
   partner: openrouter
@@ -100,5 +75,43 @@
     actions: true
     sources: false
     builder: Pipedream repo (component)
+  status: not-a-workflow
+  arazzo: null
+- slug: writer-ping-identity-own
+  label: Ping Identity (own)
+  partner: ping-identity
+  partner_name: Ping Identity (own)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://marketplace.pingone.com/item/writer-sso-and-user-provisioning-for-pingfederate
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: writer-slack-own
+  label: Slack (own)
+  partner: slack
+  partner_name: Slack (own)
+  category: Slack app
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://slack.com/marketplace/A07JCFEUDAB-writer
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: writer-hugging-face-hugging-face-hub
+  label: Hugging Face (hugging-face-hub)
+  partner: hugging-face
+  partner_name: Hugging Face (hugging-face-hub)
+  category: Hugging Face Hub datasets
+  type: marketplace
+  marketplace: hugging-face-hub
+  channel: partner-built
+  evidence: https://huggingface.co/Writer
+  source: edge
+  relationship: platform-app
   status: not-a-workflow
   arazzo: null

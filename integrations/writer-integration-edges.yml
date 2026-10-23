@@ -8,6 +8,7 @@ checked:
 - https://zapier.com/api/v4/apps/
 - ping-identity/integrations/ping-identity-integration-edges.yml
 - slack/integrations/slack-integration-edges.yml
+- hugging-face/integrations/hugging-face-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: Microsoft Azure Marketplace
@@ -25,40 +26,6 @@ edges:
   seller_name: Writer
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
-- partner_name: Ping Identity (own)
-  partner: ping-identity
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://marketplace.pingone.com/item/writer-sso-and-user-provisioning-for-pingfederate
-  mirror_of: ping-identity/integrations/ping-identity-integration-edges.yml
-  apps:
-  - Writer SSO and User Provisioning for PingFederate
-  - Writer SSO and User Provisioning for PingOne
-  listing_count: 2
-  detected: '2026-10-14'
-  detected_by: mirror-platform-listings.py
-- partner_name: Slack (own)
-  partner: slack
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://slack.com/marketplace/A07JCFEUDAB-writer
-  mirror_of: slack/integrations/slack-integration-edges.yml
-  apps:
-  - WRITER
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Slack app
 - partner_name: OpenRouter
   partner: openrouter
   partner_match: router
@@ -130,5 +97,71 @@ edges:
     builder: Pipedream repo (component)
   detected_by: sweep-workflow-automation.py
   first_seen: '2026-10-15'
+- partner_name: Ping Identity (own)
+  partner: ping-identity
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.pingone.com/item/writer-sso-and-user-provisioning-for-pingfederate
+  mirror_of: ping-identity/integrations/ping-identity-integration-edges.yml
+  apps:
+  - Writer SSO and User Provisioning for PingFederate
+  - Writer SSO and User Provisioning for PingOne
+  listing_count: 2
+  detected: '2026-10-14'
+  detected_by: mirror-platform-listings.py
+- partner_name: Slack (own)
+  partner: slack
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://slack.com/marketplace/A07JCFEUDAB-writer
+  mirror_of: slack/integrations/slack-integration-edges.yml
+  apps:
+  - WRITER
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Slack app
+- partner_name: Hugging Face (hugging-face-hub)
+  partner: hugging-face
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: hugging-face-hub
+  evidence: https://huggingface.co/Writer
+  mirror_of: hugging-face/integrations/hugging-face-integration-edges.yml
+  apps:
+  - Writer/omniact
+  - Writer/FailSafeQA
+  - Writer/IRT-mislabeled-items
+  - Writer/writing-in-the-margins-multihoprag
+  - Writer/PalmyraX6_Model_Evaluation_Open_Data_Release
+  - Writer/camel-5b-hf
+  - Writer/palmyra-base
+  - Writer/palmyra-med-20b
+  - Writer/palmyra-large
+  - Writer/palmyra-3B
+  - Writer/palmyra-small
+  - Writer/palmyra-20b-chat
+  - Writer/InstructPalmyra-20b
+  - Writer
+  listing_count: 3
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Hugging Face Hub datasets
+  badges:
+  - Verified publisher (Hugging Face verified organisation)
 source:
 - ping-identity/integrations/ping-identity-integration-edges.yml
